@@ -28,17 +28,18 @@ const generateRefreshToken = (id: string) => {
 };
 
 const setCookies = (res: Response, accessToken: string, refreshToken: string) => {
+  const isProduction = process.env.NODE_ENV === "production";
   res.cookie("accessToken", accessToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 2 * 24 * 60 * 60 * 1000 // 2 days
   });
   
   res.cookie("refreshToken", refreshToken, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
 };
@@ -169,8 +170,15 @@ export const googleLogin = async (req: Request, res: Response) => {
 };
 
 export const logout = async (req: Request, res: Response) => {
-  res.cookie("accessToken", "", { httpOnly: true, expires: new Date(0) });
-  res.cookie("refreshToken", "", { httpOnly: true, expires: new Date(0) });
+  const isProduction = process.env.NODE_ENV === "production";
+  const cookieOptions = { 
+    httpOnly: true, 
+    expires: new Date(0),
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax" as const
+  };
+  res.cookie("accessToken", "", cookieOptions);
+  res.cookie("refreshToken", "", cookieOptions);
   res.json({ message: "Logged out successfully" });
 };
 
@@ -189,11 +197,12 @@ export const refreshToken = async (req: Request, res: Response) => {
     }
 
     const newAccessToken = generateAccessToken(user._id.toString());
+    const isProduction = process.env.NODE_ENV === "production";
     
     res.cookie("accessToken", newAccessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
       maxAge: 2 * 24 * 60 * 60 * 1000 // 2 days
     });
 
