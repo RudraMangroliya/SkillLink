@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, CookieOptions } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User";
@@ -171,11 +171,11 @@ export const googleLogin = async (req: Request, res: Response) => {
 
 export const logout = async (req: Request, res: Response) => {
   const isProduction = process.env.NODE_ENV === "production";
-  const cookieOptions = { 
+  const cookieOptions: CookieOptions = { 
     httpOnly: true, 
     expires: new Date(0),
     secure: isProduction,
-    sameSite: isProduction ? "none" : "lax" as const
+    sameSite: isProduction ? "none" : "lax"
   };
   res.cookie("accessToken", "", cookieOptions);
   res.cookie("refreshToken", "", cookieOptions);
