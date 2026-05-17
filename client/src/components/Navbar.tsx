@@ -22,6 +22,18 @@ export default function Navbar() {
 
   const isActive = (path: string) => location.pathname === path;
 
+  // Prevent background scrolling when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
   // Fetch notifications
   useEffect(() => {
     if (isAuthenticated) {
