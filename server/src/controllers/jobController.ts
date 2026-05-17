@@ -277,7 +277,7 @@ ${interviewLink ? `\nMeeting Link: ${interviewLink}` : ''}
         
 Log in to your dashboard for more details.`;
 
-        const frontendUrl = process.env.CLIENT_URL || "http://localhost:5173";
+        const frontendUrl = process.env.CLIENT_URL || "https://skill-link-rm.vercel.app";
         const emailHtml = `
           <div style="font-family: 'Inter', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
             <div style="background-color: #4f46e5; padding: 24px; text-align: center;">
