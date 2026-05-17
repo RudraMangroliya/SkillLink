@@ -22,3 +22,11 @@ build/
 .vscode/
 .idea/
 .DS_Store
+
+# Scratch and Test files
+scratch/
+test*.ts
+test*.js
+check_admin.ts
+create_admin.ts
+seed_jobs.js
