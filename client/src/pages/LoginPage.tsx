@@ -100,7 +100,6 @@ export default function LoginPage() {
             onError={() => {
               console.log('Login Failed');
             }}
-            useOneTap
             shape="rectangular"
             theme="outline"
             text="signin_with"

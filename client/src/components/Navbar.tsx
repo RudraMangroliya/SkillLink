@@ -331,7 +331,7 @@ export default function Navbar() {
 
       {/* Left Sidebar Drawer */}
       <div 
-        className={`fixed top-0 left-0 h-full w-[260px] max-w-[80vw] bg-white dark:bg-gray-900 shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
+        className={`fixed top-0 left-0 h-[100dvh] w-[260px] max-w-[80vw] bg-white dark:bg-gray-900 shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

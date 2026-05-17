@@ -122,7 +122,6 @@ export default function RegisterPage() {
             onError={() => {
               console.log('Google Signup Failed');
             }}
-            useOneTap
             shape="rectangular"
             theme="outline"
             text="signup_with"
