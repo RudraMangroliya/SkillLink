@@ -9,6 +9,18 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+// Add request interceptor to attach Bearer token as a fallback for browsers blocking 3rd party cookies
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
 // Intercept responses to handle 401 Unauthorized globally
 axiosInstance.interceptors.response.use(
   (response) => response,

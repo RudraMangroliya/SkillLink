@@ -10,7 +10,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") as string) : null,
-  token: null, // Tokens are now handled via HTTP-Only Cookies primarily, but we can still store it temporarily in Redux memory
+  token: localStorage.getItem("token") || null, // Fallback for browsers that block 3rd party cookies
   isAuthenticated: !!localStorage.getItem("user"),
   profileComplete: null,
 };
@@ -28,6 +28,9 @@ export const authSlice = createSlice({
       state.isAuthenticated = true;
       state.profileComplete = action.payload.user.profileComplete ?? null;
       localStorage.setItem("user", JSON.stringify(action.payload.user));
+      if (action.payload.token) {
+        localStorage.setItem("token", action.payload.token);
+      }
     },
     setProfileComplete: (state, action: PayloadAction<boolean>) => {
       state.profileComplete = action.payload;
@@ -38,6 +41,7 @@ export const authSlice = createSlice({
       state.isAuthenticated = false;
       state.profileComplete = null;
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
     },
   },
 });
