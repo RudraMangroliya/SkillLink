@@ -328,7 +328,8 @@ export const generateRecommendationDraft = async (req: any, res: Response) => {
     const target_skills = profile.skills || [];
 
     const axios = require('axios');
-    const response = await axios.post("http://localhost:8000/generate-draft", {
+    const AI_SERVICE_URL = process.env.AI_SERVICE_URL || "http://localhost:8000";
+    const response = await axios.post(`${AI_SERVICE_URL}/generate-draft`, {
       target_name,
       target_headline,
       target_skills
