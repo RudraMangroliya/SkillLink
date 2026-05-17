@@ -18,6 +18,7 @@ export default function ChatPage() {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [isSending, setIsSending] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -264,7 +265,8 @@ export default function ChatPage() {
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (newMessage && selectedChat) {
+    if (newMessage && selectedChat && !isSending) {
+      setIsSending(true);
       socket.emit("stop typing", selectedChat._id);
       try {
         const res = await axiosInstance.post("/api/messages", {
@@ -279,6 +281,8 @@ export default function ChatPage() {
         fetchChats(); // Update latest message
       } catch (err) {
         console.error("Error sending message", err);
+      } finally {
+        setIsSending(false);
       }
     }
   };
@@ -478,7 +482,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] flex bg-gray-50 dark:bg-slate-900 pt-2 sm:pt-4 pb-2 sm:pb-4 transition-colors">
+    <div className="h-[calc(100dvh-64px)] flex bg-gray-50 dark:bg-slate-900 pt-2 sm:pt-4 pb-2 sm:pb-4 transition-colors">
       <div className="max-w-7xl mx-auto w-full px-0 sm:px-4 flex gap-0 md:gap-6 h-full">
 
         {/* Left Sidebar - Contacts list */}
@@ -947,11 +951,11 @@ export default function ChatPage() {
                       
                       <button 
                         type="submit" 
-                        disabled={!newMessage.trim()}
+                        disabled={!newMessage.trim() || isSending}
                         className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-2 sm:px-5 sm:py-2 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center shrink-0 ml-1"
                       >
-                        <Send size={16} className="sm:mr-1" />
-                        <span className="hidden sm:inline font-medium">Send</span>
+                        <Send size={16} className={`sm:mr-1 ${isSending ? 'animate-pulse' : ''}`} />
+                        <span className="hidden sm:inline font-medium">{isSending ? 'Sending...' : 'Send'}</span>
                       </button>
                     </form>
                   )}
