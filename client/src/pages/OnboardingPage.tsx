@@ -57,6 +57,7 @@ export default function OnboardingPage() {
   };
 
   const handleSubmit = async () => {
+    if (loading) return;
     setError("");
     setLoading(true);
     try {
@@ -116,7 +117,6 @@ export default function OnboardingPage() {
             <span>About</span>
             <span>Skills & Interests</span>
             <span>Education</span>
-            <span>Uploads</span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2">
             <div
@@ -290,9 +290,17 @@ export default function OnboardingPage() {
             <button
               onClick={handleSubmit}
               disabled={loading}
-              className="px-8 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition shadow-md disabled:opacity-70 flex items-center"
+              className="px-8 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition shadow-md disabled:opacity-70 flex items-center justify-center min-w-[180px]"
             >
-              {loading ? "Saving Profile..." : "Complete Profile"}
+              {loading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Saving...
+                </>
+              ) : "Complete Profile"}
             </button>
           )}
         </div>

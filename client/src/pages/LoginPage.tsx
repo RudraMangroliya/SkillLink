@@ -20,6 +20,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
     try {
@@ -36,15 +37,21 @@ export default function LoginPage() {
 
   const handleManualLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoading) return;
+    setIsLoading(true);
     try {
-      const res = await axiosInstance.post("/api/auth/login", {
-        email, password
-      });
+      const res = await axiosInstance.post("/api/auth/login", { email, password });
       dispatch(setCredentials({ user: res.data, token: res.data.token }));
-      navigate("/explore");
+      if (!res.data.profileComplete) {
+        navigate("/profile-setup");
+      } else {
+        navigate("/explore");
+      }
     } catch (error: any) {
       console.error("Login Error", error);
-      setError(error.response?.data?.message || "Invalid email or password");
+      setError(error.response?.data?.message || "Invalid credentials");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -83,8 +90,16 @@ export default function LoginPage() {
               required
             />
           </div>
-          <button type="submit" className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-md">
-            Sign In
+          <button type="submit" disabled={isLoading} className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center">
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Signing In...
+              </>
+            ) : "Sign In"}
           </button>
         </form>
 
