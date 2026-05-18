@@ -1,5 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
+import dns from "dns";
+
+// Force IPv4 first to fix ENETUNREACH errors with nodemailer on ISPs without IPv6
+dns.setDefaultResultOrder("ipv4first");
 
 dotenv.config();
 
