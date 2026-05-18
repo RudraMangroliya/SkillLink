@@ -3,9 +3,9 @@ import nodemailer from "nodemailer";
 export const sendEmail = async (options: { email: string; subject: string; message: string; html?: string }) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '465'),
+      secure: process.env.SMTP_PORT === '587' ? false : true,
       connectionTimeout: 10000, // 10 seconds
       greetingTimeout: 10000,
       socketTimeout: 10000,
