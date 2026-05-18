@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import axiosInstance from "../utils/axios";
-import { Briefcase, Users, XCircle, CheckCircle, Calendar, Plus, Trash2, Edit } from "lucide-react";
+import { Briefcase, Users, XCircle, CheckCircle, Calendar, Plus, Trash2, Edit, Loader2 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function JobsDashboardPage() {
@@ -27,6 +27,7 @@ export default function JobsDashboardPage() {
   const [scheduleModal, setScheduleModal] = useState<{jobId: string, appId: string} | null>(null);
   const [interviewData, setInterviewData] = useState({ date: "", link: "" });
   const [isScheduling, setIsScheduling] = useState(false);
+  const [updatingAppId, setUpdatingAppId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -58,6 +59,7 @@ export default function JobsDashboardPage() {
 
   const handleUpdateStatus = async (jobId: string, applicationId: string, status: string, interviewDetails?: any) => {
     try {
+      setUpdatingAppId(applicationId);
       const payload: any = { status };
       if (interviewDetails) {
         if (interviewDetails.date) payload.interviewDate = interviewDetails.date;
@@ -78,6 +80,8 @@ export default function JobsDashboardPage() {
       }));
     } catch (err) {
       console.error(err);
+    } finally {
+      setUpdatingAppId(null);
     }
   };
 
@@ -262,8 +266,14 @@ export default function JobsDashboardPage() {
                               <div className="w-full sm:w-1/3 flex justify-start sm:justify-end mt-2 sm:mt-0">
                                 {app.status === 'Pending' && (
                                   <div className="flex gap-2 w-full sm:w-auto">
-                                    <button onClick={() => handleUpdateStatus(job._id, app._id, 'Shortlisted')} className="flex-1 sm:flex-none px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-md text-xs font-semibold transition text-center">Shortlist</button>
-                                    <button onClick={() => handleUpdateStatus(job._id, app._id, 'Rejected')} className="flex-1 sm:flex-none px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-md text-xs font-semibold transition text-center">Reject</button>
+                                    <button disabled={updatingAppId === app._id} onClick={() => handleUpdateStatus(job._id, app._id, 'Shortlisted')} className="flex-1 sm:flex-none px-3 py-1.5 bg-green-50 text-green-600 hover:bg-green-100 rounded-md text-xs font-semibold transition text-center disabled:opacity-50 flex items-center justify-center">
+                                      {updatingAppId === app._id && <Loader2 size={12} className="animate-spin mr-1" />}
+                                      Shortlist
+                                    </button>
+                                    <button disabled={updatingAppId === app._id} onClick={() => handleUpdateStatus(job._id, app._id, 'Rejected')} className="flex-1 sm:flex-none px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-md text-xs font-semibold transition text-center disabled:opacity-50 flex items-center justify-center">
+                                      {updatingAppId === app._id && <Loader2 size={12} className="animate-spin mr-1" />}
+                                      Reject
+                                    </button>
                                   </div>
                                 )}
                                 {app.status === 'Shortlisted' && (
