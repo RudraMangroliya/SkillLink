@@ -267,6 +267,8 @@ export const forgotPassword = async (req: Request, res: Response) => {
       }
     });
 
+    console.log(`[SMTP DEBUG] Attempting to connect to ${process.env.SMTP_HOST || 'smtp.gmail.com'}:${process.env.SMTP_PORT || '465'} as ${process.env.SMTP_EMAIL}`);
+
     await transporter.sendMail(mailOptions);
 
     res.json({ message: "OTP sent to your email" });

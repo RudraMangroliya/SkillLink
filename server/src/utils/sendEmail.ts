@@ -26,6 +26,8 @@ export const sendEmail = async (options: { email: string; subject: string; messa
       ...(options.html && { html: options.html }),
     };
 
+    console.log(`[SMTP DEBUG] Attempting to connect to ${process.env.SMTP_HOST || 'smtp.gmail.com'}:${process.env.SMTP_PORT || '465'} as ${process.env.SMTP_EMAIL}`);
+
     await transporter.sendMail(mailOptions);
     console.log(`Email successfully sent to ${options.email}`);
   } catch (error: any) {
