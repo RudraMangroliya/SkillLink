@@ -38,10 +38,17 @@ const allowedOrigins = process.env.CLIENT_URL
 export const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {
-  pingTimeout: 60000,
   cors: {
-    origin: allowedOrigins,
-    credentials: true
+    origin: function (origin: any, callback: any) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
   },
 });
 
