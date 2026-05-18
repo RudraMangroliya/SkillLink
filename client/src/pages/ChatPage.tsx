@@ -482,7 +482,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-[calc(100dvh-64px)] flex bg-gray-50 dark:bg-slate-900 pt-2 sm:pt-4 pb-2 sm:pb-4 transition-colors">
+    <div className="fixed top-[64px] bottom-0 left-0 right-0 flex bg-gray-50 dark:bg-slate-900 pt-2 sm:pt-4 pb-2 sm:pb-4 transition-colors">
       <div className="max-w-7xl mx-auto w-full px-0 sm:px-4 flex gap-0 md:gap-6 h-full">
 
         {/* Left Sidebar - Contacts list */}
