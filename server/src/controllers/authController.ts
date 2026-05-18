@@ -245,7 +245,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     `;
 
     const mailOptions = {
-      from: process.env.SMTP_EMAIL,
+      from: `"SkillLink Job Portal" <${process.env.FROM_EMAIL || process.env.SMTP_EMAIL}>`,
       to: user.email,
       subject: "SkillLink Password Reset Verification Code",
       html: emailHtml,

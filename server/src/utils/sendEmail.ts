@@ -19,7 +19,7 @@ export const sendEmail = async (options: { email: string; subject: string; messa
     });
 
     const mailOptions = {
-      from: `"SkillLink Job Portal" <${process.env.SMTP_EMAIL}>`,
+      from: `"SkillLink Job Portal" <${process.env.FROM_EMAIL || process.env.SMTP_EMAIL}>`,
       to: options.email,
       subject: options.subject,
       text: options.message,
