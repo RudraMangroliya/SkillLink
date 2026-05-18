@@ -691,7 +691,7 @@ export default function ChatPage() {
                     <div className={`group max-w-[90%] sm:max-w-[70%] flex items-end space-x-1 sm:space-x-2 relative ${isMe ? 'flex-row-reverse space-x-reverse' : 'flex-row'}`}>
                       {!isMe && <img src={m.sender?.profileImage || `https://ui-avatars.com/api/?name=${m.sender?.name}&background=random`} alt="" className="w-6 h-6 sm:w-8 sm:h-8 rounded-full mb-1 shrink-0" />}
                       
-                      <div className={`p-3 rounded-2xl relative group ${isMe ? 'bg-indigo-600 border border-indigo-500 text-white rounded-br-none shadow-sm' : 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white rounded-bl-none shadow-sm'} ${m.isDeleted ? 'opacity-70 italic' : ''}`}>
+                      <div className={`p-3 rounded-2xl relative group shadow-sm border ${isMe ? 'bg-indigo-50 dark:bg-indigo-900/40 border-indigo-200 dark:border-indigo-800 text-gray-900 dark:text-white rounded-br-none' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white rounded-bl-none'} ${m.isDeleted ? 'opacity-70 italic' : ''}`}>
 
                         {m.replyTo && !m.isDeleted && (
                           <div 
@@ -768,18 +768,18 @@ export default function ChatPage() {
                           </div>
                           <div className="flex items-center space-x-1 ml-3">
                             {isPinned && <Pin size={10} className="text-indigo-400 mr-1" />}
-                            {m.isEdited && !m.isDeleted && <span className={`text-[9px] ${isMe ? 'text-indigo-200' : 'text-gray-400'}`}>(edited)</span>}
-                            <p className={`text-[10px] ${isMe ? 'text-indigo-200' : 'text-gray-400'}`}>
+                            {m.isEdited && !m.isDeleted && <span className={`text-[9px] ${isMe ? 'text-indigo-500 dark:text-indigo-400' : 'text-gray-400'}`}>(edited)</span>}
+                            <p className={`text-[10px] ${isMe ? 'text-indigo-500 dark:text-indigo-400' : 'text-gray-400'}`}>
                               {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </p>
                             {isMe && !m.isDeleted && (
                               <span className="text-[10px] ml-1">
                                 {m.readBy?.length > 1 ? (
-                                  <span className="text-sky-300 font-bold">✓✓</span>
+                                  <span className="text-blue-600 dark:text-blue-400 font-bold">✓✓</span>
                                 ) : m.deliveredTo?.length > 0 ? (
-                                  <span className="text-indigo-200 font-bold">✓✓</span>
+                                  <span className="text-gray-500 dark:text-gray-400 font-bold">✓✓</span>
                                 ) : (
-                                  <span className="text-indigo-200 font-bold">✓</span>
+                                  <span className="text-gray-500 dark:text-gray-400 font-bold">✓</span>
                                 )}
                               </span>
                             )}

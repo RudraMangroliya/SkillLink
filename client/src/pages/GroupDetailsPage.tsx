@@ -668,7 +668,7 @@ export default function GroupDetailsPage() {
                           <div className={`max-w-[85%] sm:max-w-[70%] flex items-end space-x-2 relative ${isMe ? 'flex-row-reverse space-x-reverse' : 'flex-row'}`}>
                             {!isMe && <img src={msg.sender.profileImage || `https://ui-avatars.com/api/?name=${msg.sender.name}&background=random`} alt="" className="w-8 h-8 rounded-full mb-1" />}
                             
-                            <div className={`p-3 rounded-2xl relative ${isMe ? 'bg-indigo-600 text-white rounded-br-none' : 'bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white rounded-bl-none shadow-sm'} ${msg.isDeleted ? 'opacity-70 italic' : ''}`}>
+                            <div className={`p-3 rounded-2xl relative shadow-sm border ${isMe ? 'bg-indigo-50 dark:bg-indigo-900/40 border-indigo-200 dark:border-indigo-800 text-gray-900 dark:text-white rounded-br-none' : 'bg-white dark:bg-slate-800 border-gray-200 dark:border-slate-700 text-gray-900 dark:text-white rounded-bl-none'} ${msg.isDeleted ? 'opacity-70 italic' : ''}`}>
                               {!isMe && <p className="text-xs font-semibold mb-1 text-indigo-600 dark:text-indigo-400">{msg.sender.name}</p>}
                               
                               {editingMessage === msg._id ? (
@@ -690,8 +690,8 @@ export default function GroupDetailsPage() {
                                   ))}
                                 </div>
                                 <div className="flex items-center space-x-1 ml-3">
-                                  {msg.isEdited && !msg.isDeleted && <span className={`text-[9px] ${isMe ? 'text-indigo-200' : 'text-gray-400'}`}>(edited)</span>}
-                                  <p className={`text-[10px] ${isMe ? 'text-indigo-200' : 'text-gray-400'}`}>
+                                  {msg.isEdited && !msg.isDeleted && <span className={`text-[9px] ${isMe ? 'text-indigo-500 dark:text-indigo-400' : 'text-gray-400'}`}>(edited)</span>}
+                                  <p className={`text-[10px] ${isMe ? 'text-indigo-500 dark:text-indigo-400' : 'text-gray-400'}`}>
                                     {new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                   </p>
                                 </div>
