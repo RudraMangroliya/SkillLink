@@ -695,7 +695,7 @@ export default function ChatPage() {
 
                         {m.replyTo && !m.isDeleted && (
                           <div 
-                            className={`mb-2 p-2 rounded text-xs border-l-4 cursor-pointer hover:opacity-80 transition ${isMe ? 'bg-indigo-700 border-indigo-300' : 'bg-gray-100 dark:bg-slate-700 border-gray-400 dark:border-slate-500'}`}
+                            className={`mb-2 p-2 rounded text-xs border-l-4 cursor-pointer hover:opacity-80 transition ${isMe ? 'bg-indigo-200/50 dark:bg-indigo-800/50 border-indigo-400 dark:border-indigo-500' : 'bg-gray-100 dark:bg-slate-700 border-gray-400 dark:border-slate-500'}`}
                             onClick={() => {
                               const el = document.getElementById(`message-${m.replyTo._id}`);
                               if (el) {
