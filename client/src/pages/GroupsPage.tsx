@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Users, Search, UsersRound, Loader2 } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import io, { Socket } from "socket.io-client";
 import axiosInstance from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -127,9 +128,7 @@ export default function GroupsPage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-          </div>
+          <PageLoader fullPage={false} label="Loading groups..." />
         ) : (
           <div className="space-y-12">
             {/* My Groups Section */}

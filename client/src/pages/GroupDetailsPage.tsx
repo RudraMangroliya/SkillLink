@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { UsersRound, Users, Plus, MessageSquare, Send, ArrowLeft, Settings, MessageCircle, Info, Smile, Edit2, Trash2, MoreVertical, Sparkles, Loader2 } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
@@ -478,11 +479,7 @@ export default function GroupDetailsPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex justify-center pt-32">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-      </div>
-    );
+    return <PageLoader label="Loading group details..." />;
   }
 
   if (!group) {

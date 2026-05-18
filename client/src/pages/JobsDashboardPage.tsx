@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import axiosInstance from "../utils/axios";
 import { Briefcase, Users, XCircle, CheckCircle, Calendar, Plus, Trash2, Edit, Loader2 } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function JobsDashboardPage() {
@@ -149,7 +150,7 @@ export default function JobsDashboardPage() {
     setNewJob({ title: "", company: "", location: "", type: "Full-time", description: "", requirements: "", salaryRange: "" });
   };
 
-  if (loading) return <div className="flex justify-center p-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div></div>;
+  if (loading) return <PageLoader fullPage={false} label="Loading jobs..." />;
 
   return (
     <div>

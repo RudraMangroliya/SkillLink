@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import { MapPin, Briefcase, GraduationCap, Link as LinkIcon, Camera, Loader2, Award, FolderGit2, FileText, UserPlus } from "lucide-react";
+import { MapPin, Briefcase, GraduationCap, Edit2, Camera, UserPlus, CheckCircle2, XCircle, Share2, FileText, ChevronRight, MessageSquare, Loader2, Link as LinkIcon, Plus, UserCheck, X } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import EditProfileModal from "../components/EditProfileModal";
 import UserListModal from "../components/UserListModal";
@@ -264,7 +265,7 @@ export default function ProfilePage() {
       if (res.data && res.data.draft) {
         setRecommendationText(res.data.draft);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Generate draft error:", err);
     } finally {
       setGeneratingDraft(false);
@@ -273,8 +274,8 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex justify-center pt-20 transition-colors">
-        <Loader2 className="animate-spin text-indigo-600" size={48} />
+      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex justify-center pt-32">
+        <PageLoader fullPage={true} label="Loading profile..." />
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Search, UserPlus, MapPin, Loader2, Filter } from "lucide-react";
+import { Search, MapPin, Building, Briefcase, GraduationCap, Link as LinkIcon, UserPlus, CheckCircle2, XCircle, Filter, Loader2, Sparkles, MessageSquare } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
@@ -183,8 +184,8 @@ export default function ExplorePage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="animate-spin text-indigo-600" size={48} />
+          <div className="flex justify-center items-center py-20 min-h-[50vh]">
+            <PageLoader fullPage={false} label="Finding the best matches..." />
           </div>
         ) : error ? (
           <div className="bg-red-50 text-red-500 p-4 rounded-xl border border-red-100 text-center">

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Users, UserPlus, Check, X, MessageSquare } from "lucide-react";
+import { Search, UserPlus, CheckCircle2, XCircle, Users, ExternalLink, Briefcase, GraduationCap, X, MessageSquare } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -173,9 +174,7 @@ export default function NetworkPage() {
           {/* Main Content */}
           <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-3 sm:p-6 transition-colors min-w-0">
             {loading ? (
-              <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-              </div>
+              <PageLoader fullPage={false} label="Loading network..." />
             ) : (
               <>
                 {activeTab === "suggestions" && (

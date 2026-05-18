@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Search, MapPin, Building, DollarSign, Clock, BookmarkPlus, Loader2, CheckCircle2, X } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
@@ -247,8 +248,8 @@ export default function JobBoardPage() {
             </div>
 
             {loading ? (
-              <div className="flex justify-center py-12">
-                <Loader2 className="animate-spin text-indigo-600" size={40} />
+              <div className="flex justify-center items-center py-20 min-h-[50vh]">
+                <PageLoader fullPage={false} label="Loading jobs..." />
               </div>
             ) : error ? (
               <div className="bg-red-50 text-red-500 p-4 rounded-xl border border-red-100 text-center">

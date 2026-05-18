@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Users, Briefcase, Link as LinkIcon, Activity, Trash2, ShieldAlert, AlertTriangle, ShieldX, Server, MessageSquare, BarChart3, Database, Loader2 } from "lucide-react";
+import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 
 export default function AdminDashboard() {
@@ -57,11 +58,7 @@ export default function AdminDashboard() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent"></div>
-      </div>
-    );
+    return <PageLoader label="Loading dashboard..." />;
   }
 
   if (error) {
