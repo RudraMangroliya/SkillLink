@@ -1,31 +1,33 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState } from "./store/store";
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import axiosInstance from "./utils/axios";
 import { setProfileComplete } from "./store/slices/authSlice";
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import JobBoardPage from "./pages/JobBoardPage";
-import ExplorePage from "./pages/ExplorePage";
-import ChatPage from "./pages/ChatPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
-import OnboardingPage from "./pages/OnboardingPage";
-import NotFoundPage from "./pages/NotFoundPage";
 import Navbar from "./components/Navbar";
-import NetworkPage from "./pages/NetworkPage";
-import GroupsPage from "./pages/GroupsPage";
-import GroupDetailsPage from "./pages/GroupDetailsPage";
-import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
-import TermsOfServicePage from "./pages/TermsOfServicePage";
-import CookiePolicyPage from "./pages/CookiePolicyPage";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import PageLoader from "./components/PageLoader";
+
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
+const RegisterPage = lazy(() => import("./pages/RegisterPage"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const JobBoardPage = lazy(() => import("./pages/JobBoardPage"));
+const ExplorePage = lazy(() => import("./pages/ExplorePage"));
+const ChatPage = lazy(() => import("./pages/ChatPage"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const ForgotPasswordPage = lazy(() => import("./pages/ForgotPasswordPage"));
+const ResetPasswordPage = lazy(() => import("./pages/ResetPasswordPage"));
+const OnboardingPage = lazy(() => import("./pages/OnboardingPage"));
+const NotFoundPage = lazy(() => import("./pages/NotFoundPage"));
+const NetworkPage = lazy(() => import("./pages/NetworkPage"));
+const GroupsPage = lazy(() => import("./pages/GroupsPage"));
+const GroupDetailsPage = lazy(() => import("./pages/GroupDetailsPage"));
+const PrivacyPolicyPage = lazy(() => import("./pages/PrivacyPolicyPage"));
+const TermsOfServicePage = lazy(() => import("./pages/TermsOfServicePage"));
+const CookiePolicyPage = lazy(() => import("./pages/CookiePolicyPage"));
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -91,8 +93,9 @@ function App() {
         <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
         <Navbar />
         <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
+          <Suspense fallback={<PageLoader fullPage={true} />}>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={
@@ -153,7 +156,8 @@ function App() {
         
           {/* Catch-all route for unknown pages */}
           <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+            </Routes>
+          </Suspense>
           </main>
           <Footer />
         </div>

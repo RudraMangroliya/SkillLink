@@ -440,7 +440,28 @@ export const getSuggestedProfiles = async (req: any, res: Response) => {
       c.requester.toString() === currentUserId.toString() ? c.recipient.toString() : c.requester.toString()
     );
 
-    const scoredProfiles = await Promise.all(allProfiles.map(async (p: any) => {
+    // OPTIMIZATION: Fetch mutual connection candidates in one query to avoid N+1 queries in the loop
+    const connectionsOfMyConnections = await Connection.find({
+      $or: [
+        { requester: { $in: myConnectionIds } },
+        { recipient: { $in: myConnectionIds } }
+      ],
+      status: "Accepted"
+    });
+
+    const mutualConnectionMap = new Map<string, Set<string>>();
+    connectionsOfMyConnections.forEach((conn: any) => {
+      const reqId = conn.requester.toString();
+      const recId = conn.recipient.toString();
+      
+      if (!mutualConnectionMap.has(reqId)) mutualConnectionMap.set(reqId, new Set());
+      if (!mutualConnectionMap.has(recId)) mutualConnectionMap.set(recId, new Set());
+      
+      mutualConnectionMap.get(reqId)!.add(recId);
+      mutualConnectionMap.get(recId)!.add(reqId);
+    });
+
+    const scoredProfiles = allProfiles.map((p: any) => {
       let score = 0;
 
       // 1. Location (1 point for exact match)
@@ -457,22 +478,15 @@ export const getSuggestedProfiles = async (req: any, res: Response) => {
       }
 
       // 3. Mutual Connections (3 points per mutual connection)
-      const theirConnections = await Connection.find({
-        $or: [{ requester: p.user._id }, { recipient: p.user._id }],
-        status: "Accepted"
-      });
-      const theirConnectionIds = theirConnections.map((c: any) => 
-        c.requester.toString() === p.user._id.toString() ? c.recipient.toString() : c.requester.toString()
-      );
-      
-      const mutualCount = myConnectionIds.filter((id: any) => theirConnectionIds.includes(id)).length;
+      const theirConnectionsSet = mutualConnectionMap.get(p.user._id.toString()) || new Set<string>();
+      const mutualCount = myConnectionIds.filter((id: any) => theirConnectionsSet.has(id)).length;
       score += mutualCount * 3;
 
       // 4. Job Role / Headline (4 points for shared keywords)
       if (p.headline && currentProfile.headline) {
         const myHeadlineWords = currentProfile.headline.toLowerCase().split(" ");
         const theirHeadlineWords = p.headline.toLowerCase().split(" ");
-        const sharedWords = myHeadlineWords.filter(w => w.length > 3 && theirHeadlineWords.includes(w));
+        const sharedWords = myHeadlineWords.filter((w: string) => w.length > 3 && theirHeadlineWords.includes(w));
         score += sharedWords.length * 4;
       }
 
@@ -500,7 +514,7 @@ export const getSuggestedProfiles = async (req: any, res: Response) => {
       }
 
       return { profile: p, score };
-    }));
+    });
 
     // Filter out profiles with 0 score (no relevance), sort by score descending and return top 10
     const relevantProfiles = scoredProfiles.filter(sp => sp.score > 0);
