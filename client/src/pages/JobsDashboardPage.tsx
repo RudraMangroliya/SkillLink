@@ -28,6 +28,8 @@ export default function JobsDashboardPage() {
   const [interviewData, setInterviewData] = useState({ date: "", link: "" });
   const [isScheduling, setIsScheduling] = useState(false);
   const [updatingAppId, setUpdatingAppId] = useState<string | null>(null);
+  const [deletingJobIds, setDeletingJobIds] = useState<Set<string>>(new Set());
+  const [isCreatingJob, setIsCreatingJob] = useState(false);
 
   const fetchDashboardData = async () => {
     try {
@@ -90,16 +92,24 @@ export default function JobsDashboardPage() {
 
   const handleDeleteJob = async (jobId: string) => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
+    setDeletingJobIds(prev => new Set(prev).add(jobId));
     try {
       await axiosInstance.delete(`/api/jobs/${jobId}`);
       setJobs(jobs.filter(job => job._id !== jobId));
     } catch (err) {
       console.error(err);
+    } finally {
+      setDeletingJobIds(prev => {
+        const next = new Set(prev);
+        next.delete(jobId);
+        return next;
+      });
     }
   };
 
   const handleCreateJob = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsCreatingJob(true);
     try {
       const requirementsArray = newJob.requirements.split(",").map(r => r.trim()).filter(r => r.length > 0);
       
@@ -114,6 +124,8 @@ export default function JobsDashboardPage() {
       handleCloseModal();
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsCreatingJob(false);
     }
   };
 
@@ -209,8 +221,8 @@ export default function JobsDashboardPage() {
                       <button onClick={() => handleOpenEditModal(job)} className="p-2 text-gray-400 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 bg-white dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600 transition shadow-sm hover:shadow">
                         <Edit size={18} />
                       </button>
-                      <button onClick={() => handleDeleteJob(job._id)} className="p-2 text-gray-400 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 bg-white dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600 transition shadow-sm hover:shadow">
-                        <Trash2 size={18} />
+                      <button onClick={() => handleDeleteJob(job._id)} disabled={deletingJobIds.has(job._id)} className="p-2 text-gray-400 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 bg-white dark:bg-slate-700 rounded-lg border border-gray-200 dark:border-slate-600 transition shadow-sm hover:shadow disabled:opacity-50">
+                        {deletingJobIds.has(job._id) ? <Loader2 size={18} className="animate-spin text-red-600" /> : <Trash2 size={18} />}
                       </button>
                     </div>
                   </div>
@@ -399,8 +411,11 @@ export default function JobsDashboardPage() {
               </div>
 
               <div className="pt-4 flex flex-col sm:flex-row justify-end gap-3 sm:space-x-3 sm:gap-0">
-                <button type="button" onClick={handleCloseModal} className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center">Cancel</button>
-                <button type="submit" className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-center">{editingJobId ? "Update Job" : "Post Job"}</button>
+                <button type="button" onClick={handleCloseModal} disabled={isCreatingJob} className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center disabled:opacity-50">Cancel</button>
+                <button type="submit" disabled={isCreatingJob} className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-center disabled:opacity-50 flex items-center justify-center">
+                  {isCreatingJob && <Loader2 size={16} className="animate-spin mr-2" />}
+                  {isCreatingJob ? (editingJobId ? "Updating..." : "Posting...") : (editingJobId ? "Update Job" : "Post Job")}
+                </button>
               </div>
             </form>
           </div>

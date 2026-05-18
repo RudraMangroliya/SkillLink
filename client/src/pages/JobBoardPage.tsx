@@ -19,6 +19,8 @@ export default function JobBoardPage() {
   const [showSavedOnly, setShowSavedOnly] = useState(false);
   const [sortBy, setSortBy] = useState("relevant");
   const [selectedJob, setSelectedJob] = useState<any>(null);
+  const [savingIds, setSavingIds] = useState<Set<string>>(new Set());
+  const [applyingIds, setApplyingIds] = useState<Set<string>>(new Set());
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
@@ -65,6 +67,7 @@ export default function JobBoardPage() {
   }, [isAuthenticated]);
 
   const handleToggleSave = async (jobId: string) => {
+    setSavingIds(prev => new Set(prev).add(jobId));
     try {
       await axiosInstance.post(`/api/jobs/${jobId}/save`);
       if (savedJobs.includes(jobId)) {
@@ -74,10 +77,17 @@ export default function JobBoardPage() {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setSavingIds(prev => {
+        const next = new Set(prev);
+        next.delete(jobId);
+        return next;
+      });
     }
   };
 
   const handleApply = async (jobId: string) => {
+    setApplyingIds(prev => new Set(prev).add(jobId));
     try {
       await axiosInstance.post(`/api/jobs/${jobId}/apply`);
       // Update local state to reflect the new application
@@ -92,6 +102,12 @@ export default function JobBoardPage() {
       }));
     } catch (err) {
       console.error("Failed to apply", err);
+    } finally {
+      setApplyingIds(prev => {
+        const next = new Set(prev);
+        next.delete(jobId);
+        return next;
+      });
     }
   };
 
@@ -267,9 +283,10 @@ export default function JobBoardPage() {
                       {user?.role !== "recruiter" && user?.role !== "admin" && (
                         <button 
                           onClick={(e) => { e.stopPropagation(); handleToggleSave(job._id); }}
-                          className={`p-2 rounded-full border transition ${savedJobs.includes(job._id) ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400' : 'border-gray-200 dark:border-gray-700 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
+                          disabled={savingIds.has(job._id)}
+                          className={`p-2 rounded-full border transition flex items-center justify-center disabled:opacity-50 ${savedJobs.includes(job._id) ? 'bg-indigo-50 dark:bg-indigo-900/30 border-indigo-200 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400' : 'border-gray-200 dark:border-gray-700 text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-indigo-600 dark:hover:text-indigo-400'}`}
                         >
-                          <BookmarkPlus size={20} className={savedJobs.includes(job._id) ? 'fill-indigo-600' : ''} />
+                          {savingIds.has(job._id) ? <Loader2 className="animate-spin h-5 w-5" /> : <BookmarkPlus size={20} className={savedJobs.includes(job._id) ? 'fill-indigo-600' : ''} />}
                         </button>
                       )}
                     </div>
@@ -293,8 +310,9 @@ export default function JobBoardPage() {
                             <CheckCircle2 size={16} className="mr-1" /> Applied
                           </button>
                         ) : (
-                          <button onClick={(e) => { e.stopPropagation(); handleApply(job._id); }} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium text-sm transition shadow-sm hover:shadow-md">
-                            Apply Now
+                          <button disabled={applyingIds.has(job._id)} onClick={(e) => { e.stopPropagation(); handleApply(job._id); }} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium text-sm transition shadow-sm hover:shadow-md disabled:opacity-50 flex items-center justify-center min-w-[100px]">
+                            {applyingIds.has(job._id) ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : null}
+                            {applyingIds.has(job._id) ? "Applying..." : "Apply Now"}
                           </button>
                         )
                       )}
@@ -358,18 +376,20 @@ export default function JobBoardPage() {
               <div className="mt-8 pt-6 border-t border-gray-100 flex justify-end space-x-3">
                 <button 
                   onClick={() => handleToggleSave(selectedJob._id)}
-                  className={`px-4 py-2 rounded-lg font-medium text-sm transition border flex items-center ${savedJobs.includes(selectedJob._id) ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
+                  disabled={savingIds.has(selectedJob._id)}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm transition border flex items-center disabled:opacity-50 ${savedJobs.includes(selectedJob._id) ? 'bg-indigo-50 border-indigo-200 text-indigo-600' : 'border-gray-200 text-gray-700 hover:bg-gray-50'}`}
                 >
-                  <BookmarkPlus size={18} className={`mr-2 ${savedJobs.includes(selectedJob._id) ? 'fill-indigo-600' : ''}`} /> 
-                  {savedJobs.includes(selectedJob._id) ? "Saved" : "Save Job"}
+                  {savingIds.has(selectedJob._id) ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <BookmarkPlus size={18} className={`mr-2 ${savedJobs.includes(selectedJob._id) ? 'fill-indigo-600' : ''}`} />} 
+                  {savingIds.has(selectedJob._id) ? "Saving..." : savedJobs.includes(selectedJob._id) ? "Saved" : "Save Job"}
                 </button>
                 {selectedJob.applications?.some((app: any) => String(app.applicant) === String(user?._id) || String(app.applicant?._id) === String(user?._id)) ? (
                   <button disabled className="px-6 py-2 bg-gray-100 text-gray-500 rounded-lg font-medium text-sm cursor-not-allowed flex items-center">
                     <CheckCircle2 size={16} className="mr-1" /> Applied
                   </button>
                 ) : (
-                  <button onClick={() => { handleApply(selectedJob._id); setSelectedJob(null); }} className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium shadow-sm">
-                    Apply Now
+                  <button disabled={applyingIds.has(selectedJob._id)} onClick={() => { handleApply(selectedJob._id); }} className="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium shadow-sm disabled:opacity-50 flex items-center justify-center min-w-[120px]">
+                    {applyingIds.has(selectedJob._id) ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : null}
+                    {applyingIds.has(selectedJob._id) ? "Applying..." : "Apply Now"}
                   </button>
                 )}
               </div>

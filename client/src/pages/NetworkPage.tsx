@@ -11,15 +11,24 @@ export default function NetworkPage() {
   const [requests, setRequests] = useState<any[]>([]);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
+  const [startingChatIds, setStartingChatIds] = useState<Set<string>>(new Set());
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
   const handleStartChat = async (userId: string) => {
+    setStartingChatIds(prev => new Set(prev).add(userId));
     try {
       await axiosInstance.post("/api/chats", { userId });
       navigate("/chat");
     } catch (err) {
       console.error(err);
+    } finally {
+      setStartingChatIds(prev => {
+        const next = new Set(prev);
+        next.delete(userId);
+        return next;
+      });
     }
   };
 
@@ -92,20 +101,34 @@ export default function NetworkPage() {
   };
 
   const handleAccept = async (id: string) => {
+    setProcessingIds(prev => new Set(prev).add(id));
     try {
       await axiosInstance.post(`/api/connections/accept/${id}`);
       setRequests(requests.filter(r => r._id !== id));
     } catch (err) {
       console.error(err);
+    } finally {
+      setProcessingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
   const handleReject = async (id: string) => {
+    setProcessingIds(prev => new Set(prev).add(id));
     try {
       await axiosInstance.post(`/api/connections/reject/${id}`);
       setRequests(requests.filter(r => r._id !== id));
     } catch (err) {
       console.error(err);
+    } finally {
+      setProcessingIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -201,11 +224,11 @@ export default function NetworkPage() {
                             </div>
                           </div>
                           <div className="flex space-x-2 self-end sm:self-auto shrink-0">
-                            <button onClick={() => handleAccept(req._id)} className="p-2 text-green-600 hover:bg-green-50 rounded-full transition border border-green-200" title="Accept">
-                              <Check size={20} />
+                            <button onClick={() => handleAccept(req._id)} disabled={processingIds.has(req._id)} className="p-2 text-green-600 hover:bg-green-50 rounded-full transition border border-green-200 disabled:opacity-50" title="Accept">
+                              {processingIds.has(req._id) ? <div className="animate-spin h-5 w-5 border-2 border-green-600 border-t-transparent rounded-full" /> : <Check size={20} />}
                             </button>
-                            <button onClick={() => handleReject(req._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-full transition border border-red-200" title="Reject">
-                              <X size={20} />
+                            <button onClick={() => handleReject(req._id)} disabled={processingIds.has(req._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-full transition border border-red-200 disabled:opacity-50" title="Reject">
+                              {processingIds.has(req._id) ? <div className="animate-spin h-5 w-5 border-2 border-red-600 border-t-transparent rounded-full" /> : <X size={20} />}
                             </button>
                           </div>
                         </div>
@@ -231,8 +254,8 @@ export default function NetworkPage() {
                               </Link>
                               <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{otherUser.headline}</p>
                             </div>
-                            <button onClick={() => handleStartChat(otherUser._id)} className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-2 rounded-full transition">
-                              <MessageSquare size={18} />
+                            <button onClick={() => handleStartChat(otherUser._id)} disabled={startingChatIds.has(otherUser._id)} className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-2 rounded-full transition disabled:opacity-50">
+                              {startingChatIds.has(otherUser._id) ? <div className="animate-spin h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full" /> : <MessageSquare size={18} />}
                             </button>
                           </div>
                         );

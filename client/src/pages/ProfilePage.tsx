@@ -27,6 +27,11 @@ export default function ProfilePage() {
   const [mutualConnections, setMutualConnections] = useState<any[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [isConnectingLoading, setIsConnectingLoading] = useState(false);
+  const [isDisconnectingLoading, setIsDisconnectingLoading] = useState(false);
+  const [isAcceptingLoading, setIsAcceptingLoading] = useState(false);
+  const [isRejectingLoading, setIsRejectingLoading] = useState(false);
   const navigate = useNavigate();
 
   // User List Modal State
@@ -89,6 +94,7 @@ export default function ProfilePage() {
 
   const handleFollow = async () => {
     if (!profile?.user?._id) return;
+    setIsFollowLoading(true);
     try {
       if (isFollowing) {
         await axiosInstance.post(`/api/profile/unfollow/${profile.user._id}`);
@@ -101,6 +107,8 @@ export default function ProfilePage() {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsFollowLoading(false);
     }
   };
 
@@ -160,6 +168,7 @@ export default function ProfilePage() {
 
   const handleConnect = async () => {
     if (!profile?.user?._id) return;
+    setIsConnectingLoading(true);
     try {
       setConnectionStatus("Pending");
       setConnectionRequester(String(user?._id));
@@ -172,11 +181,14 @@ export default function ProfilePage() {
       } else {
         setConnectionStatus("Error");
       }
+    } finally {
+      setIsConnectingLoading(false);
     }
   };
 
   const handleDisconnect = async () => {
     if (!profile?.user?._id) return;
+    setIsDisconnectingLoading(true);
     try {
       await axiosInstance.delete(`/api/connections/remove/${profile.user._id}`);
       setConnectionStatus(null);
@@ -185,22 +197,28 @@ export default function ProfilePage() {
       fetchProfile();
     } catch (err) {
       console.error("Disconnect error:", err);
+    } finally {
+      setIsDisconnectingLoading(false);
     }
   };
 
   const handleAcceptConnection = async () => {
     if (!connectionRequestId) return;
+    setIsAcceptingLoading(true);
     try {
       await axiosInstance.post(`/api/connections/accept/${connectionRequestId}`);
       setConnectionStatus("Accepted");
       fetchProfile();
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsAcceptingLoading(false);
     }
   };
 
   const handleRejectConnection = async () => {
     if (!connectionRequestId) return;
+    setIsRejectingLoading(true);
     try {
       await axiosInstance.post(`/api/connections/reject/${connectionRequestId}`);
       setConnectionStatus(null);
@@ -208,6 +226,8 @@ export default function ProfilePage() {
       setConnectionRequester(null);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsRejectingLoading(false);
     }
   };
 
@@ -400,13 +420,14 @@ export default function ProfilePage() {
                   <>
                     <button 
                       onClick={handleFollow}
-                      className={`flex-1 md:flex-none px-6 py-2 rounded-lg font-medium transition shadow-sm hover:shadow text-sm sm:text-base border ${
+                      disabled={isFollowLoading}
+                      className={`flex-1 md:flex-none px-6 py-2 rounded-lg font-medium transition shadow-sm hover:shadow text-sm sm:text-base border flex items-center justify-center disabled:opacity-50 ${
                         isFollowing 
                           ? "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700" 
                           : "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700"
                       }`}
                     >
-                      {isFollowing ? "Unfollow" : "Follow"}
+                      {isFollowLoading ? <Loader2 className="animate-spin h-4 w-4" /> : isFollowing ? "Unfollow" : "Follow"}
                     </button>
                     {connectionStatus === "Accepted" ? (
                       <>
@@ -418,33 +439,37 @@ export default function ProfilePage() {
                         </button>
                         <button 
                           onClick={handleDisconnect}
-                          className="flex-1 md:flex-none bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center"
+                          disabled={isDisconnectingLoading}
+                          className="flex-1 md:flex-none bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                         >
-                          Disconnect
+                          {isDisconnectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Disconnect"}
                         </button>
                       </>
                     ) : connectionStatus === "Pending" && String(connectionRequester) !== String(user?._id) ? (
                       <div className="flex flex-1 md:flex-none gap-2">
                         <button 
                           onClick={handleAcceptConnection}
-                          className="flex-1 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center"
+                          disabled={isAcceptingLoading}
+                          className="flex-1 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                         >
-                          Accept
+                          {isAcceptingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Accept"}
                         </button>
                         <button 
                           onClick={handleRejectConnection}
-                          className="flex-1 bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center"
+                          disabled={isRejectingLoading}
+                          className="flex-1 bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                         >
-                          Reject
+                          {isRejectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Reject"}
                         </button>
                       </div>
                     ) : (
                       <button 
                         onClick={handleConnect}
-                        disabled={connectionStatus === "Pending"}
+                        disabled={connectionStatus === "Pending" || isConnectingLoading}
                         className="flex-1 md:flex-none bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                       >
-                        {connectionStatus === "Pending" ? "Pending..." : <><UserPlus size={18} className="mr-2" /> Connect</>}
+                        {isConnectingLoading || connectionStatus === "Pending" ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <UserPlus size={18} className="mr-2" />}
+                        {connectionStatus === "Pending" ? "Pending..." : isConnectingLoading ? "Connecting..." : "Connect"}
                       </button>
                     )}
                   </>
@@ -612,8 +637,9 @@ export default function ProfilePage() {
                   <button 
                     type="submit" 
                     disabled={submittingRec || !recommendationText.trim()}
-                    className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50"
+                    className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition disabled:opacity-50 flex items-center justify-center"
                   >
+                    {submittingRec && <Loader2 className="animate-spin h-4 w-4 mr-2" />}
                     {submittingRec ? "Submitting..." : "Submit Recommendation"}
                   </button>
                 </form>
@@ -647,10 +673,10 @@ export default function ProfilePage() {
                           <button 
                             onClick={() => handleEndorse(skill)}
                             disabled={endorsing === skill}
-                            className={`px-2 py-1.5 text-xs font-medium border-l border-indigo-200 dark:border-indigo-800/50 transition ${hasEndorsed ? 'bg-indigo-600 dark:bg-indigo-500 text-white' : 'hover:bg-indigo-200 dark:hover:bg-indigo-800/80 text-indigo-700 dark:text-indigo-400'}`}
+                            className={`px-2 py-1.5 text-xs font-medium border-l border-indigo-200 dark:border-indigo-800/50 transition flex items-center justify-center disabled:opacity-70 ${hasEndorsed ? 'bg-indigo-600 dark:bg-indigo-500 text-white' : 'hover:bg-indigo-200 dark:hover:bg-indigo-800/80 text-indigo-700 dark:text-indigo-400'}`}
                             title={hasEndorsed ? "Remove endorsement" : "Endorse skill"}
                           >
-                            {endorsing === skill ? "..." : "+"}
+                            {endorsing === skill ? <Loader2 className="animate-spin h-3 w-3" /> : "+"}
                           </button>
                         )}
                       </div>

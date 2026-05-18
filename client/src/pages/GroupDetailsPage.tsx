@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { UsersRound, Users, Plus, MessageSquare, Send, ArrowLeft, Settings, MessageCircle, Info, Smile, Edit2, Trash2, MoreVertical, Sparkles } from "lucide-react";
+import { UsersRound, Users, Plus, MessageSquare, Send, ArrowLeft, Settings, MessageCircle, Info, Smile, Edit2, Trash2, MoreVertical, Sparkles, Loader2 } from "lucide-react";
 import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
@@ -25,6 +25,10 @@ export default function GroupDetailsPage() {
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
   const [commentText, setCommentText] = useState<{ [key: string]: string }>({});
+  const [postingDiscussion, setPostingDiscussion] = useState(false);
+  const [updatingGroup, setUpdatingGroup] = useState(false);
+  const [deletingGroup, setDeletingGroup] = useState(false);
+  const [addingMemberIds, setAddingMemberIds] = useState<Set<string>>(new Set());
 
   // Chat State
   const [messages, setMessages] = useState<any[]>([]);
@@ -252,6 +256,7 @@ export default function GroupDetailsPage() {
 
   const handlePostDiscussion = async (e: React.FormEvent) => {
     e.preventDefault();
+    setPostingDiscussion(true);
     try {
       const res = await axiosInstance.post(`/api/groups/${id}/discussions`, { title: newTitle, content: newContent });
       setDiscussions([res.data, ...discussions]);
@@ -261,6 +266,8 @@ export default function GroupDetailsPage() {
       socket.emit("new group discussion", res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setPostingDiscussion(false);
     }
   };
 
@@ -364,6 +371,7 @@ export default function GroupDetailsPage() {
 
   const handleUpdateGroup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setUpdatingGroup(true);
     try {
       const rulesArray = editRules.split("\n").filter(r => r.trim());
       const tagsArray = editTags.split(",").map(t => t.trim()).filter(t => t);
@@ -380,6 +388,8 @@ export default function GroupDetailsPage() {
       alert("Group updated successfully");
     } catch (err) {
       console.error(err);
+    } finally {
+      setUpdatingGroup(false);
     }
   };
 
@@ -405,6 +415,7 @@ export default function GroupDetailsPage() {
   };
 
   const handleAddMember = async (userId: string) => {
+    setAddingMemberIds(prev => new Set(prev).add(userId));
     try {
       await axiosInstance.post(`/api/groups/${id}/members`, { userId });
       fetchGroupData();
@@ -413,16 +424,24 @@ export default function GroupDetailsPage() {
     } catch (err) {
       console.error(err);
       alert("Failed to add member");
+    } finally {
+      setAddingMemberIds(prev => {
+        const next = new Set(prev);
+        next.delete(userId);
+        return next;
+      });
     }
   };
 
   const handleDeleteGroup = async () => {
     if (!window.confirm("Are you sure you want to PERMANENTLY delete this group?")) return;
+    setDeletingGroup(true);
     try {
       await axiosInstance.delete(`/api/groups/${id}`);
       navigate("/groups");
     } catch (err) {
       console.error(err);
+      setDeletingGroup(false);
     }
   };
 
@@ -474,17 +493,19 @@ export default function GroupDetailsPage() {
                   <button 
                     onClick={handleLeave}
                     disabled={joining}
-                    className="w-full sm:w-auto bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow"
+                    className="w-full sm:w-auto bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow disabled:opacity-50 flex items-center justify-center min-w-[140px]"
                   >
-                    Leave Group
+                    {joining && <Loader2 size={18} className="animate-spin mr-2" />}
+                    {joining ? "Leaving..." : "Leave Group"}
                   </button>
                 ) : user?.role !== "admin" ? (
                   <button 
                     onClick={handleJoin}
                     disabled={joining}
-                    className="w-full sm:w-auto bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition flex items-center justify-center"
+                    className="w-full sm:w-auto bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition flex items-center justify-center disabled:opacity-50 min-w-[140px]"
                   >
-                    <Plus size={18} className="mr-2" /> Join Group
+                    {joining ? <Loader2 size={18} className="animate-spin mr-2" /> : <Plus size={18} className="mr-2" />}
+                    {joining ? "Joining..." : "Join Group"}
                   </button>
                 ) : null}
               </div>
@@ -560,7 +581,10 @@ export default function GroupDetailsPage() {
                   <input type="text" id="postTitle" name="postTitle" placeholder="Post Title" required value={newTitle} onChange={(e) => setNewTitle(e.target.value)} className="w-full px-3 py-2 mb-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all outline-none font-medium placeholder-gray-400 dark:placeholder-gray-500" />
                   <textarea id="postContent" name="postContent" placeholder="What do you want to share?" required rows={4} value={newContent} onChange={(e) => setNewContent(e.target.value)} className="w-full px-4 py-2 mb-3 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all outline-none resize-none text-sm placeholder-gray-400 dark:placeholder-gray-500"></textarea>
                   <div className="flex justify-end">
-                    <button type="submit" className="bg-indigo-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-indigo-700 transition text-sm">Post</button>
+                    <button type="submit" disabled={postingDiscussion} className="bg-indigo-600 text-white px-5 py-2 rounded-lg font-medium hover:bg-indigo-700 transition text-sm disabled:opacity-50 flex items-center min-w-[100px] justify-center">
+                      {postingDiscussion ? <Loader2 size={16} className="animate-spin mr-2" /> : null}
+                      {postingDiscussion ? "Posting..." : "Post"}
+                    </button>
                   </div>
                 </form>
               )}
@@ -775,9 +799,11 @@ export default function GroupDetailsPage() {
                             </div>
                             <button 
                               onClick={() => handleAddMember(u._id)}
-                              className="text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition self-start min-[350px]:self-auto shrink-0"
+                              disabled={addingMemberIds.has(u._id)}
+                              className="text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition self-start min-[350px]:self-auto shrink-0 disabled:opacity-50 flex items-center min-w-[100px] justify-center"
                             >
-                              Add Member
+                              {addingMemberIds.has(u._id) ? <Loader2 size={14} className="animate-spin mr-1" /> : null}
+                              {addingMemberIds.has(u._id) ? "Adding..." : "Add Member"}
                             </button>
                           </div>
                         ))}
@@ -851,7 +877,10 @@ export default function GroupDetailsPage() {
                   <textarea id="editGroupRules" name="editGroupRules" value={editRules} onChange={(e) => setEditRules(e.target.value)} rows={4} placeholder="E.g., Be respectful&#10;No spamming..." className="w-full px-4 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none resize-none placeholder-gray-400 dark:placeholder-gray-500" />
                 </div>
                 <div className="pt-4 border-t border-gray-100 dark:border-slate-700">
-                  <button type="submit" className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition">Save Changes</button>
+                  <button type="submit" disabled={updatingGroup} className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-50 flex items-center justify-center min-w-[160px]">
+                    {updatingGroup && <Loader2 size={16} className="animate-spin mr-2" />}
+                    {updatingGroup ? "Saving Changes..." : "Save Changes"}
+                  </button>
                 </div>
               </form>
 
@@ -860,9 +889,11 @@ export default function GroupDetailsPage() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">Deleting this group will permanently remove all posts, chat messages, and member data associated with it. This action cannot be undone.</p>
                 <button 
                   onClick={handleDeleteGroup}
-                  className="px-6 py-2 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/30 transition flex items-center"
+                  disabled={deletingGroup}
+                  className="px-6 py-2 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/30 transition flex items-center disabled:opacity-50 min-w-[160px] justify-center"
                 >
-                  <Trash2 size={16} className="mr-2" /> Delete Group
+                  {deletingGroup ? <Loader2 size={16} className="animate-spin mr-2" /> : <Trash2 size={16} className="mr-2" />}
+                  {deletingGroup ? "Deleting..." : "Delete Group"}
                 </button>
               </div>
             </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Users, Search, UsersRound } from "lucide-react";
+import { Plus, Users, Search, UsersRound, Loader2 } from "lucide-react";
 import io, { Socket } from "socket.io-client";
 import axiosInstance from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -288,8 +288,9 @@ export default function GroupsPage() {
                 <button 
                   type="submit" 
                   disabled={creating}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition disabled:opacity-50"
+                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition disabled:opacity-50 flex items-center justify-center min-w-[140px]"
                 >
+                  {creating && <Loader2 size={16} className="animate-spin mr-2" />}
                   {creating ? "Creating..." : "Create Group"}
                 </button>
               </div>

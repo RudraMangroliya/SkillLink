@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import io, { Socket } from "socket.io-client";
-import { Search, Send, Phone, Video, Info, Edit2, Trash2, Smile, Paperclip, Mic, MoreVertical, ArrowLeft, CornerUpLeft, Pin, PinOff, Sparkles, ShieldAlert } from "lucide-react";
+import { Search, Send, Phone, Video, Info, Edit2, Trash2, Smile, Paperclip, Mic, MoreVertical, ArrowLeft, CornerUpLeft, Pin, PinOff, Sparkles, ShieldAlert, Loader2 } from "lucide-react";
 import axiosInstance from "../utils/axios";
 import EmojiPicker from 'emoji-picker-react';
 
@@ -890,8 +890,11 @@ export default function ChatPage() {
                         <span className="truncate">Rec... {Math.floor(recordingTime / 60)}:{(recordingTime % 60).toString().padStart(2, '0')}</span>
                       </div>
                       <div className="flex space-x-1 sm:space-x-3 text-xs sm:text-sm shrink-0">
-                        <button type="button" onClick={() => stopRecording(false)} className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-medium px-2 py-1">Cancel</button>
-                        <button type="button" onClick={() => stopRecording(true)} className="bg-red-500 hover:bg-red-600 text-white rounded-full px-3 sm:px-5 py-1 sm:py-1.5 transition shadow-sm font-medium">Send</button>
+                        <button type="button" onClick={() => stopRecording(false)} disabled={isUploading} className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 font-medium px-2 py-1 disabled:opacity-50">Cancel</button>
+                        <button type="button" onClick={() => stopRecording(true)} disabled={isUploading} className="bg-red-500 hover:bg-red-600 text-white rounded-full px-3 sm:px-5 py-1 sm:py-1.5 transition shadow-sm font-medium disabled:opacity-50 flex items-center justify-center">
+                          {isUploading ? <Loader2 size={14} className="animate-spin mr-1" /> : null}
+                          {isUploading ? "Sending..." : "Send"}
+                        </button>
                       </div>
                     </div>
                   ) : (
@@ -908,10 +911,10 @@ export default function ChatPage() {
                         type="button" 
                         onClick={() => fileInputRef.current?.click()}
                         disabled={isUploading}
-                        className={`p-1.5 sm:p-2 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition shrink-0 ${isUploading ? 'opacity-50 animate-pulse' : ''}`}
+                        className="p-1.5 sm:p-2 text-gray-400 dark:text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition shrink-0 disabled:opacity-50 flex items-center justify-center"
                         title={isUploading ? 'Uploading file...' : 'Attach file'}
                       >
-                        <Paperclip size={18} />
+                        {isUploading ? <Loader2 size={18} className="animate-spin" /> : <Paperclip size={18} />}
                       </button>
                       
                       <input
@@ -954,7 +957,7 @@ export default function ChatPage() {
                         disabled={!newMessage.trim() || isSending}
                         className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full p-2 sm:px-5 sm:py-2 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex items-center shrink-0 ml-1"
                       >
-                        <Send size={16} className={`sm:mr-1 ${isSending ? 'animate-pulse' : ''}`} />
+                        {isSending ? <Loader2 size={16} className="animate-spin sm:mr-1" /> : <Send size={16} className="sm:mr-1" />}
                         <span className="hidden sm:inline font-medium">{isSending ? 'Sending...' : 'Send'}</span>
                       </button>
                     </form>

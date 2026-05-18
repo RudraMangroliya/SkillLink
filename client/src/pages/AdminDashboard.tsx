@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Users, Briefcase, Link as LinkIcon, Activity, Trash2, ShieldAlert, AlertTriangle, ShieldX, Server, MessageSquare, BarChart3, Database } from "lucide-react";
+import { Users, Briefcase, Link as LinkIcon, Activity, Trash2, ShieldAlert, AlertTriangle, ShieldX, Server, MessageSquare, BarChart3, Database, Loader2 } from "lucide-react";
 import axiosInstance from "../utils/axios";
 
 export default function AdminDashboard() {
@@ -12,6 +12,7 @@ export default function AdminDashboard() {
   const [chartMetric, setChartMetric] = useState<"users" | "jobs" | "connections" | "messages">("users");
   const [chartDays, setChartDays] = useState(7);
   const [startDate, setStartDate] = useState("");
+  const [deletingUserIds, setDeletingUserIds] = useState<Set<string>>(new Set());
 
   const fetchAnalytics = async () => {
     try {
@@ -35,6 +36,7 @@ export default function AdminDashboard() {
 
   const handleDeleteUser = async (id: string) => {
     if (!window.confirm("Are you sure you want to completely delete this user and all their data?")) return;
+    setDeletingUserIds(prev => new Set(prev).add(id));
     try {
       await axiosInstance.delete(`/api/admin/users/${id}`);
       // Optimistic update
@@ -45,6 +47,12 @@ export default function AdminDashboard() {
       }));
     } catch (err: any) {
       alert(err.response?.data?.message || "Failed to delete user");
+    } finally {
+      setDeletingUserIds(prev => {
+        const next = new Set(prev);
+        next.delete(id);
+        return next;
+      });
     }
   };
 
@@ -261,11 +269,11 @@ export default function AdminDashboard() {
                         <td className="p-4 text-right">
                           <button 
                             onClick={() => handleDeleteUser(u._id)}
-                            disabled={u.role === 'admin'}
-                            className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded disabled:opacity-30 disabled:cursor-not-allowed"
+                            disabled={u.role === 'admin' || deletingUserIds.has(u._id)}
+                            className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition p-1.5 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center ml-auto min-w-[32px] min-h-[32px]"
                             title={u.role === 'admin' ? "Cannot delete admin" : "Delete User"}
                           >
-                            <Trash2 size={16} />
+                            {deletingUserIds.has(u._id) ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                           </button>
                         </td>
                       </tr>

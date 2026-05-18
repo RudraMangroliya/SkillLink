@@ -14,6 +14,8 @@ export default function ExplorePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [connectionStatuses, setConnectionStatuses] = useState<Record<string, string>>({});
+  const [connectingIds, setConnectingIds] = useState<Set<string>>(new Set());
+  const [disconnectingIds, setDisconnectingIds] = useState<Set<string>>(new Set());
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   const fetchProfiles = async () => {
@@ -78,9 +80,10 @@ export default function ExplorePage() {
   };
 
   const handleConnect = async (recipientId: string) => {
+    setConnectingIds(prev => new Set(prev).add(recipientId));
     try {
-      setConnectionStatuses(prev => ({ ...prev, [recipientId]: "Pending" }));
       await axiosInstance.post("/api/connections/request", { recipientId });
+      setConnectionStatuses(prev => ({ ...prev, [recipientId]: "Pending" }));
     } catch (err: any) {
       console.error("Connect error:", err);
       const errMsg = err.response?.data?.message || "Error";
@@ -89,10 +92,17 @@ export default function ExplorePage() {
       } else {
         setConnectionStatuses(prev => ({ ...prev, [recipientId]: "Error" }));
       }
+    } finally {
+      setConnectingIds(prev => {
+        const next = new Set(prev);
+        next.delete(recipientId);
+        return next;
+      });
     }
   };
 
   const handleDisconnect = async (recipientId: string) => {
+    setDisconnectingIds(prev => new Set(prev).add(recipientId));
     try {
       await axiosInstance.delete(`/api/connections/remove/${recipientId}`);
       setConnectionStatuses(prev => {
@@ -102,6 +112,12 @@ export default function ExplorePage() {
       });
     } catch (err) {
       console.error("Disconnect error:", err);
+    } finally {
+      setDisconnectingIds(prev => {
+        const next = new Set(prev);
+        next.delete(recipientId);
+        return next;
+      });
     }
   };
 
@@ -233,17 +249,19 @@ export default function ExplorePage() {
                       connectionStatuses[person.user?._id] === "Accepted" ? (
                         <button 
                           onClick={() => handleDisconnect(person.user?._id)}
-                          className="flex-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 px-3 py-2 rounded-lg font-semibold hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 transition-colors flex items-center justify-center text-sm min-w-0"
+                          disabled={disconnectingIds.has(person.user?._id)}
+                          className="flex-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 px-3 py-2 rounded-lg font-semibold hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 transition-colors flex items-center justify-center text-sm disabled:opacity-50 min-w-0"
                         >
-                          Disconnect
+                          {disconnectingIds.has(person.user?._id) ? <Loader2 className="animate-spin h-4 w-4" /> : "Disconnect"}
                         </button>
                       ) : (
                         <button 
                           onClick={() => handleConnect(person.user?._id)}
-                          disabled={connectionStatuses[person.user?._id] === "Pending"}
+                          disabled={connectionStatuses[person.user?._id] === "Pending" || connectingIds.has(person.user?._id)}
                           className="flex-1 bg-indigo-600 text-white px-3 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center text-sm disabled:opacity-50 min-w-0"
                         >
-                          {connectionStatuses[person.user?._id] === "Pending" ? "Pending" : <span className="flex items-center"><UserPlus size={16} className="mr-1 flex-shrink-0" /> <span className="truncate">Connect</span></span>}
+                          {connectingIds.has(person.user?._id) || connectionStatuses[person.user?._id] === "Pending" ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <UserPlus size={16} className="mr-1 flex-shrink-0" />}
+                          {connectionStatuses[person.user?._id] === "Pending" ? "Pending" : connectingIds.has(person.user?._id) ? "Connecting..." : <span className="truncate">Connect</span>}
                         </button>
                       )
                     )}
