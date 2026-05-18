@@ -389,10 +389,10 @@ export default function Navbar() {
             </>
           ) : (
             <div className="flex flex-col space-y-3 pt-2">
-              <Link onClick={() => setIsMobileMenuOpen(false)} to="/login" className="w-full text-center text-gray-700 dark:text-gray-300 font-semibold border-2 border-gray-200 dark:border-slate-700 py-2.5 rounded-xl hover:bg-gray-50 dark:hover:bg-slate-800 hover:border-gray-300 dark:hover:border-slate-600 transition">
+              <Link onClick={() => setIsMobileMenuOpen(false)} to="/login" className="w-full text-center text-gray-700 dark:text-gray-300 font-semibold border border-gray-200 dark:border-slate-700 py-2.5 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-200 dark:hover:bg-slate-800 dark:hover:border-slate-600 dark:hover:text-white transition shadow-sm">
                 Log in
               </Link>
-              <Link onClick={() => setIsMobileMenuOpen(false)} to="/register" className="w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white py-2.5 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition shadow-md">
+              <Link onClick={() => setIsMobileMenuOpen(false)} to="/register" className="w-full text-center bg-indigo-600 dark:bg-indigo-500 text-white py-2.5 rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition shadow-md hover:shadow-lg">
                 Sign up
               </Link>
             </div>
