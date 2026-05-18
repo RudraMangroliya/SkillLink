@@ -29,6 +29,9 @@ export default function GroupDetailsPage() {
   const [updatingGroup, setUpdatingGroup] = useState(false);
   const [deletingGroup, setDeletingGroup] = useState(false);
   const [addingMemberIds, setAddingMemberIds] = useState<Set<string>>(new Set());
+  const [removingMemberIds, setRemovingMemberIds] = useState<Set<string>>(new Set());
+  const [deletingDiscussionId, setDeletingDiscussionId] = useState<string | null>(null);
+  const [postingCommentId, setPostingCommentId] = useState<string | null>(null);
 
   // Chat State
   const [messages, setMessages] = useState<any[]>([]);
@@ -39,6 +42,9 @@ export default function GroupDetailsPage() {
   const [typing, setTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const [deletingMessageId, setDeletingMessageId] = useState<string | null>(null);
+  const [savingEditedMessage, setSavingEditedMessage] = useState(false);
+  const [reactingMessageId, setReactingMessageId] = useState<string | null>(null);
   
   // Realtime Features State
   const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
@@ -274,22 +280,28 @@ export default function GroupDetailsPage() {
 
   const handleDeleteDiscussion = async (discussionId: string) => {
     if (!window.confirm("Are you sure you want to delete this post?")) return;
+    setDeletingDiscussionId(discussionId);
     try {
       await axiosInstance.delete(`/api/groups/discussions/${discussionId}`);
       setDiscussions(discussions.filter(d => d._id !== discussionId));
     } catch (err) {
       console.error("Failed to delete discussion:", err);
+    } finally {
+      setDeletingDiscussionId(null);
     }
   };
 
   const handlePostComment = async (discussionId: string) => {
     if (!commentText[discussionId]?.trim()) return;
+    setPostingCommentId(discussionId);
     try {
       const res = await axiosInstance.post(`/api/groups/discussions/${discussionId}/comments`, { text: commentText[discussionId] });
       setDiscussions(discussions.map(d => d._id === discussionId ? res.data : d));
       setCommentText({ ...commentText, [discussionId]: "" });
     } catch (err) {
       console.error(err);
+    } finally {
+      setPostingCommentId(null);
     }
   };
 
@@ -331,17 +343,21 @@ export default function GroupDetailsPage() {
 
   const handleDeleteMessage = async (messageId: string) => {
     if (!window.confirm("Are you sure you want to delete this message?")) return;
+    setDeletingMessageId(messageId);
     try {
       const res = await axiosInstance.delete(`/api/groups/${id}/messages/${messageId}`);
       setMessages(messages.map(m => m._id === messageId ? res.data : m));
       socket.emit("group message deleted", res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setDeletingMessageId(null);
     }
   };
 
   const handleEditMessage = async (e: React.FormEvent, messageId: string) => {
     e.preventDefault();
+    setSavingEditedMessage(true);
     try {
       const res = await axiosInstance.put(`/api/groups/${id}/messages/${messageId}`, { content: editMessageText });
       setMessages(messages.map(m => m._id === messageId ? res.data : m));
@@ -350,26 +366,38 @@ export default function GroupDetailsPage() {
       setEditMessageText("");
     } catch (err) {
       console.error(err);
+    } finally {
+      setSavingEditedMessage(false);
     }
   };
 
   const handleReaction = async (messageId: string, emoji: string) => {
+    setReactingMessageId(messageId);
     try {
       const res = await axiosInstance.post(`/api/groups/${id}/messages/${messageId}/react`, { emoji });
       setMessages(messages.map(m => m._id === messageId ? res.data : m));
       socket.emit("group message updated", res.data);
     } catch (err) {
       console.error(err);
+    } finally {
+      setReactingMessageId(null);
     }
   };
 
   const handleRemoveMember = async (memberId: string) => {
     if (!window.confirm("Remove this member?")) return;
+    setRemovingMemberIds(prev => new Set(prev).add(memberId));
     try {
       await axiosInstance.delete(`/api/groups/${id}/members/${memberId}`);
       fetchGroupData();
     } catch (err) {
       console.error(err);
+    } finally {
+      setRemovingMemberIds(prev => {
+        const next = new Set(prev);
+        next.delete(memberId);
+        return next;
+      });
     }
   };
 
@@ -608,10 +636,11 @@ export default function GroupDetailsPage() {
                         {(disc.author._id === user?._id || isAdmin) && (
                           <button 
                             onClick={() => handleDeleteDiscussion(disc._id)}
-                            className="text-gray-400 hover:text-red-500 transition p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30"
+                            disabled={deletingDiscussionId === disc._id}
+                            className="text-gray-400 hover:text-red-500 transition p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/30 disabled:opacity-50"
                             title="Delete Post"
                           >
-                            <Trash2 size={16} />
+                            {deletingDiscussionId === disc._id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
                           </button>
                         )}
                       </div>
@@ -636,7 +665,9 @@ export default function GroupDetailsPage() {
                         </div>
                         <div className="flex space-x-2 mt-4">
                           <input type="text" id={`comment-${disc._id}`} name={`comment-${disc._id}`} placeholder="Add a comment..." value={commentText[disc._id] || ""} onChange={(e) => setCommentText({...commentText, [disc._id]: e.target.value})} onKeyDown={(e) => e.key === 'Enter' && handlePostComment(disc._id)} className="flex-1 px-3 sm:px-4 py-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-full focus:bg-white dark:focus:bg-slate-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all outline-none text-sm min-w-0 placeholder-gray-400 dark:placeholder-gray-400" />
-                          <button onClick={() => handlePostComment(disc._id)} disabled={!commentText[disc._id]?.trim()} className="p-2.5 shrink-0 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition disabled:opacity-50 flex items-center justify-center"><Send size={16} /></button>
+                          <button onClick={() => handlePostComment(disc._id)} disabled={!commentText[disc._id]?.trim() || postingCommentId === disc._id} className="p-2.5 shrink-0 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition disabled:opacity-50 flex items-center justify-center">
+                            {postingCommentId === disc._id ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -674,8 +705,8 @@ export default function GroupDetailsPage() {
                               {editingMessage === msg._id ? (
                                 <form onSubmit={(e) => handleEditMessage(e, msg._id)} className="flex items-center space-x-2">
                                   <input type="text" id={`editMessage-${msg._id}`} name={`editMessage-${msg._id}`} value={editMessageText} onChange={(e) => setEditMessageText(e.target.value)} className="px-2 py-1 text-gray-900 dark:text-white bg-white dark:bg-slate-700 rounded border border-gray-300 dark:border-slate-600 text-sm focus:outline-none" autoFocus />
-                                  <button type="submit" className={`text-xs px-2 py-1 rounded ${isMe ? 'bg-indigo-500 text-white' : 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400'}`}>Save</button>
-                                  <button type="button" onClick={() => setEditingMessage(null)} className="text-xs opacity-75">Cancel</button>
+                                  <button type="submit" disabled={savingEditedMessage} className={`text-xs px-2 py-1 rounded ${isMe ? 'bg-indigo-500 text-white' : 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400'} disabled:opacity-50`}>{savingEditedMessage ? 'Saving...' : 'Save'}</button>
+                                  <button type="button" onClick={() => setEditingMessage(null)} disabled={savingEditedMessage} className="text-xs opacity-75 disabled:opacity-50">Cancel</button>
                                 </form>
                               ) : (
                                 <p className="text-sm leading-relaxed">
@@ -700,14 +731,16 @@ export default function GroupDetailsPage() {
                               {/* Hover Actions (Below Message) */}
                               {hoveredMessage === msg._id && !msg.isDeleted && (
                                 <div className={`flex items-center bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 shadow-sm rounded-lg px-2 py-1.5 mt-2 space-x-3 w-max ${isMe ? 'ml-auto' : 'mr-auto'} text-gray-700 dark:text-gray-300 transition-colors`}>
-                                  <button onClick={() => handleReaction(msg._id, "👍")} className="hover:scale-125 transition">👍</button>
-                                  <button onClick={() => handleReaction(msg._id, "❤️")} className="hover:scale-125 transition">❤️</button>
-                                  <button onClick={() => handleReaction(msg._id, "😂")} className="hover:scale-125 transition">😂</button>
+                                  <button onClick={() => handleReaction(msg._id, "👍")} disabled={reactingMessageId === msg._id} className="hover:scale-125 transition disabled:opacity-50">👍</button>
+                                  <button onClick={() => handleReaction(msg._id, "❤️")} disabled={reactingMessageId === msg._id} className="hover:scale-125 transition disabled:opacity-50">❤️</button>
+                                  <button onClick={() => handleReaction(msg._id, "😂")} disabled={reactingMessageId === msg._id} className="hover:scale-125 transition disabled:opacity-50">😂</button>
                                   {isMe && (
                                     <>
                                       <div className="w-px h-4 bg-gray-200 dark:bg-slate-700 mx-1"></div>
                                       <button onClick={() => { setEditingMessage(msg._id); setEditMessageText(msg.content); }} className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400"><Edit2 size={14} /></button>
-                                      <button onClick={() => handleDeleteMessage(msg._id)} className="text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400"><Trash2 size={14} /></button>
+                                      <button onClick={() => handleDeleteMessage(msg._id)} disabled={deletingMessageId === msg._id} className="text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 disabled:opacity-50">
+                                        {deletingMessageId === msg._id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                                      </button>
                                     </>
                                   )}
                                 </div>
@@ -836,9 +869,11 @@ export default function GroupDetailsPage() {
                     {isAdmin && member._id !== group.admin._id && (
                       <button 
                         onClick={() => handleRemoveMember(member._id)}
-                        className="text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 px-3 py-1.5 rounded-lg transition"
+                        disabled={removingMemberIds.has(member._id)}
+                        className="text-xs font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 px-3 py-1.5 rounded-lg transition disabled:opacity-50 flex items-center min-w-[80px] justify-center"
                       >
-                        Remove
+                        {removingMemberIds.has(member._id) ? <Loader2 size={14} className="animate-spin mr-1" /> : null}
+                        {removingMemberIds.has(member._id) ? "Removing..." : "Remove"}
                       </button>
                     )}
                   </div>
