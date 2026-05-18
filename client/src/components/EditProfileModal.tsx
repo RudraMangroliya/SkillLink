@@ -361,16 +361,16 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
         </div>
 
         {showDeleteConfirm ? (
-          <div className="p-6 bg-red-50 dark:bg-red-900/20 border-t border-red-100 dark:border-red-900/50 flex flex-col gap-3">
-            <h4 className="font-bold text-red-700 dark:text-red-400">Are you absolutely sure?</h4>
-            <p className="text-sm text-red-600 dark:text-red-400 mb-2">
+          <div className="p-4 sm:p-6 bg-red-50 dark:bg-red-900/20 border-t border-red-100 dark:border-red-900/50 flex flex-col gap-3">
+            <h4 className="font-bold text-red-700 dark:text-red-400 text-sm sm:text-base">Are you absolutely sure?</h4>
+            <p className="text-xs sm:text-sm text-red-600 dark:text-red-400 mb-2">
               This action cannot be undone. This will permanently delete your account, connections, followers, media files, and completely remove your data from our servers.
             </p>
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
               <button 
                 type="button" 
                 onClick={() => setShowDeleteConfirm(false)} 
-                className="px-4 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition text-sm"
+                className="w-full sm:w-auto px-4 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition text-sm text-center"
               >
                 Cancel
               </button>
@@ -378,7 +378,7 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
                 type="button" 
                 onClick={handleDeleteAccount}
                 disabled={deleting}
-                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition text-sm flex items-center disabled:opacity-70"
+                className="w-full sm:w-auto px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition text-sm flex justify-center items-center disabled:opacity-70"
               >
                 {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {deleting ? "Deleting..." : "Yes, delete my account"}
@@ -386,23 +386,23 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
             </div>
           </div>
         ) : (
-          <div className="p-6 border-t border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50 flex justify-between items-center gap-3">
+          <div className="p-4 sm:p-6 border-t border-gray-100 dark:border-slate-700 bg-gray-50 dark:bg-slate-900/50 flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3">
             <button 
               type="button" 
               onClick={() => setShowDeleteConfirm(true)} 
-              className="px-4 py-2 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 font-medium rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 transition text-sm"
+              className="w-full sm:w-auto px-4 py-2 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 font-medium rounded-xl hover:bg-red-50 dark:hover:bg-red-900/30 hover:border-red-300 transition text-sm text-center"
             >
               Delete Account
             </button>
-            <div className="flex gap-3">
-              <button type="button" onClick={onClose} className="px-6 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto">
+              <button type="button" onClick={onClose} className="w-full sm:w-auto px-6 py-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-slate-700 transition text-center">
                 Cancel
               </button>
               <button 
                 type="submit" 
                 form="edit-profile-form" 
                 disabled={loading} 
-                className="px-6 py-2 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition shadow-md flex items-center disabled:opacity-70"
+                className="w-full sm:w-auto px-6 py-2 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition shadow-md flex justify-center items-center disabled:opacity-70"
               >
                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {loading ? "Saving..." : "Save Changes"}
