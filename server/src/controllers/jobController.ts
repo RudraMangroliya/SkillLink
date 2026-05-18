@@ -245,15 +245,18 @@ export const updateApplicationStatus = async (req: any, res: Response) => {
     await job.save();
 
     const candidateId = application.applicant?.toString();
+    console.log(`[JobController] Updating application. Candidate ID: ${candidateId}`);
     
     if (candidateId) {
       const candidateUser = await User.findById(candidateId);
+      console.log(`[JobController] Found candidate user: ${candidateUser ? candidateUser.email : 'NOT FOUND'}`);
       
       if (status === 'Shortlisted' || status === 'Rejected') {
         const notifMessage = isReschedule 
           ? `Your interview for ${job.title} has been rescheduled.`
           : `Your application for ${job.title} has been ${status.toLowerCase()}`;
 
+        console.log(`[JobController] Sending in-app notification to candidate...`);
         await sendNotification({
           recipient: candidateId,
           sender: req.user._id,
@@ -261,9 +264,11 @@ export const updateApplicationStatus = async (req: any, res: Response) => {
           relatedId: job._id.toString(),
           message: notifMessage
         });
+        console.log(`[JobController] In-app notification sent.`);
       }
 
       if (status === 'Shortlisted' && candidateUser) {
+        console.log(`[JobController] Preparing to send email to ${candidateUser.email}...`);
         const emailSubject = isReschedule ? `Interview Rescheduled: ${job.title}` : `Application Shortlisted: ${job.title}`;
         const emailGreeting = isReschedule ? `Update regarding your application, ${candidateUser.name}.` : `Good news, ${candidateUser.name}!`;
         const emailMainText = isReschedule 
