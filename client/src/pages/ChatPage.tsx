@@ -548,7 +548,7 @@ export default function ChatPage() {
           <>
           <div className={`w-full md:flex-1 bg-white dark:bg-slate-800 rounded-none sm:rounded-2xl shadow-sm border-0 sm:border border-gray-100 dark:border-slate-700 flex flex-col overflow-hidden transition-colors ${!selectedChat ? 'hidden md:flex' : 'flex'}`}>
             {/* Chat Header */}
-            <div className="p-2 sm:p-4 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 z-10 shadow-sm transition-colors">
+            <div className="p-2 sm:p-4 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center bg-white dark:bg-slate-800 z-10 shadow-sm transition-colors shrink-0">
               <div className="flex items-center min-w-0 flex-1">
                 <button 
                   className="md:hidden mr-1 sm:mr-2 p-1.5 text-gray-500 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full hover:bg-gray-100 dark:hover:bg-slate-700 transition shrink-0"
@@ -663,7 +663,7 @@ export default function ChatPage() {
             {/* Pinned Messages Banner */}
             {selectedChat.pinnedMessages && selectedChat.pinnedMessages.length > 0 && (
               <div 
-                className="bg-indigo-50 dark:bg-indigo-900/30 border-b border-indigo-100 dark:border-indigo-800/50 p-2 px-4 flex items-center justify-between text-sm shadow-sm cursor-pointer hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition"
+                className="bg-indigo-50 dark:bg-indigo-900/30 border-b border-indigo-100 dark:border-indigo-800/50 p-2 px-4 flex items-center justify-between text-sm shadow-sm cursor-pointer hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition shrink-0"
                 onClick={() => {
                   const el = document.getElementById(`message-${selectedChat.pinnedMessages[0]}`);
                   if (el) {
@@ -682,7 +682,7 @@ export default function ChatPage() {
             )}
 
             {/* Messages Area */}
-            <div ref={messagesContainerRef} className="flex-1 p-6 overflow-y-auto bg-gray-50/50 dark:bg-slate-900 flex flex-col space-y-4 transition-colors">
+            <div ref={messagesContainerRef} className="flex-1 min-h-0 p-6 overflow-y-auto bg-gray-50/50 dark:bg-slate-900 flex flex-col space-y-4 transition-colors">
               {messages.map((m, i) => {
                 const isMe = m.sender?._id === user?._id;
                 const isPinned = selectedChat.pinnedMessages?.includes(m._id);
@@ -850,7 +850,7 @@ export default function ChatPage() {
             </div>
 
               {/* Input Area */}
-              <div className="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 flex flex-col shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors">
+              <div className="bg-white dark:bg-slate-800 border-t border-gray-100 dark:border-slate-700 flex flex-col shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] dark:shadow-none transition-colors shrink-0">
                 {replyingTo && (
                   <div className="bg-gray-50 dark:bg-slate-700/50 px-2 sm:px-4 py-2 border-b border-gray-100 dark:border-slate-700 flex justify-between items-center">
                     <div className="text-xs sm:text-sm min-w-0">

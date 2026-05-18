@@ -691,7 +691,7 @@ export default function GroupDetailsPage() {
                 </div>
               ) : (
                 <>
-                  <div ref={messagesContainerRef} className="flex-1 p-2 sm:p-6 overflow-y-auto bg-gray-50 dark:bg-slate-900 flex flex-col space-y-4 transition-colors">
+                  <div ref={messagesContainerRef} className="flex-1 min-h-0 p-2 sm:p-6 overflow-y-auto bg-gray-50 dark:bg-slate-900 flex flex-col space-y-4 transition-colors">
                     {messages.map((msg, i) => {
                       const isMe = msg.sender._id === user?._id;
                       return (
@@ -759,7 +759,7 @@ export default function GroupDetailsPage() {
                     )}
                     <div ref={messagesEndRef} />
                   </div>
-                  <div className="p-2 sm:p-4 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 transition-colors">
+                  <div className="p-2 sm:p-4 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-slate-700 transition-colors shrink-0">
                     {smartReplies.length > 0 && newMessage.length === 0 && (
                       <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
                         <div className="flex items-center text-indigo-500 text-xs font-medium mr-1 shrink-0">
