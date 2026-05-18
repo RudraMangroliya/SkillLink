@@ -52,6 +52,9 @@ export const io = new Server(server, {
   },
 });
 
+// Trust proxy so rate limiting works correctly behind Render's load balancer
+app.set("trust proxy", 1);
+
 // Rate Limiting
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
