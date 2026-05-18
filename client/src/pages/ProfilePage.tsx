@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import { MapPin, Briefcase, GraduationCap, Edit2, Camera, UserPlus, CheckCircle2, XCircle, Share2, FileText, ChevronRight, MessageSquare, Loader2, Link as LinkIcon, Plus, UserCheck, X } from "lucide-react";
+import { MapPin, Briefcase, GraduationCap, Edit2, Camera, UserPlus, CheckCircle2, XCircle, Share2, FileText, ChevronRight, MessageSquare, Loader2, Link as LinkIcon, Plus, UserCheck, X, Award, FolderGit2 } from "lucide-react";
 import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import EditProfileModal from "../components/EditProfileModal";
