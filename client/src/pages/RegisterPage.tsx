@@ -25,6 +25,7 @@ export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
+    setIsLoading(true);
     try {
       const res = await axiosInstance.post("/api/auth/google", {
         idToken: credentialResponse.credential,
@@ -32,10 +33,16 @@ export default function RegisterPage() {
       });
       // The backend creates an account if it doesn't exist
       dispatch(setCredentials({ user: res.data, token: res.data.token }));
-      navigate("/profile");
+      if (!res.data.profileComplete) {
+        navigate("/profile-setup");
+      } else {
+        navigate("/explore");
+      }
     } catch (error: any) {
       console.error("Google Sign Up Error", error);
       setError(error.response?.data?.message || "Failed to sign up with Google");
+    } finally {
+      setIsLoading(false);
     }
   };
 

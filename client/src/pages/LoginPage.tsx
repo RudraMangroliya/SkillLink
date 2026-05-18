@@ -23,15 +23,22 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleGoogleSuccess = async (credentialResponse: any) => {
+    setIsLoading(true);
     try {
       const res = await axiosInstance.post("/api/auth/google", {
         idToken: credentialResponse.credential,
       });
       dispatch(setCredentials({ user: res.data, token: res.data.token }));
-      navigate("/explore");
+      if (!res.data.profileComplete) {
+        navigate("/profile-setup");
+      } else {
+        navigate("/explore");
+      }
     } catch (error: any) {
       console.error("Google Login Error", error);
       setError(error.response?.data?.message || "Failed to log in with Google");
+    } finally {
+      setIsLoading(false);
     }
   };
 
