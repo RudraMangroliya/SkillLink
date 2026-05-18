@@ -33,6 +33,7 @@ export default function GroupDetailsPage() {
   // Chat State
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [typing, setTyping] = useState(false);
@@ -294,8 +295,9 @@ export default function GroupDetailsPage() {
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim() || !isMember) return;
+    if (!newMessage.trim() || !isMember || isSendingMessage) return;
     
+    setIsSendingMessage(true);
     socket.emit("stop group typing", id);
     try {
       const res = await axiosInstance.post(`/api/groups/${id}/messages`, { content: newMessage });
@@ -304,6 +306,8 @@ export default function GroupDetailsPage() {
       setNewMessage("");
     } catch (err) {
       console.error("Error sending message", err);
+    } finally {
+      setIsSendingMessage(false);
     }
   };
 
@@ -755,10 +759,10 @@ export default function GroupDetailsPage() {
                       />
                       <button 
                         type="submit" 
-                        disabled={!newMessage.trim()}
+                        disabled={!newMessage.trim() || isSendingMessage}
                         className="p-2 sm:p-3 shrink-0 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition disabled:opacity-50 flex items-center justify-center"
                       >
-                        <Send size={16} className="sm:w-[18px] sm:h-[18px]" />
+                        {isSendingMessage ? <Loader2 size={16} className="animate-spin sm:w-[18px] sm:h-[18px]" /> : <Send size={16} className="sm:w-[18px] sm:h-[18px]" />}
                       </button>
                     </form>
                   </div>

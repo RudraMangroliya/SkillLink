@@ -768,18 +768,18 @@ export default function ChatPage() {
                           </div>
                           <div className="flex items-center space-x-1 ml-3">
                             {isPinned && <Pin size={10} className="text-indigo-400 mr-1" />}
-                            {m.isEdited && !m.isDeleted && <span className={`text-[9px] ${isMe ? 'text-blue-500' : 'text-gray-400'}`}>(edited)</span>}
-                            <p className={`text-[10px] ${isMe ? 'text-blue-600' : 'text-gray-400'}`}>
+                            {m.isEdited && !m.isDeleted && <span className={`text-[9px] ${isMe ? 'text-indigo-200' : 'text-gray-400'}`}>(edited)</span>}
+                            <p className={`text-[10px] ${isMe ? 'text-indigo-200' : 'text-gray-400'}`}>
                               {new Date(m.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </p>
                             {isMe && !m.isDeleted && (
                               <span className="text-[10px] ml-1">
                                 {m.readBy?.length > 1 ? (
-                                  <span className="text-blue-500 font-bold">✓✓</span>
+                                  <span className="text-sky-300 font-bold">✓✓</span>
                                 ) : m.deliveredTo?.length > 0 ? (
-                                  <span className="text-gray-500 font-bold">✓✓</span>
+                                  <span className="text-indigo-200 font-bold">✓✓</span>
                                 ) : (
-                                  <span className="text-gray-500 font-bold">✓</span>
+                                  <span className="text-indigo-200 font-bold">✓</span>
                                 )}
                               </span>
                             )}
