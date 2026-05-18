@@ -7,6 +7,10 @@ const Footer = () => {
   const [email, setEmail] = useState('');
   const location = useLocation();
 
+  if (location.pathname.startsWith('/chat')) {
+    return null;
+  }
+
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     if (email) {
