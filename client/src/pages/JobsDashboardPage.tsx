@@ -29,31 +29,30 @@ export default function JobsDashboardPage() {
   const [isScheduling, setIsScheduling] = useState(false);
   const [updatingAppId, setUpdatingAppId] = useState<string | null>(null);
 
+  const fetchDashboardData = async () => {
+    try {
+      const statsRes = await axiosInstance.get("/api/jobs/dashboard/stats");
+      setStats(statsRes.data);
+
+      if (user?.role === "recruiter") {
+        const jobsRes = await axiosInstance.get("/api/jobs/dashboard/recruiter");
+        setJobs(jobsRes.data);
+      } else {
+        const jobsRes = await axiosInstance.get("/api/jobs/dashboard/candidate");
+        setJobs(jobsRes.data);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate("/login");
       return;
     }
-    
-    const fetchDashboardData = async () => {
-      try {
-        const statsRes = await axiosInstance.get("/api/jobs/dashboard/stats");
-        setStats(statsRes.data);
-
-        if (user?.role === "recruiter") {
-          const jobsRes = await axiosInstance.get("/api/jobs/dashboard/recruiter");
-          setJobs(jobsRes.data);
-        } else {
-          const jobsRes = await axiosInstance.get("/api/jobs/dashboard/candidate");
-          setJobs(jobsRes.data);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDashboardData();
   }, [isAuthenticated, user, navigate]);
 
@@ -67,17 +66,7 @@ export default function JobsDashboardPage() {
       }
       
       await axiosInstance.put(`/api/jobs/${jobId}/applications/${applicationId}`, payload);
-      setJobs(jobs.map(job => {
-        if (job._id === jobId) {
-          return {
-            ...job,
-            applications: job.applications.map((app: any) => 
-              app._id === applicationId ? { ...app, status, ...payload } : app
-            )
-          };
-        }
-        return job;
-      }));
+      await fetchDashboardData();
     } catch (err) {
       console.error(err);
     } finally {
@@ -409,9 +398,9 @@ export default function JobsDashboardPage() {
                 <input type="text" id="jobSalaryRange" name="jobSalaryRange" value={newJob.salaryRange} onChange={e => setNewJob({...newJob, salaryRange: e.target.value})} className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg focus:ring-indigo-500 focus:border-indigo-500" placeholder="$100k - $120k" />
               </div>
 
-              <div className="pt-4 flex justify-end space-x-3">
-                <button type="button" onClick={handleCloseModal} className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">Cancel</button>
-                <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">{editingJobId ? "Update Job" : "Post Job"}</button>
+              <div className="pt-4 flex flex-col sm:flex-row justify-end gap-3 sm:space-x-3 sm:gap-0">
+                <button type="button" onClick={handleCloseModal} className="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-center">Cancel</button>
+                <button type="submit" className="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition text-center">{editingJobId ? "Update Job" : "Post Job"}</button>
               </div>
             </form>
           </div>
