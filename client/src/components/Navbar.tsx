@@ -172,7 +172,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link to="/" className="text-xl sm:text-2xl font-extrabold text-indigo-600 tracking-tight">
+            <Link to="/" className="text-xl sm:text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 tracking-tight">
               SkillLink
             </Link>
           </div>
@@ -350,7 +350,7 @@ export default function Navbar() {
         }`}
       >
         <div className="p-4 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
-          <span className="text-xl font-extrabold text-indigo-600 tracking-tight">SkillLink</span>
+          <span className="text-xl font-extrabold text-indigo-600 dark:text-indigo-400 tracking-tight">SkillLink</span>
           <button 
             onClick={() => setIsMobileMenuOpen(false)}
             className="text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition"
