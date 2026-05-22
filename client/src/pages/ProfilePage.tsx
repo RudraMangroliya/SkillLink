@@ -7,6 +7,7 @@ import axiosInstance from "../utils/axios";
 import EditProfileModal from "../components/EditProfileModal";
 import UserListModal from "../components/UserListModal";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ProfilePage() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -34,6 +35,7 @@ export default function ProfilePage() {
   const [isAcceptingLoading, setIsAcceptingLoading] = useState(false);
   const [isRejectingLoading, setIsRejectingLoading] = useState(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // User List Modal State
   const [isUserListModalOpen, setIsUserListModalOpen] = useState(false);
@@ -131,16 +133,21 @@ export default function ProfilePage() {
       // If we receive a connection request or acceptance from the user whose profile we are viewing
       if (
         (notification.type === 'connection_request' || notification.type === 'accepted') && 
-        notification.sender?._id === profile.user._id
+        String(notification.sender?._id) === String(profile.user._id)
       ) {
         fetchConnectionStatus(profile.user._id);
         if (notification.type === 'accepted') fetchProfile();
+      }
+
+      // If we receive a follow notification and we are viewing our own profile
+      if (notification.type === 'follow' && String(profile.user._id) === String(user?._id)) {
+        fetchProfile();
       }
     };
     const handleConnectionRemoved = (e: any) => {
       const data = e.detail;
       if (!profile?.user?._id) return;
-      if (data.userId === profile.user._id) {
+      if (String(data.userId) === String(profile.user._id)) {
         fetchConnectionStatus(profile.user._id);
         fetchProfile();
       }
@@ -174,6 +181,7 @@ export default function ProfilePage() {
       setConnectionStatus("Pending");
       setConnectionRequester(String(user?._id));
       await axiosInstance.post("/api/connections/request", { recipientId: profile.user._id });
+      queryClient.invalidateQueries({ queryKey: ['connectionStatus'] });
     } catch (err: any) {
       console.error("Connect error:", err);
       const errMsg = err.response?.data?.message || "Error";
@@ -195,6 +203,7 @@ export default function ProfilePage() {
       setConnectionStatus(null);
       setConnectionRequestId(null);
       setConnectionRequester(null);
+      queryClient.invalidateQueries({ queryKey: ['connectionStatus'] });
       fetchProfile();
     } catch (err) {
       console.error("Disconnect error:", err);
@@ -209,6 +218,7 @@ export default function ProfilePage() {
     try {
       await axiosInstance.post(`/api/connections/accept/${connectionRequestId}`);
       setConnectionStatus("Accepted");
+      queryClient.invalidateQueries({ queryKey: ['connectionStatus'] });
       fetchProfile();
     } catch (err) {
       console.error(err);
@@ -225,6 +235,7 @@ export default function ProfilePage() {
       setConnectionStatus(null);
       setConnectionRequestId(null);
       setConnectionRequester(null);
+      queryClient.invalidateQueries({ queryKey: ['connectionStatus'] });
     } catch (err) {
       console.error(err);
     } finally {
