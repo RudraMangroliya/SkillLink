@@ -41,7 +41,9 @@ export default function Navbar() {
       
       // Setup individual socket for global notifications
       if (user) {
-        const newSocket = io(import.meta.env.VITE_API_URL || "http://localhost:5000");
+        const newSocket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
+          transports: ["websocket"],
+        });
         newSocket.emit("setup", user);
         
         newSocket.on("new notification", (notification) => {

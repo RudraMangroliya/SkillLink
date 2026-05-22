@@ -47,7 +47,9 @@ export default function GroupsPage() {
       
       // Initialize Socket connection
       if (user) {
-        const newSocket = io(import.meta.env.VITE_API_URL || "http://localhost:5000");
+        const newSocket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
+          transports: ["websocket"],
+        });
         newSocket.emit("setup", user);
         
         // Join all joined groups

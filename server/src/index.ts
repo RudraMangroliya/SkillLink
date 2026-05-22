@@ -50,6 +50,7 @@ export const io = new Server(server, {
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
+  transports: ["websocket", "polling"],
 });
 
 // Trust proxy so rate limiting works correctly behind Render's load balancer
