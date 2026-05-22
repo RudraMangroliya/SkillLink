@@ -159,7 +159,7 @@ export default function ProfilePage() {
       window.removeEventListener('new_notification', handleNewNotification);
       window.removeEventListener('connection_removed', handleConnectionRemoved);
     };
-  }, [profile?.user?._id]);
+  }, [profile?.user?._id, user?._id]);
 
   const handleEndorse = async (skill: string) => {
     if (!profile?.user?._id) return;
