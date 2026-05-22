@@ -42,7 +42,7 @@ export default function ProfilePage() {
   const [userListTitle, setUserListTitle] = useState("");
   const [userListData, setUserListData] = useState<any[]>([]);
 
-  const fetchProfile = async () => {
+  const fetchProfile = React.useCallback(async () => {
     try {
       const url = userId ? `/api/profile/user/${userId}` : "/api/profile";
       const res = await axiosInstance.get(url);
@@ -69,9 +69,9 @@ export default function ProfilePage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId, user?._id]);
 
-  const fetchConnectionStatus = async (targetUserId: string) => {
+  const fetchConnectionStatus = React.useCallback(async (targetUserId: string) => {
     if (!isAuthenticated || isOwnProfile) return;
     try {
       const res = await axiosInstance.get("/api/connections/status");
@@ -93,7 +93,7 @@ export default function ProfilePage() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [isAuthenticated, isOwnProfile, user?._id]);
 
   const handleFollow = async () => {
     if (!profile?.user?._id) return;
@@ -101,13 +101,10 @@ export default function ProfilePage() {
     try {
       if (isFollowing) {
         await axiosInstance.post(`/api/profile/unfollow/${profile.user._id}`);
-        setIsFollowing(false);
-        setFollowersCount(prev => prev - 1);
       } else {
         await axiosInstance.post(`/api/profile/follow/${profile.user._id}`);
-        setIsFollowing(true);
-        setFollowersCount(prev => prev + 1);
       }
+      await fetchProfile();
     } catch (err) {
       console.error(err);
     } finally {
@@ -159,7 +156,7 @@ export default function ProfilePage() {
       window.removeEventListener('new_notification', handleNewNotification);
       window.removeEventListener('connection_removed', handleConnectionRemoved);
     };
-  }, [profile?.user?._id, user?._id]);
+  }, [profile?.user?._id, user?._id, fetchProfile, fetchConnectionStatus]);
 
   const handleEndorse = async (skill: string) => {
     if (!profile?.user?._id) return;
