@@ -1,15 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Mail, Zap } from 'lucide-react';
+import { Mail, Zap, ArrowUp } from 'lucide-react';
 import { FaTwitter, FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
+  const [showScrollTop, setShowScrollTop] = useState(false);
   const location = useLocation();
 
   if (location.pathname.startsWith('/chat')) {
     return null;
   }
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.scrollY > 300) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +36,13 @@ const Footer = () => {
     if (location.pathname === path) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   return (
@@ -67,8 +87,8 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 mb-16">
           
           {/* Brand Section */}
-          <div className="w-full lg:w-2/5 shrink-0">
-            <Link to="/" onClick={() => handleLinkClick("/")} className="flex items-center gap-2 mb-4">
+          <div className="w-full lg:w-2/5 shrink-0 flex flex-col items-center xs:items-start text-center xs:text-left">
+            <Link to="/" onClick={() => handleLinkClick("/")} className="flex items-center gap-2 mb-4 justify-center xs:justify-start">
               <div className="bg-indigo-600 p-2 rounded-lg">
                 <Zap size={24} className="text-white" fill="currentColor" />
               </div>
@@ -77,7 +97,7 @@ const Footer = () => {
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-sm leading-relaxed transition-colors">
               Empowering professionals to connect, grow, and succeed. Your professional network starts here.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 justify-center xs:justify-start">
               <a href="#" className="w-10 h-10 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full flex items-center justify-center text-gray-400 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white hover:bg-indigo-50 dark:hover:bg-indigo-600 hover:border-indigo-200 dark:hover:border-indigo-600 transition-all shadow-sm dark:shadow-none">
                 <FaTwitter size={18} />
               </a>
@@ -94,10 +114,10 @@ const Footer = () => {
           </div>
 
           {/* Links Columns container */}
-          <div className="w-full lg:w-3/5 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-8">
+          <div className="w-full lg:w-3/5 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-4 xs:gap-x-6 md:gap-x-8">
             {/* Quick Links */}
-            <div>
-              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Quick Links</h3>
+            <div className="text-center xs:text-left">
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Quick Links</h3>
               <ul className="space-y-4 text-sm font-medium">
                 <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</Link></li>
                 <li><Link to="/explore" onClick={() => handleLinkClick("/explore")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Explore</Link></li>
@@ -110,8 +130,8 @@ const Footer = () => {
             </div>
 
             {/* Features */}
-            <div>
-              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Features</h3>
+            <div className="text-center xs:text-left">
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Features</h3>
               <ul className="space-y-4 text-sm font-medium">
                 <li><Link to="/jobs" onClick={() => handleLinkClick("/jobs")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Job Recommendations</Link></li>
                 <li><Link to="/chat" onClick={() => handleLinkClick("/chat")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Real-Time Chat</Link></li>
@@ -122,8 +142,8 @@ const Footer = () => {
             </div>
 
             {/* Resources */}
-            <div>
-              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Resources</h3>
+            <div className="text-center xs:text-left">
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Resources</h3>
               <ul className="space-y-4 text-sm font-medium">
                 <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Help Center</Link></li>
                 <li><Link to="/privacy-policy" onClick={() => handleLinkClick("/privacy-policy")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
@@ -132,13 +152,13 @@ const Footer = () => {
             </div>
 
             {/* Contact */}
-            <div>
-              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Contact</h3>
-              <div className="space-y-4">
-                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-sm font-medium">
-                  <Mail size={16} /> support@skilllink.com
+            <div className="text-center xs:text-left">
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Contact</h3>
+              <div className="space-y-4 flex flex-col items-center xs:items-start">
+                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-xs min-[380px]:text-sm font-medium break-all justify-center xs:justify-start">
+                  <Mail size={16} className="shrink-0" /> support@skilllink.com
                 </a>
-                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Ahmedabad, India</p>
+                <p className="text-gray-600 dark:text-gray-400 text-xs min-[380px]:text-sm font-medium">Ahmedabad, India</p>
               </div>
             </div>
           </div>
@@ -156,6 +176,16 @@ const Footer = () => {
         </div>
 
       </div>
+
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white/90 dark:bg-slate-900/90 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-800 shadow-lg hover:shadow-indigo-500/20 hover:text-indigo-600 dark:hover:text-indigo-400 hover:-translate-y-1 active:scale-95 transition-all duration-300 backdrop-blur-sm group focus:outline-none"
+        >
+          <ArrowUp size={20} className="group-hover:animate-bounce shrink-0" />
+        </button>
+      )}
     </footer>
   );
 };
