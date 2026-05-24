@@ -4,7 +4,77 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SkillLink</title>
+    
+    <!-- Primary SEO Metadata -->
+    <title>SkillLink | AI-Powered Professional Networking & Job Matching</title>
+    <meta name="description" content="SkillLink is an AI-powered professional networking and career platform. Connect with mentors, discover AI-matched jobs, join collaborative groups, and build your digital portfolio." />
+    <meta name="keywords" content="professional network, AI job matching, career platform, mentorship, portfolio builder, job board, developer network, professional collaboration" />
+    <meta name="author" content="SkillLink Inc." />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://skill-link.vercel.app" />
+
+    <!-- Theme and UI Preferences -->
+    <meta name="theme-color" content="#4f46e5" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!-- Open Graph / Facebook Social Sharing Card -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SkillLink" />
+    <meta property="og:title" content="SkillLink | AI-Powered Professional Networking & Job Matching" />
+    <meta property="og:description" content="Connect with mentors, find AI-matched job opportunities, and build stunning portfolios on the premier professional network." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://skill-link.vercel.app" />
+
+    <!-- Twitter Social Sharing Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="SkillLink | AI-Powered Professional Networking & Job Matching" />
+    <meta name="twitter:description" content="Connect with mentors, find AI-matched job opportunities, and build stunning portfolios on the premier professional network." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- JSON-LD Structured Data Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://skill-link.vercel.app/#website",
+            "url": "https://skill-link.vercel.app",
+            "name": "SkillLink",
+            "description": "AI-powered professional networking and career platform.",
+            "potentialAction": [
+              {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://skill-link.vercel.app/explore?q={search_term_string}"
+                },
+                "query-input": "required name=search_term_string"
+              }
+            ],
+            "inLanguage": "en-US"
+          },
+          {
+            "@type": "Organization",
+            "@id": "https://skill-link.vercel.app/#organization",
+            "name": "SkillLink",
+            "url": "https://skill-link.vercel.app",
+            "logo": {
+              "@type": "ImageObject",
+              "@id": "https://skill-link.vercel.app/#logo",
+              "url": "https://skill-link.vercel.app/favicon.svg",
+              "contentUrl": "https://skill-link.vercel.app/favicon.svg",
+              "width": "512",
+              "height": "512",
+              "caption": "SkillLink Logo"
+            },
+            "image": {
+              "@id": "https://skill-link.vercel.app/#logo"
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="min-w-[200px] overflow-x-hidden bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-white transition-colors duration-300">
     <div id="root"></div>

@@ -5,6 +5,7 @@ import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import JobsDashboardPage from "./JobsDashboardPage";
+import SEO from "../components/SEO";
 
 export default function JobBoardPage() {
   const [activeTab, setActiveTab] = useState<"board" | "dashboard">("board");
@@ -132,6 +133,10 @@ export default function JobBoardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-6 sm:pt-8 pb-12 transition-colors duration-300">
+      <SEO 
+        title="Find Tech & Developer Jobs" 
+        description="Search recent job listings, retrieve AI recommended job positions, and apply for technical openings on SkillLink's smart job board."
+      />
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         
         {/* Header & Search */}

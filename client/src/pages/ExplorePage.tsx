@@ -4,6 +4,7 @@ import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import SEO from "../components/SEO";
 
 export default function ExplorePage() {
   const [keyword, setKeyword] = useState("");
@@ -124,6 +125,10 @@ export default function ExplorePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-8 pb-12 transition-colors duration-300">
+      <SEO 
+        title="Explore Professionals & Mentors" 
+        description="Search and connect with industry leading tech experts, recruiters, and professional mentors in the SkillLink community."
+      />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         <div className="mb-8">

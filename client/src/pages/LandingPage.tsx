@@ -2,12 +2,17 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { Target, MessageSquare, TrendingUp } from "lucide-react";
+import SEO from "../components/SEO";
 
 export default function LandingPage() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-indigo-50 to-white dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+      <SEO 
+        title="AI-Powered Professional Networking & Job Matching" 
+        description="Connect with mentors, find AI-matched jobs, join groups, and accelerate your career growth on SkillLink, the leading professional ecosystem."
+      />
       {/* Hero Section */}
       <div className="flex-grow flex flex-col justify-center items-center text-center px-4 py-20">
         <div className="max-w-3xl mt-10">

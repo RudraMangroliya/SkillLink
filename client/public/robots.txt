@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /chat/
+Disallow: /settings/
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://skill-link.vercel.app/sitemap.xml
