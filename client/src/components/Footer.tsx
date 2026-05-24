@@ -64,10 +64,10 @@ const Footer = () => {
         <div className="border-t border-gray-200 dark:border-slate-800 mb-12 transition-colors"></div>
 
         {/* Main Footer Links */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 mb-16">
+        <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 mb-16">
           
           {/* Brand Section */}
-          <div className="lg:col-span-2">
+          <div className="w-full lg:w-2/5 shrink-0">
             <Link to="/" onClick={() => handleLinkClick("/")} className="flex items-center gap-2 mb-4">
               <div className="bg-indigo-600 p-2 rounded-lg">
                 <Zap size={24} className="text-white" fill="currentColor" />
@@ -93,48 +93,52 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Quick Links</h3>
-            <ul className="space-y-4 text-sm font-medium">
-              <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</Link></li>
-              <li><Link to="/explore" onClick={() => handleLinkClick("/explore")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Explore</Link></li>
-              <li><Link to="/jobs" onClick={() => handleLinkClick("/jobs")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Jobs</Link></li>
-              <li><Link to="/groups" onClick={() => handleLinkClick("/groups")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Groups</Link></li>
-              <li><Link to="/chat" onClick={() => handleLinkClick("/chat")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Messages</Link></li>
-              <li><Link to="/network" onClick={() => handleLinkClick("/network")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Network</Link></li>
-              <li><Link to="/profile" onClick={() => handleLinkClick("/profile")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Profile</Link></li>
-            </ul>
-          </div>
+          {/* Links Columns container */}
+          <div className="w-full lg:w-3/5 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
+            {/* Quick Links */}
+            <div>
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Quick Links</h3>
+              <ul className="space-y-4 text-sm font-medium">
+                <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Home</Link></li>
+                <li><Link to="/explore" onClick={() => handleLinkClick("/explore")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Explore</Link></li>
+                <li><Link to="/jobs" onClick={() => handleLinkClick("/jobs")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Jobs</Link></li>
+                <li><Link to="/groups" onClick={() => handleLinkClick("/groups")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Groups</Link></li>
+                <li><Link to="/chat" onClick={() => handleLinkClick("/chat")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Messages</Link></li>
+                <li><Link to="/network" onClick={() => handleLinkClick("/network")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Network</Link></li>
+                <li><Link to="/profile" onClick={() => handleLinkClick("/profile")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Profile</Link></li>
+              </ul>
+            </div>
 
-          {/* Features */}
-          <div>
-            <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Features</h3>
-            <ul className="space-y-4 text-sm font-medium">
-              <li><Link to="/jobs" onClick={() => handleLinkClick("/jobs")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Job Recommendations</Link></li>
-              <li><Link to="/chat" onClick={() => handleLinkClick("/chat")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Real-Time Chat</Link></li>
-              <li><Link to="/explore" onClick={() => handleLinkClick("/explore")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">AI Matching</Link></li>
-              <li><Link to="/profile" onClick={() => handleLinkClick("/profile")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Resume Upload</Link></li>
-              <li><Link to="/groups" onClick={() => handleLinkClick("/groups")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Professional Groups</Link></li>
-            </ul>
-          </div>
+            {/* Features */}
+            <div>
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Features</h3>
+              <ul className="space-y-4 text-sm font-medium">
+                <li><Link to="/jobs" onClick={() => handleLinkClick("/jobs")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Job Recommendations</Link></li>
+                <li><Link to="/chat" onClick={() => handleLinkClick("/chat")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Real-Time Chat</Link></li>
+                <li><Link to="/explore" onClick={() => handleLinkClick("/explore")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">AI Matching</Link></li>
+                <li><Link to="/profile" onClick={() => handleLinkClick("/profile")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Resume Upload</Link></li>
+                <li><Link to="/groups" onClick={() => handleLinkClick("/groups")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Professional Groups</Link></li>
+              </ul>
+            </div>
 
-          {/* Resources & Contact */}
-          <div>
-            <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Resources</h3>
-            <ul className="space-y-4 text-sm font-medium mb-8">
-              <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Help Center</Link></li>
-              <li><Link to="/privacy-policy" onClick={() => handleLinkClick("/privacy-policy")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms-of-service" onClick={() => handleLinkClick("/terms-of-service")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Terms of Service</Link></li>
-            </ul>
-            <h3 className="text-gray-900 dark:text-white font-semibold mb-4 transition-colors">Contact</h3>
-            <div className="space-y-2">
-              <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-sm">
-                <Mail size={16} /> support@skilllink.com
-              </a>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">Ahmedabad, India</p>
+            {/* Resources & Contact */}
+            <div>
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Resources</h3>
+              <ul className="space-y-4 text-sm font-medium mb-8">
+                <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Help Center</Link></li>
+                <li><Link to="/privacy-policy" onClick={() => handleLinkClick("/privacy-policy")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms-of-service" onClick={() => handleLinkClick("/terms-of-service")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Terms of Service</Link></li>
+              </ul>
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-4 transition-colors">Contact</h3>
+              <div className="space-y-2">
+                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-sm">
+                  <Mail size={16} /> support@skilllink.com
+                </a>
+                <p className="text-gray-600 dark:text-gray-400 text-sm">Ahmedabad, India</p>
+              </div>
             </div>
           </div>
+
         </div>
 
         {/* Bottom Copyright */}
