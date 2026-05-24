@@ -94,7 +94,7 @@ const Footer = () => {
           </div>
 
           {/* Links Columns container */}
-          <div className="w-full lg:w-3/5 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
+          <div className="w-full lg:w-3/5 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-8">
             {/* Quick Links */}
             <div>
               <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Quick Links</h3>
@@ -121,20 +121,24 @@ const Footer = () => {
               </ul>
             </div>
 
-            {/* Resources & Contact */}
+            {/* Resources */}
             <div>
               <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Resources</h3>
-              <ul className="space-y-4 text-sm font-medium mb-8">
+              <ul className="space-y-4 text-sm font-medium">
                 <li><Link to="/" onClick={() => handleLinkClick("/")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Help Center</Link></li>
                 <li><Link to="/privacy-policy" onClick={() => handleLinkClick("/privacy-policy")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Privacy Policy</Link></li>
                 <li><Link to="/terms-of-service" onClick={() => handleLinkClick("/terms-of-service")} className="text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Terms of Service</Link></li>
               </ul>
-              <h3 className="text-gray-900 dark:text-white font-semibold mb-4 transition-colors">Contact</h3>
-              <div className="space-y-2">
-                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-sm">
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors">Contact</h3>
+              <div className="space-y-4">
+                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-sm font-medium">
                   <Mail size={16} /> support@skilllink.com
                 </a>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Ahmedabad, India</p>
+                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium">Ahmedabad, India</p>
               </div>
             </div>
           </div>
@@ -144,7 +148,7 @@ const Footer = () => {
         {/* Bottom Copyright */}
         <div className="pt-8 border-t border-gray-200 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-500 font-medium transition-colors">
           <p>© {new Date().getFullYear()} SkillLink. All rights reserved.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
             <Link to="/privacy-policy" onClick={() => handleLinkClick("/privacy-policy")} className="hover:text-gray-900 dark:hover:text-white transition-colors">Privacy Policy</Link>
             <Link to="/terms-of-service" onClick={() => handleLinkClick("/terms-of-service")} className="hover:text-gray-900 dark:hover:text-white transition-colors">Terms of Service</Link>
             <Link to="/cookie-policy" onClick={() => handleLinkClick("/cookie-policy")} className="hover:text-gray-900 dark:hover:text-white transition-colors">Cookie Policy</Link>
