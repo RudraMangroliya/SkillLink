@@ -8,10 +8,6 @@ const Footer = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const location = useLocation();
 
-  if (location.pathname.startsWith('/chat')) {
-    return null;
-  }
-
   useEffect(() => {
     const toggleVisibility = () => {
       if (window.scrollY > 300) {
@@ -44,6 +40,10 @@ const Footer = () => {
       behavior: 'smooth'
     });
   };
+
+  if (location.pathname.startsWith('/chat')) {
+    return null;
+  }
 
   return (
     <footer className="bg-gray-50 dark:bg-slate-950 text-gray-600 dark:text-gray-300 py-16 border-t border-gray-200 dark:border-slate-800 font-sans relative overflow-hidden mt-auto transition-colors duration-300">
