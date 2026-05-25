@@ -317,6 +317,15 @@ export default function ChatPage() {
       }
     });
 
+    socket.on("chat deleted", (deletedChatData) => {
+      const deletedChatId = deletedChatData.chatId || deletedChatData._id;
+      setChats((prev) => prev.filter((c) => c._id !== deletedChatId));
+      if (selectedChat && selectedChat._id === deletedChatId) {
+        setSelectedChat(null);
+        setMessages([]);
+      }
+    });
+
     return () => {
       socket.off("message received");
       socket.off("message updated");
@@ -326,6 +335,7 @@ export default function ChatPage() {
       socket.off("typing");
       socket.off("stop typing");
       socket.off("chat updated");
+      socket.off("chat deleted");
     };
   }, [selectedChat]);
 
@@ -506,6 +516,37 @@ export default function ChatPage() {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
       if (timerRef.current) clearInterval(timerRef.current);
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    if (!selectedChat) return;
+    if (selectedChat.isGroup) return; // Only allow one-to-one chats
+    
+    const otherUser = selectedChat.users.find((u: any) => u._id !== user?._id);
+    if (!window.confirm(`Are you sure you want to permanently delete this entire chat with ${otherUser?.name || 'this user'}? This will delete all messages for both of you.`)) {
+      return;
+    }
+
+    try {
+      await axiosInstance.delete(`/api/chats/${selectedChat._id}`);
+      
+      // Emit socket event so it updates for the other user instantly
+      if (socket) {
+        socket.emit("chat deleted", {
+          chatId: selectedChat._id,
+          users: selectedChat.users
+        });
+      }
+
+      // Update local state
+      setChats((prev) => prev.filter((c) => c._id !== selectedChat._id));
+      setSelectedChat(null);
+      setMessages([]);
+      setShowInfoPanel(false);
+    } catch (err) {
+      console.error("Failed to delete chat", err);
+      alert("Failed to delete chat. Please try again.");
     }
   };
 
@@ -699,19 +740,27 @@ export default function ChatPage() {
                 
                 {/* Dropdown for < 300px */}
                 {showHeaderMenu && (
-                  <div className="absolute right-0 top-full mt-2 w-40 bg-white rounded-lg shadow-lg border border-gray-100 z-50 py-1 min-[300px]:hidden">
-                    <button onClick={() => { setShowSearch(!showSearch); setShowHeaderMenu(false); }} className="w-full px-4 py-2 text-left flex items-center hover:bg-gray-50 text-sm">
-                      <Search size={14} className="mr-2" /> Search
+                  <div className="absolute right-0 top-full mt-2 w-44 bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-gray-100 dark:border-slate-700 z-50 py-1 min-[300px]:hidden overflow-hidden">
+                    <button onClick={() => { setShowSearch(!showSearch); setShowHeaderMenu(false); }} className="w-full px-4 py-2.5 text-left flex items-center hover:bg-gray-50 dark:hover:bg-slate-700 text-sm">
+                      <Search size={14} className="mr-2 text-gray-400" /> Search
                     </button>
-                    <button onClick={() => { setShowCallModal('voice'); setShowHeaderMenu(false); }} className="w-full px-4 py-2 text-left flex items-center hover:bg-gray-50 text-sm">
-                      <Phone size={14} className="mr-2" /> Voice Call
+                    <button onClick={() => { setShowCallModal('voice'); setShowHeaderMenu(false); }} className="w-full px-4 py-2.5 text-left flex items-center hover:bg-gray-50 dark:hover:bg-slate-700 text-sm">
+                      <Phone size={14} className="mr-2 text-gray-400" /> Voice Call
                     </button>
-                    <button onClick={() => { setShowCallModal('video'); setShowHeaderMenu(false); }} className="w-full px-4 py-2 text-left flex items-center hover:bg-gray-50 text-sm">
-                      <Video size={14} className="mr-2" /> Video Call
+                    <button onClick={() => { setShowCallModal('video'); setShowHeaderMenu(false); }} className="w-full px-4 py-2.5 text-left flex items-center hover:bg-gray-50 dark:hover:bg-slate-700 text-sm">
+                      <Video size={14} className="mr-2 text-gray-400" /> Video Call
                     </button>
-                    <button onClick={() => { setShowInfoPanel(!showInfoPanel); setShowHeaderMenu(false); }} className="w-full px-4 py-2 text-left flex items-center hover:bg-gray-50 text-sm">
-                      <Info size={14} className="mr-2" /> Details
+                    <button onClick={() => { setShowInfoPanel(!showInfoPanel); setShowHeaderMenu(false); }} className="w-full px-4 py-2.5 text-left flex items-center hover:bg-gray-50 dark:hover:bg-slate-700 text-sm">
+                      <Info size={14} className="mr-2 text-gray-400" /> Details
                     </button>
+                    {!selectedChat?.isGroup && (
+                      <>
+                        <div className="h-px bg-gray-100 dark:bg-slate-700 my-1"></div>
+                        <button onClick={() => { handleDeleteChat(); setShowHeaderMenu(false); }} className="w-full px-4 py-2.5 text-left flex items-center hover:bg-red-50 dark:hover:bg-red-950/20 text-red-600 dark:text-red-400 text-sm font-semibold">
+                          <Trash2 size={14} className="mr-2 text-red-400" /> Delete Chat
+                        </button>
+                      </>
+                    )}
                   </div>
                 )}
                 {/* Search Popup */}
@@ -1165,6 +1214,20 @@ export default function ChatPage() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 break-words leading-tight mt-0.5">View saved messages</p>
                   </div>
                 </div>
+                {!selectedChat?.isGroup && (
+                  <div 
+                    onClick={handleDeleteChat} 
+                    className="bg-red-50 dark:bg-red-950/20 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-xl p-3 flex items-center cursor-pointer transition min-w-0 border border-red-100/50 dark:border-red-900/30"
+                  >
+                    <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 flex items-center justify-center mr-3 shrink-0">
+                      <Trash2 size={18} />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h4 className="text-sm font-bold text-red-600 dark:text-red-400 truncate">Delete Chat</h4>
+                      <p className="text-xs text-red-500 dark:text-red-400 break-words leading-tight mt-0.5">Permanently delete for both</p>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -200,6 +200,13 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("chat deleted", (deletedChatData) => {
+    if (!deletedChatData.users) return;
+    deletedChatData.users.forEach((user: any) => {
+      socket.in(user._id || user).emit("chat deleted", deletedChatData);
+    });
+  });
+
   socket.on("message seen", (messageData) => {
     if (messageData.chat?.users) {
       messageData.chat.users.forEach((user: any) => {
