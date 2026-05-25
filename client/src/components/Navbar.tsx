@@ -115,6 +115,15 @@ export default function Navbar() {
           window.dispatchEvent(new CustomEvent('connection_removed', { detail: data }));
         });
 
+        newSocket.on("chat deleted", (deletedChatData) => {
+          const deletedChatId = deletedChatData.chatId || deletedChatData._id;
+          setNotifications(prev => {
+            const filtered = prev.filter(n => n.relatedId !== deletedChatId);
+            setUnreadCount(filtered.filter((n: any) => !n.isRead).length);
+            return filtered;
+          });
+        });
+
         setSocket(newSocket);
 
         return () => {

@@ -2,6 +2,7 @@ import { Response } from "express";
 import { Chat } from "../models/Chat";
 import { User } from "../models/User";
 import { Message } from "../models/Message";
+import { Notification } from "../models/Notification";
 import { cloudinary } from "../config/cloudinary";
 
 export const accessChat = async (req: any, res: Response) => {
@@ -147,9 +148,21 @@ export const deleteChat = async (req: any, res: Response) => {
       }
     }
 
-    // Delete messages and chat from database
+    // Delete messages, chat, and associated notifications from database
     await Message.deleteMany({ chat: chatId });
     await Chat.findByIdAndDelete(chatId);
+    await Notification.deleteMany({ relatedId: chatId as any });
+
+    // Emit socket event so it updates for the other user instantly
+    const { io } = require("../index");
+    if (io && chat.users) {
+      chat.users.forEach((userId: any) => {
+        io.to(userId.toString()).emit("chat deleted", {
+          chatId,
+          users: chat.users,
+        });
+      });
+    }
 
     res.status(200).json({ success: true, message: "Chat and all associated messages deleted successfully" });
   } catch (error: any) {

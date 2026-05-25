@@ -122,6 +122,10 @@ export default function ChatPage() {
   // Smart Reply AI State
   const [smartReplies, setSmartReplies] = useState<string[]>([]);
 
+  // User search and connections
+  const [userSearchQuery, setUserSearchQuery] = useState("");
+  const [connections, setConnections] = useState<any[]>([]);
+
   const fetchChats = async () => {
     try {
       const res = await axiosInstance.get("/api/chats");
@@ -196,8 +200,18 @@ export default function ChatPage() {
     }
   }, [messages, user]);
 
+  const fetchConnections = async () => {
+    try {
+      const res = await axiosInstance.get("/api/connections");
+      setConnections(res.data);
+    } catch (error) {
+      console.error("Error fetching connections", error);
+    }
+  };
+
   useEffect(() => {
     fetchChats();
+    fetchConnections();
   }, []);
 
   useEffect(() => {
@@ -615,6 +629,34 @@ export default function ChatPage() {
     }, 3000);
   };
 
+  // Filter active chats based on search query
+  const filteredChats = chats.filter((chat) => {
+    if (!userSearchQuery.trim()) return true;
+    const otherUser = chat.users.find((u: any) => u._id !== user?._id);
+    return otherUser?.name?.toLowerCase().includes(userSearchQuery.toLowerCase());
+  });
+
+  // Extract mutually connected users from connections
+  const connectedUsers = connections.map((conn) => {
+    if (!conn) return null;
+    return conn.requester?._id === user?._id ? conn.recipient : conn.requester;
+  }).filter(Boolean);
+
+  // Exclude connections with whom we already have a chat
+  const connectionsWithoutChat = connectedUsers.filter((connUser) => {
+    if (!connUser) return false;
+    const hasChat = chats.some(
+      (chat) => !chat.isGroupChat && chat.users.some((u: any) => u._id === connUser._id)
+    );
+    return !hasChat;
+  });
+
+  // Filter connections based on search query
+  const filteredConnections = connectionsWithoutChat.filter((connUser) => {
+    if (!userSearchQuery.trim()) return false;
+    return connUser.name?.toLowerCase().includes(userSearchQuery.toLowerCase());
+  });
+
   if (user?.role === "admin") {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center p-4">
@@ -641,49 +683,163 @@ export default function ChatPage() {
                 type="text"
                 id="searchUsers"
                 name="searchUsers"
-                placeholder="Search users..."
+                placeholder="Search chats or connected users..."
                 className="w-full bg-transparent text-gray-900 dark:text-white outline-none text-sm placeholder-gray-400 dark:placeholder-gray-500"
+                value={userSearchQuery}
+                onChange={(e) => setUserSearchQuery(e.target.value)}
               />
+              {userSearchQuery && (
+                <button
+                  onClick={() => setUserSearchQuery("")}
+                  className="text-xs font-semibold text-gray-400 hover:text-indigo-600 px-1 transition"
+                >
+                  Clear
+                </button>
+              )}
             </div>
           </div>
 
           <div className="overflow-y-auto flex-1">
-            {chats.map(chat => {
-              // In 1-on-1 chat, find the other user
-              const otherUser = chat.users.find((u: any) => u._id !== user?._id);
-              const isOnline = onlineUsers.includes(otherUser?._id);
-              
-              return (
-                <div 
-                  key={chat._id} 
-                  onClick={() => setSelectedChat(chat)}
-                  className={`p-4 border-b border-gray-50 dark:border-slate-700/50 flex items-center cursor-pointer transition-colors ${selectedChat?._id === chat._id ? 'bg-indigo-50 dark:bg-indigo-900/30 border-l-4 border-l-indigo-600' : 'hover:bg-gray-50 dark:hover:bg-slate-700/50'}`}
-                >
-                  <div className="relative">
-                    <img src={otherUser?.profileImage || `https://ui-avatars.com/api/?name=${otherUser?.name}&background=random`} alt={otherUser?.name} className="w-12 h-12 rounded-full mr-4 border border-gray-200 dark:border-slate-700" />
-                    {isOnline && <div className="absolute bottom-0 right-4 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full"></div>}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-baseline mb-1">
-                      <h3 className="font-semibold text-gray-900 dark:text-white truncate">{otherUser?.name}</h3>
-                      <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {chat.latestMessage ? new Date(chat.latestMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
-                      </span>
+            {!userSearchQuery.trim() ? (
+              // Normal state: show all active chats
+              <>
+                {chats.map(chat => {
+                  const otherUser = chat.users.find((u: any) => u._id !== user?._id);
+                  const isOnline = onlineUsers.includes(otherUser?._id);
+                  
+                  return (
+                    <div 
+                      key={chat._id} 
+                      onClick={() => setSelectedChat(chat)}
+                      className={`p-4 border-b border-gray-50 dark:border-slate-700/50 flex items-center cursor-pointer transition-all hover:translate-x-1 ${selectedChat?._id === chat._id ? 'bg-indigo-50 dark:bg-indigo-900/30 border-l-4 border-l-indigo-600' : 'hover:bg-gray-50 dark:hover:bg-slate-700/50'}`}
+                    >
+                      <div className="relative">
+                        <img src={otherUser?.profileImage || `https://ui-avatars.com/api/?name=${otherUser?.name}&background=random`} alt={otherUser?.name} className="w-12 h-12 rounded-full mr-4 border border-gray-200 dark:border-slate-700" />
+                        {isOnline && <div className="absolute bottom-0 right-4 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse"></div>}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-baseline mb-1">
+                          <h3 className="font-semibold text-gray-900 dark:text-white truncate">{otherUser?.name}</h3>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {chat.latestMessage ? new Date(chat.latestMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{chat.latestMessage?.isDeleted ? "🚫 This message was deleted" : chat.latestMessage?.content || "No messages yet"}</p>
+                      </div>
+                      {chat.unreadCount > 0 && (
+                        <div className="ml-3 bg-indigo-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                          {chat.unreadCount}
+                        </div>
+                      )}
                     </div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{chat.latestMessage?.isDeleted ? "🚫 This message was deleted" : chat.latestMessage?.content || "No messages yet"}</p>
+                  );
+                })}
+                
+                {chats.length === 0 && (
+                  <div className="p-8 text-center text-gray-500">
+                    <p className="text-sm font-medium">No active chats yet.</p>
+                    <p className="text-xs text-gray-400 mt-1">Search for your connected users in the search bar above to start a chat!</p>
                   </div>
-                  {chat.unreadCount > 0 && (
-                    <div className="ml-3 bg-indigo-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
-                      {chat.unreadCount}
+                )}
+              </>
+            ) : (
+              // Search state
+              <div className="flex flex-col h-full">
+                {/* Active Chats Section */}
+                {filteredChats.length > 0 && (
+                  <div>
+                    <div className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase px-4 py-2 bg-gray-50 dark:bg-slate-700/30">
+                      Active Chats ({filteredChats.length})
                     </div>
-                  )}
-                </div>
-              );
-            })}
-            
-            {chats.length === 0 && (
-              <div className="p-8 text-center text-gray-500">
-                <p>No chats yet. Connect with professionals to start chatting!</p>
+                    {filteredChats.map(chat => {
+                      const otherUser = chat.users.find((u: any) => u._id !== user?._id);
+                      const isOnline = onlineUsers.includes(otherUser?._id);
+                      
+                      return (
+                        <div 
+                          key={chat._id} 
+                          onClick={() => {
+                            setSelectedChat(chat);
+                            setUserSearchQuery("");
+                          }}
+                          className={`p-4 border-b border-gray-50 dark:border-slate-700/50 flex items-center cursor-pointer transition-all hover:translate-x-1 ${selectedChat?._id === chat._id ? 'bg-indigo-50 dark:bg-indigo-900/30 border-l-4 border-l-indigo-600' : 'hover:bg-gray-50 dark:hover:bg-slate-700/50'}`}
+                        >
+                          <div className="relative">
+                            <img src={otherUser?.profileImage || `https://ui-avatars.com/api/?name=${otherUser?.name}&background=random`} alt={otherUser?.name} className="w-12 h-12 rounded-full mr-4 border border-gray-200 dark:border-slate-700" />
+                            {isOnline && <div className="absolute bottom-0 right-4 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse"></div>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex justify-between items-baseline mb-1">
+                              <h3 className="font-semibold text-gray-900 dark:text-white truncate">{otherUser?.name}</h3>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {chat.latestMessage ? new Date(chat.latestMessage.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 truncate">{chat.latestMessage?.isDeleted ? "🚫 This message was deleted" : chat.latestMessage?.content || "No messages yet"}</p>
+                          </div>
+                          {chat.unreadCount > 0 && (
+                            <div className="ml-3 bg-indigo-600 text-white text-xs font-bold w-5 h-5 flex items-center justify-center rounded-full">
+                              {chat.unreadCount}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Connections Without Chat Section */}
+                {filteredConnections.length > 0 && (
+                  <div>
+                    <div className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase px-4 py-2 bg-gray-50 dark:bg-slate-700/30 border-t border-gray-100 dark:border-slate-700/50">
+                      Start New Chat ({filteredConnections.length})
+                    </div>
+                    {filteredConnections.map(connUser => {
+                      const isOnline = onlineUsers.includes(connUser._id);
+                      
+                      return (
+                        <div 
+                          key={connUser._id} 
+                          onClick={async () => {
+                            try {
+                              const res = await axiosInstance.post("/api/chats", { userId: connUser._id });
+                              const fullChat = res.data;
+                              setChats(prev => {
+                                if (prev.some(c => c._id === fullChat._id)) return prev;
+                                return [fullChat, ...prev];
+                              });
+                              setSelectedChat(fullChat);
+                              setUserSearchQuery("");
+                            } catch (err) {
+                              console.error("Failed to start chat with connection", err);
+                              alert("Failed to start chat. Please try again.");
+                            }
+                          }}
+                          className="p-4 border-b border-gray-50 dark:border-slate-700/50 flex items-center cursor-pointer transition-all hover:translate-x-1 hover:bg-gray-50 dark:hover:bg-slate-700/50"
+                        >
+                          <div className="relative">
+                            <img src={connUser.profileImage || `https://ui-avatars.com/api/?name=${connUser.name}&background=random`} alt={connUser.name} className="w-12 h-12 rounded-full mr-4 border border-gray-200 dark:border-slate-700" />
+                            {isOnline && <div className="absolute bottom-0 right-4 w-3 h-3 bg-green-500 border-2 border-white dark:border-slate-800 rounded-full animate-pulse"></div>}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-gray-900 dark:text-white truncate">{connUser.name}</h3>
+                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">{connUser.headline || "Mutually connected user"}</p>
+                          </div>
+                          <div className="ml-3 p-2 bg-indigo-50 dark:bg-indigo-950/40 rounded-full text-indigo-600 dark:text-indigo-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {filteredChats.length === 0 && filteredConnections.length === 0 && (
+                  <div className="p-8 text-center text-gray-500">
+                    <p className="text-sm font-medium">No results found for "{userSearchQuery}"</p>
+                    <p className="text-xs text-gray-400 mt-1">Make sure you are connected with this user or check spelling.</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
