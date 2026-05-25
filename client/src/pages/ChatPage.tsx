@@ -397,15 +397,47 @@ export default function ChatPage() {
   };
 
   const startRecording = async () => {
+    // Insecure contexts (HTTP) do not support media devices on laptop browsers
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert("Microphone access is unavailable. Modern browsers require a secure HTTPS connection or localhost to record audio. Please verify your connection or SSL settings.");
+      return;
+    }
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true
-        } 
-      });
-      const mediaRecorder = new MediaRecorder(stream);
+      let stream: MediaStream;
+      try {
+        // Attempt premium audio quality with echo cancellation and noise suppression
+        stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          } 
+        });
+      } catch (constraintErr) {
+        console.warn("Advanced mic constraints rejected by hardware, falling back to basic audio.", constraintErr);
+        // Fallback for strict microphones (like built-in laptop hardware)
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      }
+
+      // Check supported recording formats on laptop/mobile to ensure compatibility
+      let options = {};
+      const codecs = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/ogg;codecs=opus",
+        "audio/mp4",
+        "audio/aac",
+        "audio/wav"
+      ];
+      for (const mime of codecs) {
+        if (MediaRecorder.isTypeSupported(mime)) {
+          options = { mimeType: mime };
+          break;
+        }
+      }
+
+      const mediaRecorder = new MediaRecorder(stream, options);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -415,7 +447,8 @@ export default function ChatPage() {
         }
       };
 
-      mediaRecorder.start(250); // Fetch data every 250ms to prevent empty final blobs
+      // Start recording natively with standard event delivery
+      mediaRecorder.start(500);
       setIsRecording(true);
       setRecordingTime(0);
 
@@ -424,7 +457,7 @@ export default function ChatPage() {
       }, 1000);
     } catch (err) {
       console.error("Error accessing microphone", err);
-      alert("Microphone access denied or unavailable.");
+      alert("Microphone access denied or unavailable. Please check your system settings and browser permissions.");
     }
   };
 
@@ -799,7 +832,7 @@ export default function ChatPage() {
                                         </div>
                                         <span className="truncate max-w-[130px] sm:max-w-[180px]">{fileName}</span>
                                       </div>
-                                      <audio src={attachment.url} controls className="w-[180px] sm:w-[240px] h-[35px] outline-none" />
+                                      <audio src={attachment.url} controls className="w-[220px] min-[360px]:w-[245px] sm:w-[280px] h-[35px] outline-none" />
                                     </div>
                                   ) : attachment.resourceType === 'video' ? (
                                     <video src={attachment.url} controls className="max-w-[130px] min-[300px]:max-w-[160px] sm:max-w-[200px] rounded-lg shadow-sm" />
@@ -816,7 +849,7 @@ export default function ChatPage() {
 
                         {m.voiceNote && !m.isDeleted && (
                           <div className={`mb-2 rounded-full px-1 sm:px-2 py-1 flex items-center shadow-sm border overflow-hidden w-max max-w-full ${isMe ? 'bg-indigo-500 border-indigo-400' : 'bg-gray-100 dark:bg-slate-700 border-gray-200 dark:border-slate-600'}`}>
-                            <audio controls src={m.voiceNote.replace(/\.[^.]+$/, '.mp3')} className="w-[130px] min-[300px]:w-[180px] sm:w-[260px] h-[35px] outline-none bg-transparent" />
+                            <audio controls src={m.voiceNote.replace(/\.[^.]+$/, '.mp3')} className="w-[220px] min-[360px]:w-[245px] sm:w-[280px] h-[35px] outline-none bg-transparent" />
                           </div>
                         )}
 
