@@ -22,7 +22,7 @@ const playNotificationSound = () => {
     osc1.type = "sine";
     osc1.frequency.setValueAtTime(523.25, now); // C5
     gain1.gain.setValueAtTime(0, now);
-    gain1.gain.linearRampToValueAtTime(0.12, now + 0.015);
+    gain1.gain.linearRampToValueAtTime(0.45, now + 0.015);
     gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
     
     osc1.connect(gain1);
@@ -36,7 +36,7 @@ const playNotificationSound = () => {
     osc2.type = "sine";
     osc2.frequency.setValueAtTime(783.99, now + 0.08); // G5
     gain2.gain.setValueAtTime(0, now + 0.08);
-    gain2.gain.linearRampToValueAtTime(0.18, now + 0.095);
+    gain2.gain.linearRampToValueAtTime(0.6, now + 0.095);
     gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
 
     osc2.connect(gain2);
