@@ -9,6 +9,74 @@ import io, { Socket } from "socket.io-client";
 
 let socket: Socket;
 
+// Programmatic, high-quality audio chimes for premium user alerts
+const playNotificationChime = () => {
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    
+    // Tone 1: Fundamental sweet chime (C5)
+    const osc1 = ctx.createOscillator();
+    const gain1 = ctx.createGain();
+    osc1.type = "sine";
+    osc1.frequency.setValueAtTime(523.25, now);
+    gain1.gain.setValueAtTime(0, now);
+    gain1.gain.linearRampToValueAtTime(0.1, now + 0.015);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    
+    osc1.connect(gain1);
+    gain1.connect(ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.25);
+
+    // Tone 2: Perfect fifth harmony (G5), rising beautifully
+    const osc2 = ctx.createOscillator();
+    const gain2 = ctx.createGain();
+    osc2.type = "sine";
+    osc2.frequency.setValueAtTime(783.99, now + 0.08);
+    gain2.gain.setValueAtTime(0, now + 0.08);
+    gain2.gain.linearRampToValueAtTime(0.15, now + 0.095);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+    osc2.connect(gain2);
+    gain2.connect(ctx.destination);
+    osc2.start(now + 0.08);
+    osc2.stop(now + 0.4);
+  } catch (error) {
+    console.warn("Failed to play notification chime:", error);
+  }
+};
+
+const playSubtlePop = () => {
+  try {
+    const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+    
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    
+    // Quick pop starting at 500Hz sliding down to 300Hz in 60ms
+    osc.frequency.setValueAtTime(500, now);
+    osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+    
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.06, now + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.06);
+  } catch (error) {
+    console.warn("Failed to play subtle bubble pop:", error);
+  }
+};
+
 export default function GroupDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -121,6 +189,7 @@ export default function GroupDetailsPage() {
           setMessages((prev) => [...prev, newMessageReceived]);
           if (activeTab === "Chat") {
             axiosInstance.put(`/api/groups/${id}/read-messages`).catch(console.error);
+            playSubtlePop();
           } else {
             setUnreadCount((prev) => prev + 1);
             if ("Notification" in window && Notification.permission === "granted") {
@@ -128,6 +197,7 @@ export default function GroupDetailsPage() {
                 body: `${newMessageReceived.sender.name}: ${newMessageReceived.content}`
               });
             }
+            playNotificationChime();
           }
         }
       });
