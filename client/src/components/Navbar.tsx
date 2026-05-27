@@ -275,8 +275,12 @@ export default function Navbar() {
                     <span>Chat</span>
                   </Link>
                 )}
-                <Link to="/profile" className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition ${isActive("/profile") ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400" : "text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"}`}>
-                  <User size={18} />
+                <Link to="/profile" className={`flex items-center space-x-2 px-3 py-1.5 rounded-md text-sm font-medium transition ${isActive("/profile") ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400" : "text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"}`}>
+                  <img
+                    src={user?.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=random&size=150`}
+                    alt="Profile"
+                    className="w-6 h-6 rounded-full object-cover border border-gray-200 dark:border-slate-700 shadow-sm"
+                  />
                   <span>Profile</span>
                 </Link>
                 
@@ -409,6 +413,24 @@ export default function Navbar() {
           </button>
         </div>
 
+        {isAuthenticated && user && (
+          <Link 
+            onClick={() => setIsMobileMenuOpen(false)} 
+            to="/profile" 
+            className="px-4 py-4 border-b border-gray-100 dark:border-gray-800 bg-gradient-to-r from-indigo-50/40 to-purple-50/20 dark:from-indigo-950/20 dark:to-purple-950/10 flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-slate-800/50 transition duration-200 group"
+          >
+            <img
+              src={user?.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=random&size=150`}
+              alt="Profile"
+              className="w-11 h-11 rounded-full object-cover border-2 border-white dark:border-slate-800 shadow-md group-hover:scale-105 transition-transform duration-200"
+            />
+            <div className="min-w-0 flex-1">
+              <h4 className="font-bold text-gray-900 dark:text-white text-sm truncate group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-200">{user?.name}</h4>
+              <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
+            </div>
+          </Link>
+        )}
+
         <div className="flex-1 overflow-y-auto py-4 px-3 flex flex-col space-y-1">
           {isAuthenticated ? (
             <>
@@ -430,7 +452,12 @@ export default function Navbar() {
                 </Link>
               )}
               <Link onClick={() => setIsMobileMenuOpen(false)} to="/profile" className={`flex items-center px-3 py-3 rounded-xl transition font-medium ${isActive("/profile") ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400" : "text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"}`}>
-                <User size={20} className="mr-3" /> Profile
+                <img
+                  src={user?.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=random&size=150`}
+                  alt="Profile"
+                  className="w-5 h-5 rounded-full object-cover mr-3 border border-gray-200 dark:border-slate-700 shadow-sm"
+                /> 
+                <span>Profile</span>
               </Link>
               
               {user?.role === "admin" && (

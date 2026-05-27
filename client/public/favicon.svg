@@ -1,15 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
   <defs>
-    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#4f46e5" />
-      <stop offset="100%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#6366f1" />
     </linearGradient>
+    <filter id="subtleShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
   </defs>
-  <!-- Thick bold stylized connection forming a sleek S-link on transparent background -->
-  <path d="M30 46 C30 28, 45 22, 64 22 C83 22, 98 28, 98 46 C98 64, 30 64, 30 82 C30 100, 45 106, 64 106 C83 106, 98 100, 98 82" 
-        fill="none" stroke="url(#glowGrad)" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" />
   
-  <!-- Highlight connections representing Skill and Link intersection -->
-  <circle cx="48" cy="64" r="10" fill="#ffffff" stroke="#4f46e5" stroke-width="4" />
-  <circle cx="80" cy="64" r="10" fill="#ffffff" stroke="#8b5cf6" stroke-width="4" />
+  <!-- Premium rounded container matching the footer brand style -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#brandGrad)" filter="url(#subtleShadow)" />
+  
+  <!-- Flawless, highly symmetric, centered lightning emblem -->
+  <path d="M68 24 L28 72 H64 L60 104 L100 56 H64 Z" fill="#ffffff" />
 </svg>
