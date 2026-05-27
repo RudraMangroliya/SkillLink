@@ -111,3 +111,47 @@ body {
   animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* Premium Custom Scrollbars */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-slate-300, #cbd5e1) transparent;
+}
+
+.dark .custom-scrollbar {
+  scrollbar-color: var(--color-slate-700, #334155) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-slate-300, #cbd5e1);
+  border-radius: 9999px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-400, #94a3b8);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-slate-700, #334155);
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-slate-600, #475569);
+}
+
+/* High-contrast accessible placeholders in dark theme */
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8 !important; /* slate-400 equivalent for excellent visibility */
+  opacity: 1 !important; /* prevent browser opacity reduction */
+}
+
+
