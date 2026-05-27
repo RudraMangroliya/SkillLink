@@ -315,8 +315,8 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
                     <input type="text" placeholder="Degree (e.g. B.Tech)" value={edu.degree} onChange={(e) => { const newEdu = [...education]; newEdu[idx].degree = e.target.value; setEducation(newEdu); }} className="w-full px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
                     <input type="text" placeholder="Field of Study" value={edu.fieldOfStudy} onChange={(e) => { const newEdu = [...education]; newEdu[idx].fieldOfStudy = e.target.value; setEducation(newEdu); }} className="w-full px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
                     <div className="flex gap-2">
-                      <input type="text" placeholder="Start Year" value={edu.startYear} onChange={(e) => { const newEdu = [...education]; newEdu[idx].startYear = e.target.value; setEducation(newEdu); }} className="w-1/2 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-955/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
-                      <input type="text" placeholder="End Year" value={edu.endYear} onChange={(e) => { const newEdu = [...education]; newEdu[idx].endYear = e.target.value; setEducation(newEdu); }} className="w-1/2 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-955/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
+                      <input type="text" placeholder="Start Year" value={edu.startYear} onChange={(e) => { const newEdu = [...education]; newEdu[idx].startYear = e.target.value; setEducation(newEdu); }} className="w-1/2 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
+                      <input type="text" placeholder="End Year" value={edu.endYear} onChange={(e) => { const newEdu = [...education]; newEdu[idx].endYear = e.target.value; setEducation(newEdu); }} className="w-1/2 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
                     </div>
                   </div>
                 </div>
@@ -352,7 +352,17 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
                   <button type="button" onClick={() => setCertifications(certifications.filter((_, i) => i !== idx))} className="absolute top-3 right-3 p-1.5 text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-slate-800/80 rounded-lg transition-all duration-200"><X size={18} /></button>
                   <input type="text" placeholder="Certification Name" value={cert.name} onChange={(e) => { const newCert = [...certifications]; newCert[idx].name = e.target.value; setCertifications(newCert); }} className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
                   <input type="text" placeholder="Issuer (e.g. Coursera)" value={cert.issuer} onChange={(e) => { const newCert = [...certifications]; newCert[idx].issuer = e.target.value; setCertifications(newCert); }} className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
-                  <input type="date" value={cert.date ? new Date(cert.date).toISOString().split('T')[0] : ''} onChange={(e) => { const newCert = [...certifications]; newCert[idx].date = e.target.value; setCertifications(newCert); }} className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 dark:[color-scheme:dark]" />
+                  <input 
+                    type={cert.date ? "date" : "text"}
+                    placeholder="Certification Date"
+                    onFocus={(e) => (e.target.type = "date")}
+                    onBlur={(e) => {
+                      if (!e.target.value) e.target.type = "text";
+                    }}
+                    value={cert.date ? new Date(cert.date).toISOString().split('T')[0] : ''}
+                    onChange={(e) => { const newCert = [...certifications]; newCert[idx].date = e.target.value; setCertifications(newCert); }}
+                    className="w-full sm:flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 dark:[color-scheme:dark]"
+                  />
                 </div>
               ))}
             </div>
@@ -361,7 +371,7 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
         </div>
 
         {showDeleteConfirm ? (
-          <div className="p-4 sm:p-6 bg-red-50 dark:bg-red-955/30 border-t border-red-100 dark:border-red-900/50 flex flex-col gap-3">
+          <div className="p-4 sm:p-6 bg-red-50 dark:bg-red-950/30 border-t border-red-100 dark:border-red-900/50 flex flex-col gap-3">
             <h4 className="font-bold text-red-700 dark:text-red-400 text-sm sm:text-base">Are you absolutely sure?</h4>
             <p className="text-xs sm:text-sm text-red-600 dark:text-red-400 mb-2">
               This action cannot be undone. This will permanently delete your account, connections, followers, media files, and completely remove your data from our servers.
