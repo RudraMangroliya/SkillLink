@@ -348,21 +348,23 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
                 <button type="button" onClick={() => setCertifications([...certifications, { name: "", issuer: "", date: "" }])} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-all duration-200">+ Add Certification</button>
               </div>
               {certifications.map((cert, idx) => (
-                <div key={idx} className="p-4 bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-slate-800/50 dark:to-slate-800/20 border border-gray-200 dark:border-slate-800 rounded-xl space-y-3 relative flex flex-col sm:flex-row gap-3 pr-8 transition-all duration-300 shadow-sm">
-                  <button type="button" onClick={() => setCertifications(certifications.filter((_, i) => i !== idx))} className="absolute top-3 right-3 p-1.5 text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-slate-800/80 rounded-lg transition-all duration-200"><X size={18} /></button>
-                  <input type="text" placeholder="Certification Name" value={cert.name} onChange={(e) => { const newCert = [...certifications]; newCert[idx].name = e.target.value; setCertifications(newCert); }} className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
-                  <input type="text" placeholder="Issuer (e.g. Coursera)" value={cert.issuer} onChange={(e) => { const newCert = [...certifications]; newCert[idx].issuer = e.target.value; setCertifications(newCert); }} className="flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
-                  <input 
-                    type={cert.date ? "date" : "text"}
-                    placeholder="Certification Date"
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => {
-                      if (!e.target.value) e.target.type = "text";
-                    }}
-                    value={cert.date ? new Date(cert.date).toISOString().split('T')[0] : ''}
-                    onChange={(e) => { const newCert = [...certifications]; newCert[idx].date = e.target.value; setCertifications(newCert); }}
-                    className="w-full sm:flex-1 px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 dark:[color-scheme:dark]"
-                  />
+                <div key={idx} className="p-4 bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-slate-800/50 dark:to-slate-800/20 border border-gray-200 dark:border-slate-800 rounded-xl relative transition-all duration-300 shadow-sm">
+                  <button type="button" onClick={() => setCertifications(certifications.filter((_, i) => i !== idx))} className="absolute top-3 sm:top-1/2 sm:-translate-y-1/2 right-3 p-1.5 text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-slate-800/80 rounded-lg transition-all duration-200"><X size={18} /></button>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pr-6">
+                    <input type="text" placeholder="Certification Name" value={cert.name} onChange={(e) => { const newCert = [...certifications]; newCert[idx].name = e.target.value; setCertifications(newCert); }} className="w-full px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
+                    <input type="text" placeholder="Issuer (e.g. Coursera)" value={cert.issuer} onChange={(e) => { const newCert = [...certifications]; newCert[idx].issuer = e.target.value; setCertifications(newCert); }} className="w-full px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 placeholder-gray-400 dark:placeholder-slate-400" />
+                    <input 
+                      type={cert.date ? "date" : "text"}
+                      placeholder="Certification Date"
+                      onFocus={(e) => (e.target.type = "date")}
+                      onBlur={(e) => {
+                        if (!e.target.value) e.target.type = "text";
+                      }}
+                      value={cert.date ? new Date(cert.date).toISOString().split('T')[0] : ''}
+                      onChange={(e) => { const newCert = [...certifications]; newCert[idx].date = e.target.value; setCertifications(newCert); }}
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-950/50 text-gray-900 dark:text-slate-100 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500/20 dark:focus:ring-indigo-400/20 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all duration-200 dark:[color-scheme:dark]"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
