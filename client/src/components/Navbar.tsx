@@ -8,7 +8,7 @@ import ThemeToggle from "./ThemeToggle";
 import axiosInstance from "../utils/axios";
 import io, { Socket } from "socket.io-client";
 
-// Programmatic, high-quality audio chime for premium notification alerts
+// Programmatic, high-quality audio chime for premium notification alerts (maximum volume)
 const playNotificationSound = () => {
   try {
     const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
@@ -16,33 +16,47 @@ const playNotificationSound = () => {
     const ctx = new AudioContextClass();
     const now = ctx.currentTime;
     
-    // Tone 1: Fundamental sweet chime (C5)
+    // Tone 1: Strong fundamental sweet chime (C5) - using Triangle wave for crisp loudness
     const osc1 = ctx.createOscillator();
     const gain1 = ctx.createGain();
-    osc1.type = "sine";
+    osc1.type = "triangle"; 
     osc1.frequency.setValueAtTime(523.25, now); // C5
     gain1.gain.setValueAtTime(0, now);
-    gain1.gain.linearRampToValueAtTime(0.45, now + 0.015);
-    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+    gain1.gain.linearRampToValueAtTime(0.9, now + 0.015); // Boosted peak gain!
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.35); // Extended decay
     
     osc1.connect(gain1);
     gain1.connect(ctx.destination);
     osc1.start(now);
-    osc1.stop(now + 0.25);
+    osc1.stop(now + 0.35);
 
-    // Tone 2: Perfect fifth harmony (G5), rising beautifully
+    // Tone 2: Warm major third harmony (E5) - Sine wave for smooth body
     const osc2 = ctx.createOscillator();
     const gain2 = ctx.createGain();
     osc2.type = "sine";
-    osc2.frequency.setValueAtTime(783.99, now + 0.08); // G5
-    gain2.gain.setValueAtTime(0, now + 0.08);
-    gain2.gain.linearRampToValueAtTime(0.6, now + 0.095);
-    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    osc2.frequency.setValueAtTime(659.25, now + 0.05); // E5
+    gain2.gain.setValueAtTime(0, now + 0.05);
+    gain2.gain.linearRampToValueAtTime(0.8, now + 0.065); // Boosted peak gain!
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.45); // Extended decay
 
     osc2.connect(gain2);
     gain2.connect(ctx.destination);
-    osc2.start(now + 0.08);
+    osc2.start(now + 0.05);
     osc2.stop(now + 0.45);
+
+    // Tone 3: Bright perfect fifth harmony (G5) - Sine wave for top end clarity
+    const osc3 = ctx.createOscillator();
+    const gain3 = ctx.createGain();
+    osc3.type = "sine";
+    osc3.frequency.setValueAtTime(783.99, now + 0.1); // G5
+    gain3.gain.setValueAtTime(0, now + 0.1);
+    gain3.gain.linearRampToValueAtTime(0.9, now + 0.115); // Boosted peak gain!
+    gain3.gain.exponentialRampToValueAtTime(0.001, now + 0.55); // Extended decay
+
+    osc3.connect(gain3);
+    gain3.connect(ctx.destination);
+    osc3.start(now + 0.1);
+    osc3.stop(now + 0.55);
   } catch (error) {
     console.warn("Failed to play programmatic notification sound:", error);
   }

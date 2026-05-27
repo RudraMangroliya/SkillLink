@@ -81,7 +81,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(helmet({
-  contentSecurityPolicy: process.env.NODE_ENV === "production" ? undefined : false,
+  contentSecurityPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" },
   crossOriginEmbedderPolicy: false,
   crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
