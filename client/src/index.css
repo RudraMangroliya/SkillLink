@@ -32,3 +32,82 @@ body {
   background-color: var(--bg-dark);
   color: var(--text-dark);
 }
+
+/* Premium micro-interactions: shimmer keyframes */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 240, 0.6) 25%,
+    rgba(243, 244, 246, 0.95) 37%,
+    rgba(226, 232, 240, 0.6) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s infinite linear;
+}
+
+.dark .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.6) 25%,
+    rgba(51, 65, 85, 0.95) 37%,
+    rgba(30, 41, 59, 0.6) 63%
+  );
+  background-size: 200% 100%;
+}
+
+/* Spring transformations & active hover lifts */
+.hover-lift {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-5px) scale(1.022);
+}
+.hover-lift:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.hover-scale-sm {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hover-scale-sm:hover {
+  transform: scale(1.03);
+}
+.hover-scale-sm:active {
+  transform: scale(0.98);
+}
+
+.hover-scale-md {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hover-scale-md:hover {
+  transform: scale(1.05);
+}
+.hover-scale-md:active {
+  transform: scale(0.97);
+}
+
+/* Smooth visual loading animations */
+@keyframes fadeInSlide {
+  0% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-slide {
+  animation: fadeInSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+

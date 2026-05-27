@@ -5,6 +5,7 @@ import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import SEO from "../components/SEO";
+import { ExploreCardSkeleton } from "../components/Skeletons";
 
 export default function ExplorePage() {
   const [keyword, setKeyword] = useState("");
@@ -189,9 +190,7 @@ export default function ExplorePage() {
         </div>
 
         {loading ? (
-          <div className="flex justify-center items-center py-20 min-h-[50vh]">
-            <PageLoader fullPage={false} label="Finding the best matches..." />
-          </div>
+          <ExploreCardSkeleton />
         ) : error ? (
           <div className="bg-red-50 text-red-500 p-4 rounded-xl border border-red-100 text-center">
             {error}
@@ -199,7 +198,7 @@ export default function ExplorePage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {profiles.map((person) => (
-              <div key={person._id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow group flex flex-col">
+              <div key={person._id} className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover-lift hover:shadow-xl dark:hover:shadow-indigo-500/10 flex flex-col">
                 <div className={`h-20 flex-shrink-0 relative ${person.user?.role === 'recruiter' ? 'bg-gradient-to-r from-amber-100 to-orange-100 dark:from-amber-900/40 dark:to-orange-900/40' : person.user?.role === 'mentor' ? 'bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/40 dark:to-teal-900/40' : 'bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/40 dark:to-purple-900/40'}`}>
                   {(person.user?.role === 'recruiter' || person.user?.role === 'mentor') && (
                     <span className={`absolute top-2 right-2 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase tracking-wider ${person.user?.role === 'recruiter' ? 'bg-amber-500' : 'bg-teal-500'}`}>

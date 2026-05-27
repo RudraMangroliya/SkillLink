@@ -5,6 +5,7 @@ import axiosInstance from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
+import { NetworkCardSkeleton } from "../components/Skeletons";
 
 export default function NetworkPage() {
   const [activeTab, setActiveTab] = useState<"connections" | "requests" | "suggestions">("suggestions");
@@ -174,7 +175,7 @@ export default function NetworkPage() {
           {/* Main Content */}
           <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-3 sm:p-6 transition-colors min-w-0">
             {loading ? (
-              <PageLoader fullPage={false} label="Loading network..." />
+              <NetworkCardSkeleton type={activeTab} />
             ) : (
               <>
                 {activeTab === "suggestions" && (
@@ -182,7 +183,7 @@ export default function NetworkPage() {
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Suggested for you</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       {suggestions.map((profile) => (
-                        <div key={profile._id} className="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition bg-white dark:bg-slate-800 flex flex-col">
+                        <div key={profile._id} className="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden hover-lift hover:shadow-lg transition bg-white dark:bg-slate-800 flex flex-col">
                           <div className={`h-16 relative bg-gradient-to-r ${profile.user?.role === 'recruiter' ? 'from-amber-400 to-orange-500' : profile.user?.role === 'mentor' ? 'from-emerald-400 to-teal-500' : 'from-indigo-500 to-purple-600'}`}>
                             {(profile.user?.role === 'recruiter' || profile.user?.role === 'mentor') && (
                               <span className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase tracking-wider">
@@ -212,7 +213,7 @@ export default function NetworkPage() {
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Pending Requests</h2>
                     <div className="space-y-4">
                       {requests.map((req) => (
-                        <div key={req._id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl">
+                        <div key={req._id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl hover-scale-sm bg-white dark:bg-slate-800/40 hover:bg-gray-50/80 dark:hover:bg-slate-800/85 transition-all duration-300">
                           <div className="flex items-center space-x-4 min-w-0">
                             <img src={req.requester?.profileImage || "https://via.placeholder.com/150"} alt="" className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
                             <div className="min-w-0">
@@ -245,7 +246,7 @@ export default function NetworkPage() {
                         // determine if the current user is requester or recipient
                         const otherUser = conn.requester._id === user?._id ? conn.recipient : conn.requester;
                         return (
-                          <div key={conn._id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl min-w-0">
+                          <div key={conn._id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl min-w-0 hover-scale-sm bg-white dark:bg-slate-800/40 hover:bg-gray-50/80 dark:hover:bg-slate-800/85 transition-all duration-300">
                             <img src={otherUser.profileImage || "https://via.placeholder.com/150"} alt="" className="w-12 h-12 rounded-full object-cover" />
                             <div className="flex-1 min-w-0">
                               <Link to={`/profile/${otherUser._id}`} className="font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate block">

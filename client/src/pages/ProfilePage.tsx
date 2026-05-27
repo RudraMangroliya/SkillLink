@@ -338,15 +338,58 @@ export default function ProfilePage() {
 
         {/* Profile Completion Card (if not 100%) */}
         {isOwnProfile && displayData.profileCompletionScore < 100 && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-indigo-100 dark:border-slate-700 p-4 sm:p-6 mb-6 transition-colors">
-            <div className="flex justify-between items-center mb-2">
-              <h3 className="font-bold text-gray-900 dark:text-white">Profile Strength: {displayData.profileCompletionScore < 50 ? "Beginner" : displayData.profileCompletionScore < 80 ? "Intermediate" : "Advanced"}</h3>
-              <span className={`font-bold ${textColor}`}>{displayData.profileCompletionScore}%</span>
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-indigo-100 dark:border-slate-700 p-5 sm:p-6 mb-6 transition-all duration-300 hover:shadow-md animate-fade-in-slide">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+              <div className="flex-1 text-center sm:text-left">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                  Profile Strength: 
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-extrabold tracking-wide uppercase ${
+                    displayData.profileCompletionScore < 50 
+                      ? "bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400" 
+                      : displayData.profileCompletionScore < 80 
+                        ? "bg-yellow-100 dark:bg-yellow-950/40 text-yellow-600 dark:text-yellow-400" 
+                        : "bg-green-100 dark:bg-green-950/40 text-green-600 dark:text-green-400"
+                  }`}>
+                    {displayData.profileCompletionScore < 50 ? "Beginner" : displayData.profileCompletionScore < 80 ? "Intermediate" : "Advanced"}
+                  </span>
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-3 sm:max-w-xl leading-relaxed">{suggestionText}</p>
+              </div>
+              <div className="relative flex-shrink-0 flex items-center justify-center w-28 h-28 hover:scale-105 transition-transform duration-300">
+                {/* SVG Radial circle */}
+                <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  {/* Background Track Circle */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    className="stroke-gray-100 dark:stroke-slate-700 fill-transparent"
+                    strokeWidth="8"
+                  />
+                  {/* Animated Score Progress Circle */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    className={`fill-transparent transition-all duration-1000 ease-out ${
+                      displayData.profileCompletionScore < 50 
+                        ? "stroke-red-500" 
+                        : displayData.profileCompletionScore < 80 
+                          ? "stroke-yellow-500" 
+                          : "stroke-green-500"
+                    }`}
+                    strokeWidth="8"
+                    strokeDasharray={2 * Math.PI * 40}
+                    strokeDashoffset={2 * Math.PI * 40 * (1 - displayData.profileCompletionScore / 100)}
+                    strokeLinecap="round"
+                  />
+                </svg>
+                <div className="absolute flex flex-col items-center justify-center">
+                  <span className={`text-2xl font-black ${textColor}`}>{displayData.profileCompletionScore}%</span>
+                  <span className="text-[9px] uppercase font-bold tracking-widest text-gray-400 dark:text-slate-500 mt-0.5">Strength</span>
+                </div>
+              </div>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-slate-700 rounded-full h-2.5">
-              <div className={`${scoreColor} h-2.5 rounded-full transition-all duration-500`} style={{ width: `${displayData.profileCompletionScore}%` }}></div>
-            </div>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-3">{suggestionText}</p>
           </div>
         )}
 
