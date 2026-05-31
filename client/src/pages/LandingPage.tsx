@@ -30,9 +30,6 @@ export default function LandingPage() {
           
           {/* Left Column: Text & Calls to Action */}
           <div className="lg:col-span-5 text-left flex flex-col justify-center animate-fade-in-slide w-full">
-            
-            {/* Glowing Accent Badge */}
-            
 
             {/* Premium Heading */}
             <h1 className="text-2xl min-[320px]:text-3xl min-[400px]:text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tight leading-tight mb-4 sm:mb-6 break-words">
@@ -84,65 +81,66 @@ export default function LandingPage() {
           {/* Right Column: Centerpiece Map & Floating Visual Elements */}
           <div className="lg:col-span-7 flex justify-center items-center relative mt-6 sm:mt-10 lg:mt-0 select-none animate-fade-in-slide delay-200 w-full overflow-visible">
             
-            {/* The Main Network Map Image */}
-            <div className="relative max-w-[650px] w-full p-2 sm:p-4 animate-float flex justify-center">
+            {/* The Main Network Map Image & Badges Container */}
+            <div className="relative max-w-[650px] w-full p-2 sm:p-4 animate-float flex justify-center items-center">
               <img 
                 src={networkMapImg} 
                 className="w-full h-auto object-contain filter drop-shadow-[0_25px_50px_rgba(0,0,0,0.06)] dark:drop-shadow-[0_25px_50px_rgba(79,70,229,0.12)] max-w-[280px] min-[360px]:max-w-[340px] min-[480px]:max-w-[450px] sm:max-w-[550px] lg:max-w-[650px]"
                 alt="SkillLink Network Map" 
               />
-            </div>
 
-            {/* Floating Chat card (absolute positioned top-right) */}
-            <div className="chat-card absolute top-2 right-0 w-[110px] min-[360px]:w-[140px] min-[480px]:w-[180px] sm:w-[220px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 shadow-2xl animate-float-fast hover:scale-105 transition-transform duration-300 z-20 hidden min-[320px]:block">
-              <div className="flex items-center justify-between mb-1.5 sm:mb-3 border-b border-gray-100 dark:border-slate-700 pb-1.5 sm:pb-2">
-                <span className="text-[8px] min-[360px]:text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
-                  Live Chat <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                </span>
-                <span className="text-[7px] min-[360px]:text-[10px] bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded font-bold">Recruiter ✓</span>
+              {/* Floating Chat card (absolute positioned relative to the map container for perfect tracking) */}
+              <div className="chat-card absolute top-4 right-[-10px] sm:right-0 lg:right-[-30px] w-[110px] min-[360px]:w-[140px] min-[480px]:w-[180px] sm:w-[220px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-4 shadow-2xl animate-float-fast hover:scale-105 transition-transform duration-300 z-20 hidden min-[320px]:block">
+                <div className="flex items-center justify-between mb-1.5 sm:mb-3 border-b border-gray-100 dark:border-slate-700 pb-1.5 sm:pb-2">
+                  <span className="text-[8px] min-[360px]:text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                    Live Chat <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </span>
+                  <span className="text-[7px] min-[360px]:text-[10px] bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded font-bold">Recruiter ✓</span>
+                </div>
+                <div className="bg-gray-50 dark:bg-slate-900 rounded-lg sm:rounded-xl p-0.5 sm:p-1 overflow-hidden">
+                  <img 
+                    src={chatCommunicationImg} 
+                    className="w-full h-auto object-cover rounded-md sm:rounded-lg"
+                    alt="Live chat visual" 
+                  />
+                </div>
               </div>
-              <div className="bg-gray-50 dark:bg-slate-900 rounded-lg sm:rounded-xl p-0.5 sm:p-1 overflow-hidden">
-                <img 
-                  src={chatCommunicationImg} 
-                  className="w-full h-auto object-cover rounded-md sm:rounded-lg"
-                  alt="Live chat visual" 
-                />
-              </div>
-            </div>
 
-            {/* Badge A: AI Matching (Top-Left) */}
-            <div className="absolute top-10 left-0 bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-xs sm:text-sm border border-emerald-100 dark:border-emerald-900/50 shadow-inner">
-                95%
+              {/* Badge A: AI Matching (Top-Left, relative to map container) */}
+              <div className="absolute top-10 left-[-10px] sm:left-0 lg:left-[-30px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-xs sm:text-sm border border-emerald-100 dark:border-emerald-900/50 shadow-inner">
+                  95%
+                </div>
+                <div>
+                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">AI Matching</span>
+                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">Profile Score</span>
+                </div>
               </div>
-              <div>
-                <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">AI Matching</span>
-                <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">Profile Score</span>
-              </div>
-            </div>
 
-            {/* Badge B: Active Jobs (Bottom-Left) */}
-            <div className="absolute bottom-4 left-0 sm:left-6 bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float-slow hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/30 shadow-inner">
-                <Briefcase size={14} className="sm:w-[18px] sm:h-[18px]" />
+              {/* Badge B: Active Jobs (Bottom-Left, relative to map container) */}
+              <div className="absolute bottom-4 left-[-10px] sm:left-2 lg:left-[-10px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float-slow hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/30 shadow-inner">
+                  <Briefcase size={14} className="sm:w-[18px] sm:h-[18px]" />
+                </div>
+                <div>
+                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Active Board</span>
+                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">500+ Jobs</span>
+                </div>
               </div>
-              <div>
-                <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Active Board</span>
-                <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">500+ Jobs</span>
-              </div>
-            </div>
 
-            {/* Badge C: Online Network Status (Bottom-Right) */}
-            <div className="absolute -bottom-4 right-4 sm:right-12 bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-pink-50 dark:bg-pink-950/30 flex items-center justify-center text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-900/30 shadow-inner">
-                <MessageCircle size={14} className="sm:w-[18px] sm:h-[18px]" />
+              {/* Badge C: Online Network Status (Bottom-Right, relative to map container) */}
+              <div className="absolute -bottom-4 right-4 sm:right-6 lg:right-2 bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-pink-50 dark:bg-pink-950/30 flex items-center justify-center text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-900/30 shadow-inner">
+                  <MessageCircle size={14} className="sm:w-[18px] sm:h-[18px]" />
+                </div>
+                <div>
+                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Smart Networking</span>
+                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white flex items-center gap-1">
+                    Mentors Live <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Smart Networking</span>
-                <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white flex items-center gap-1">
-                  Mentors Live <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                </span>
-              </div>
+
             </div>
 
           </div>
