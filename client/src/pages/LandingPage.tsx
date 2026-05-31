@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import { Target, MessageSquare, TrendingUp, Briefcase, MessageCircle, Sparkles } from "lucide-react";
+import { Target, MessageSquare, TrendingUp } from "lucide-react";
 import SEO from "../components/SEO";
 
 // Custom visual assets
@@ -123,29 +123,7 @@ export default function LandingPage() {
                 </div>
               </div>
 
-              {/* Badge B: Active Jobs (Bottom-Left, tracked perfectly) */}
-              <div className="absolute bottom-4 left-[-15px] sm:left-[-15px] lg:left-[-30px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float-slow hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/30 shadow-inner">
-                  <Briefcase size={14} className="sm:w-[18px] sm:h-[18px]" />
-                </div>
-                <div>
-                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Active Board</span>
-                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">500+ Jobs</span>
-                </div>
-              </div>
 
-              {/* Badge C: Online Network Status (Bottom-Right, tracked perfectly) */}
-              <div className="absolute -bottom-4 right-4 sm:right-6 lg:right-2 bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-pink-50 dark:bg-pink-950/30 flex items-center justify-center text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-900/30 shadow-inner">
-                  <MessageCircle size={14} className="sm:w-[18px] sm:h-[18px]" />
-                </div>
-                <div>
-                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Smart Networking</span>
-                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white flex items-center gap-1">
-                    Mentors Live <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  </span>
-                </div>
-              </div>
 
             </div>
 
