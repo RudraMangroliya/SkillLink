@@ -106,7 +106,7 @@ export default function LandingPage() {
                 <div className="bg-gray-50 dark:bg-slate-900/60 rounded-lg sm:rounded-xl p-0.5 sm:p-1 border border-gray-100/30 dark:border-slate-800/30 overflow-hidden shadow-inner">
                   <img 
                     src={chatCommunicationImg} 
-                    className="w-full h-auto object-cover rounded-md sm:rounded-lg"
+                    className="w-full h-auto object-cover rounded-md sm:rounded-lg scale-[1.45] origin-center"
                     alt="Live chat visual" 
                   />
                 </div>
