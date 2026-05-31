@@ -12,7 +12,7 @@ export default function LandingPage() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-[#f8faff] via-[#eef2ff] to-[#e0e7ff] dark:from-[#0b1121] dark:via-[#0f172a] dark:to-[#1e1b4b] transition-colors duration-500">
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-gradient-to-br from-[#f8faff] via-[#eef2ff] to-[#e0e7ff] dark:from-[#0b1121] dark:via-[#0f172a] dark:to-[#1e1b4b] transition-colors duration-500">
       <SEO 
         title="AI-Powered Professional Networking & Job Matching" 
         description="Connect with mentors, find AI-matched jobs, join groups, and accelerate your career growth on SkillLink, the leading professional ecosystem."
@@ -32,13 +32,7 @@ export default function LandingPage() {
           <div className="lg:col-span-5 text-left flex flex-col justify-center animate-fade-in-slide w-full">
             
             {/* Glowing Accent Badge */}
-            <div className="inline-flex items-center gap-1.5 self-start px-2 py-1 min-[360px]:px-3 min-[360px]:py-1.5 rounded-full bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-100/50 dark:border-indigo-900/30 text-[10px] min-[360px]:text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-4 sm:mb-6 backdrop-blur-sm shadow-sm select-none">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-              </span>
-              <span className="flex items-center gap-1"><Sparkles size={11} className="min-[360px]:w-3 min-[360px]:h-3" /> Redefining Professional Networks</span>
-            </div>
+            
 
             {/* Premium Heading */}
             <h1 className="text-2xl min-[320px]:text-3xl min-[400px]:text-4xl sm:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white tracking-tight leading-tight mb-4 sm:mb-6 break-words">
@@ -70,18 +64,18 @@ export default function LandingPage() {
             </div>
 
             {/* Grid Metrics */}
-            <div className="border-t border-indigo-100/50 dark:border-slate-800/50 pt-6 flex flex-wrap gap-4 min-[360px]:gap-6 md:gap-12">
-              <div className="min-w-[50px] min-[360px]:min-w-[70px]">
-                <span className="block text-xl min-[360px]:text-2xl md:text-3xl font-black text-indigo-600 dark:text-indigo-400">10K+</span>
-                <span className="text-[9px] min-[360px]:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold">Active Users</span>
+            <div className="border-t border-indigo-100/50 dark:border-slate-800/50 pt-6 grid grid-cols-3 gap-2 min-[360px]:gap-4 md:gap-8 w-full">
+              <div className="text-left">
+                <span className="block text-base min-[300px]:text-lg min-[360px]:text-xl sm:text-2xl md:text-3xl font-black text-indigo-600 dark:text-indigo-400 leading-none mb-1">10K+</span>
+                <span className="block text-[7px] min-[300px]:text-[8px] min-[360px]:text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold leading-tight">Active Users</span>
               </div>
-              <div className="border-l border-indigo-100/50 dark:border-slate-800/50 pl-4 min-[360px]:pl-6 min-w-[50px] min-[360px]:min-w-[70px]">
-                <span className="block text-xl min-[360px]:text-2xl md:text-3xl font-black text-indigo-600 dark:text-indigo-400">500+</span>
-                <span className="text-[9px] min-[360px]:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold">Recruiters</span>
+              <div className="border-l border-indigo-100/50 dark:border-slate-800/50 pl-2 min-[300px]:pl-3 sm:pl-6 text-left">
+                <span className="block text-base min-[300px]:text-lg min-[360px]:text-xl sm:text-2xl md:text-3xl font-black text-indigo-600 dark:text-indigo-400 leading-none mb-1">500+</span>
+                <span className="block text-[7px] min-[300px]:text-[8px] min-[360px]:text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold leading-tight">Recruiters</span>
               </div>
-              <div className="border-l border-indigo-100/50 dark:border-slate-800/50 pl-4 min-[360px]:pl-6 min-w-[50px] min-[360px]:min-w-[70px]">
-                <span className="block text-xl min-[360px]:text-2xl md:text-3xl font-black text-indigo-600 dark:text-indigo-400">2K+</span>
-                <span className="text-[9px] min-[360px]:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold">Jobs Added</span>
+              <div className="border-l border-indigo-100/50 dark:border-slate-800/50 pl-2 min-[300px]:pl-3 sm:pl-6 text-left">
+                <span className="block text-base min-[300px]:text-lg min-[360px]:text-xl sm:text-2xl md:text-3xl font-black text-indigo-600 dark:text-indigo-400 leading-none mb-1">2K+</span>
+                <span className="block text-[7px] min-[300px]:text-[8px] min-[360px]:text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-bold leading-tight">Jobs Added</span>
               </div>
             </div>
 
