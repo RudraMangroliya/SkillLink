@@ -87,7 +87,7 @@ const Footer = () => {
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-8 mb-16">
           
           {/* Brand Section */}
-          <div className="w-full lg:w-2/5 shrink-0 flex flex-col items-center xs:items-start text-center xs:text-left">
+          <div className="w-full lg:w-[30%] shrink-0 flex flex-col items-center xs:items-start text-center xs:text-left">
             <Link to="/" onClick={() => handleLinkClick("/")} className="flex items-center gap-2 mb-4 justify-center xs:justify-start">
               <div className="bg-indigo-600 p-2 rounded-lg">
                 <Zap size={24} className="text-white" fill="currentColor" />
@@ -114,7 +114,7 @@ const Footer = () => {
           </div>
 
           {/* Links Columns container */}
-          <div className="w-full lg:w-3/5 grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-4 xs:gap-x-6 md:gap-x-8">
+          <div className="w-full lg:w-[70%] grid grid-cols-1 xs:grid-cols-2 md:grid-cols-4 lg:grid-cols-[1fr_1fr_1fr_auto] xl:grid-cols-4 gap-y-10 gap-x-4 xs:gap-x-6 md:gap-x-8 lg:gap-x-6 xl:gap-x-8">
             {/* Quick Links */}
             <div className="text-center xs:text-left">
               <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Quick Links</h3>
@@ -155,7 +155,7 @@ const Footer = () => {
             <div className="text-center xs:text-left">
               <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Contact</h3>
               <div className="space-y-4 flex flex-col items-center xs:items-start">
-                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-[10px] min-[320px]:text-xs min-[380px]:text-sm font-medium break-words justify-center xs:justify-start w-full">
+                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-[10px] min-[320px]:text-xs min-[380px]:text-sm md:text-xs lg:text-xs xl:text-sm font-medium whitespace-nowrap justify-center xs:justify-start w-full">
                   <Mail size={16} className="shrink-0" /> support@skilllink.com
                 </a>
                 <p className="text-gray-600 dark:text-gray-400 text-xs min-[380px]:text-sm font-medium">Ahmedabad, India</p>
