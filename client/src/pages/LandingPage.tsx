@@ -81,75 +81,75 @@ export default function LandingPage() {
           {/* Right Column: Centerpiece Map & Floating Visual Elements */}
           <div className="lg:col-span-7 flex justify-center items-center relative mt-6 sm:mt-10 lg:mt-0 select-none animate-fade-in-slide delay-200 w-full overflow-visible">
             
-            {/* The Main Network Map Image & Badges Container */}
-            <div className="relative max-w-[280px] min-[360px]:max-w-[340px] min-[480px]:max-w-[450px] sm:max-w-[500px] lg:max-w-[600px] w-full animate-float select-none mx-auto">
-              <div className="bg-white/40 dark:bg-slate-900/40 border border-white/50 dark:border-slate-800/80 p-3 sm:p-6 rounded-[24px] sm:rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.03)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.25)] backdrop-blur-sm overflow-visible relative flex items-center justify-center">
-                
-                <img 
-                  src={networkMapImg} 
-                  className="w-full h-auto object-contain mix-blend-multiply dark:mix-blend-normal dark:bg-white/95 dark:p-2 sm:dark:p-4 dark:rounded-2xl filter dark:drop-shadow-md"
-                  alt="SkillLink Network Map" 
-                />
+            {/* The Self-Sizing Network Map & Badges Container */}
+            <div className="relative max-w-[280px] min-[360px]:max-w-[340px] min-[480px]:max-w-[450px] sm:max-w-[550px] lg:max-w-[650px] w-full mx-auto animate-float flex justify-center items-center overflow-visible">
+              
+              {/* Soft visual backdrop glow behind the map in light mode for excellent visibility */}
+              <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-indigo-500/10 to-purple-500/10 filter blur-3xl z-0 pointer-events-none block dark:hidden"></div>
+              
+              {/* The Main Network Map Image */}
+              <img 
+                src={networkMapImg} 
+                className="w-full h-auto object-contain filter drop-shadow-[0_20px_40px_rgba(79,70,229,0.18)] dark:drop-shadow-[0_25px_50px_rgba(79,70,229,0.28)] brightness-95 contrast-105 saturate-110 dark:brightness-100 dark:contrast-100 dark:saturate-100 relative z-10"
+                alt="SkillLink Network Map" 
+              />
 
-                {/* Floating Chat card (absolute positioned relative to the map container for perfect tracking) */}
-                <div className="chat-card absolute top-4 right-[-10px] sm:right-[-20px] lg:right-[-40px] w-[110px] min-[360px]:w-[140px] min-[480px]:w-[170px] sm:w-[210px] bg-white/95 dark:bg-slate-950/95 border border-indigo-100/40 dark:border-slate-800/60 backdrop-blur-md rounded-xl sm:rounded-2xl p-2 sm:p-3.5 shadow-[0_20px_40px_rgba(0,0,0,0.12)] animate-float-fast hover:scale-105 transition-transform duration-300 z-20 hidden min-[320px]:block">
-                  <div className="flex items-center justify-between mb-1.5 sm:mb-2.5 border-b border-gray-100 dark:border-slate-800 pb-1.5 sm:pb-2">
-                    <div className="flex items-center gap-1 sm:gap-1.5">
-                      <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500"></span>
-                      </span>
-                      <span className="text-[8px] min-[360px]:text-xs font-bold text-gray-900 dark:text-white">Live Chat</span>
-                    </div>
-                    <span className="text-[7px] min-[360px]:text-[9px] bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded-full font-bold border border-indigo-100/20 dark:border-indigo-900/30">Recruiter ✓</span>
-                  </div>
-                  <div className="bg-gradient-to-br from-indigo-50/40 to-violet-50/20 dark:from-slate-900 dark:to-slate-900/50 rounded-lg sm:rounded-xl p-0.5 sm:p-1.5 overflow-hidden border border-indigo-100/10 dark:border-slate-800/50">
-                    <img 
-                      src={chatCommunicationImg} 
-                      className="w-full h-auto object-cover rounded-md sm:rounded-lg filter drop-shadow-sm"
-                      alt="Live chat visual" 
-                    />
-                  </div>
+              {/* Floating Chat card (absolute positioned relative to the self-sizing container) */}
+              <div className="chat-card absolute top-4 right-[-15px] sm:right-[-30px] lg:right-[-50px] w-[100px] min-[360px]:w-[130px] min-[480px]:w-[170px] sm:w-[210px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl sm:rounded-2xl p-1.5 sm:p-3.5 shadow-2xl animate-float-fast hover:scale-105 transition-transform duration-300 z-20 hidden min-[280px]:block">
+                <div className="flex items-center justify-between mb-1.5 sm:mb-2.5 border-b border-gray-100 dark:border-slate-700/60 pb-1.5 sm:pb-2">
+                  <span className="text-[7px] min-[360px]:text-[10px] sm:text-xs font-black text-gray-900 dark:text-white flex items-center gap-1">
+                    Live Chat <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </span>
+                  <span className="text-[6px] min-[360px]:text-[9px] bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 px-1 sm:px-1.5 py-0.5 rounded font-black uppercase tracking-wider scale-90 sm:scale-100">Recruiter</span>
                 </div>
-
-                {/* Badge A: AI Matching (Top-Left, relative to map container) */}
-                <div className="absolute top-8 left-[-15px] sm:left-[-25px] lg:left-[-45px] bg-white/95 dark:bg-slate-950/95 border border-indigo-100/40 dark:border-slate-800/60 backdrop-blur-md rounded-xl p-2 sm:p-2.5 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-                  <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-emerald-50 dark:bg-emerald-950/40 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-[10px] sm:text-xs border border-emerald-100/50 dark:border-emerald-900/30 shadow-inner">
-                    95%
-                  </div>
-                  <div>
-                    <span className="block text-[8px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">AI Matching</span>
-                    <span className="text-[10px] font-black text-gray-900 dark:text-white">Profile Score</span>
-                  </div>
+                <div className="bg-gray-50 dark:bg-slate-900/60 rounded-lg sm:rounded-xl p-0.5 sm:p-1 border border-gray-100/30 dark:border-slate-800/30 overflow-hidden shadow-inner">
+                  <img 
+                    src={chatCommunicationImg} 
+                    className="w-full h-auto object-cover rounded-md sm:rounded-lg"
+                    alt="Live chat visual" 
+                  />
                 </div>
-
-                {/* Badge B: Active Jobs (Bottom-Left, relative to map container) */}
-                <div className="absolute bottom-6 left-[-15px] sm:left-2 lg:left-[-10px] bg-white/95 dark:bg-slate-950/95 border border-indigo-100/40 dark:border-slate-800/60 backdrop-blur-md rounded-xl p-2 sm:p-2.5 shadow-xl flex items-center gap-2 sm:gap-3 animate-float-slow hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-                  <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-indigo-50 dark:bg-indigo-950/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100/50 dark:border-indigo-900/30 shadow-inner">
-                    <Briefcase size={12} className="sm:w-[16px] sm:h-[16px]" />
-                  </div>
-                  <div>
-                    <span className="block text-[8px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Active Board</span>
-                    <span className="text-[10px] font-black text-gray-900 dark:text-white">500+ Jobs</span>
-                  </div>
-                </div>
-
-                {/* Badge C: Online Network Status (Bottom-Right, relative to map container) */}
-                <div className="absolute -bottom-4 right-2 sm:right-6 lg:right-0 bg-white/95 dark:bg-slate-950/95 border border-indigo-100/40 dark:border-slate-800/60 backdrop-blur-md rounded-xl p-2 sm:p-2.5 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
-                  <div className="w-7 h-7 sm:w-9 sm:h-9 rounded-full bg-pink-50 dark:bg-pink-950/40 flex items-center justify-center text-pink-600 dark:text-pink-400 border border-pink-100/50 dark:border-pink-900/30 shadow-inner">
-                    <MessageCircle size={12} className="sm:w-[16px] sm:h-[16px]" />
-                  </div>
-                  <div>
-                    <span className="block text-[8px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Smart Networking</span>
-                    <span className="text-[10px] font-black text-gray-900 dark:text-white flex items-center gap-1">
-                      Mentors Live <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                    </span>
-                  </div>
-                </div>
-
               </div>
+
+              {/* Badge A: AI Matching (Top-Left, tracked perfectly) */}
+              <div className="absolute top-10 left-[-15px] sm:left-[-30px] lg:left-[-50px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-xs sm:text-sm border border-emerald-100 dark:border-emerald-900/50 shadow-inner">
+                  95%
+                </div>
+                <div>
+                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">AI Matching</span>
+                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">Profile Score</span>
+                </div>
+              </div>
+
+              {/* Badge B: Active Jobs (Bottom-Left, tracked perfectly) */}
+              <div className="absolute bottom-4 left-[-15px] sm:left-[-15px] lg:left-[-30px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float-slow hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-indigo-50 dark:bg-indigo-950/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/30 shadow-inner">
+                  <Briefcase size={14} className="sm:w-[18px] sm:h-[18px]" />
+                </div>
+                <div>
+                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Active Board</span>
+                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">500+ Jobs</span>
+                </div>
+              </div>
+
+              {/* Badge C: Online Network Status (Bottom-Right, tracked perfectly) */}
+              <div className="absolute -bottom-4 right-4 sm:right-6 lg:right-2 bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-pink-50 dark:bg-pink-950/30 flex items-center justify-center text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-900/30 shadow-inner">
+                  <MessageCircle size={14} className="sm:w-[18px] sm:h-[18px]" />
+                </div>
+                <div>
+                  <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">Smart Networking</span>
+                  <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white flex items-center gap-1">
+                    Mentors Live <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  </span>
+                </div>
+              </div>
+
             </div>
+
           </div>
+
         </div>
       </div>
 
