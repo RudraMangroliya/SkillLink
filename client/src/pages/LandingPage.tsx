@@ -84,8 +84,9 @@ export default function LandingPage() {
             {/* The Self-Sizing Network Map & Badges Container */}
             <div className="relative max-w-[280px] min-[360px]:max-w-[340px] min-[480px]:max-w-[450px] sm:max-w-[550px] lg:max-w-[650px] w-full mx-auto animate-float flex justify-center items-center overflow-visible">
               
-              {/* Soft visual backdrop glow behind the map in light mode for excellent visibility */}
-              <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-indigo-500/10 to-purple-500/10 filter blur-3xl z-0 pointer-events-none block dark:hidden"></div>
+              {/* Multi-layered HSL Glow Backdrop to make the light connecting dashed lines stand out beautifully in Light Mode */}
+              <div className="absolute w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-indigo-600/18 via-purple-600/22 to-indigo-950/25 filter blur-2xl z-0 pointer-events-none block dark:hidden"></div>
+              <div className="absolute w-[65%] h-[65%] rounded-full bg-indigo-950/15 filter blur-3xl z-0 pointer-events-none block dark:hidden"></div>
               
               {/* The Main Network Map Image */}
               <img 
