@@ -8,7 +8,7 @@ export default function ResetPasswordPage() {
   const queryParams = new URLSearchParams(location.search);
   const initialEmail = queryParams.get("email") || "";
 
-  const [email, setEmail] = useState(initialEmail);
+  const [email] = useState(initialEmail);
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");

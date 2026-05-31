@@ -154,4 +154,72 @@ body {
   opacity: 1 !important; /* prevent browser opacity reduction */
 }
 
+/* Premium Blur Circles for Landing Page */
+.circle1 {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: rgba(79, 70, 229, 0.15); /* #4f46e5 with alpha */
+  filter: blur(120px);
+  top: -100px;
+  right: -100px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.circle2 {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: rgba(124, 58, 237, 0.15); /* #7c3aed with alpha */
+  filter: blur(100px);
+  bottom: -100px;
+  left: -100px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Floating Animations for Mockups and Badges */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(0.5deg);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(-0.5deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+@keyframes float-fast {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.animate-float-fast {
+  animation: float-fast 4s ease-in-out infinite;
+}
+
+
 
