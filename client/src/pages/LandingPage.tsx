@@ -12,7 +12,7 @@ export default function LandingPage() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-gradient-to-br from-[#f8faff] via-[#eef2ff] to-[#e0e7ff] dark:from-[#0b1121] dark:via-[#0f172a] dark:to-[#1e1b4b] transition-colors duration-500">
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-gradient-to-br from-slate-50 via-slate-50 to-indigo-50/20 dark:from-[#0b1121] dark:via-[#0f172a] dark:to-[#111827] transition-colors duration-500">
       <SEO 
         title="AI-Powered Professional Networking & Job Matching" 
         description="Connect with mentors, find AI-matched jobs, join groups, and accelerate your career growth on SkillLink, the leading professional ecosystem."
@@ -84,14 +84,14 @@ export default function LandingPage() {
             {/* The Self-Sizing Network Map & Badges Container */}
             <div className="relative max-w-[280px] min-[360px]:max-w-[340px] min-[480px]:max-w-[450px] sm:max-w-[550px] lg:max-w-[650px] w-full mx-auto animate-float flex justify-center items-center overflow-visible">
               
-              {/* Multi-layered HSL Glow Backdrop to make the light connecting dashed lines stand out beautifully in Light Mode */}
-              <div className="absolute w-[85%] h-[85%] rounded-full bg-gradient-to-tr from-indigo-600/18 via-purple-600/22 to-indigo-950/25 filter blur-2xl z-0 pointer-events-none block dark:hidden"></div>
-              <div className="absolute w-[65%] h-[65%] rounded-full bg-indigo-950/15 filter blur-3xl z-0 pointer-events-none block dark:hidden"></div>
+              {/* Refined professional high-contrast glow backdrop to ensure connecting lines are perfectly visible in light mode */}
+              <div className="absolute w-[80%] h-[80%] rounded-full bg-gradient-to-tr from-indigo-600/14 via-purple-600/16 to-indigo-950/18 filter blur-2xl z-0 pointer-events-none block dark:hidden"></div>
+              <div className="absolute w-[60%] h-[60%] rounded-full bg-indigo-950/12 filter blur-3xl z-0 pointer-events-none block dark:hidden"></div>
               
               {/* The Main Network Map Image */}
               <img 
                 src={networkMapImg} 
-                className="w-full h-auto object-contain filter drop-shadow-[0_20px_40px_rgba(79,70,229,0.18)] dark:drop-shadow-[0_25px_50px_rgba(79,70,229,0.28)] brightness-95 contrast-105 saturate-110 dark:brightness-100 dark:contrast-100 dark:saturate-100 relative z-10"
+                className="w-full h-auto object-contain filter drop-shadow-[0_20px_40px_rgba(79,70,229,0.15)] dark:drop-shadow-[0_25px_50px_rgba(79,70,229,0.25)] brightness-95 contrast-105 saturate-110 dark:brightness-100 dark:contrast-100 dark:saturate-100 relative z-10"
                 alt="SkillLink Network Map" 
               />
 
