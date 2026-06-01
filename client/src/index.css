@@ -154,32 +154,6 @@ body {
   opacity: 1 !important; /* prevent browser opacity reduction */
 }
 
-/* Premium Blur Circles for Landing Page */
-.circle1 {
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  border-radius: 50%;
-  background: rgba(79, 70, 229, 0.15); /* #4f46e5 with alpha */
-  filter: blur(120px);
-  top: -100px;
-  right: -100px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.circle2 {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  border-radius: 50%;
-  background: rgba(124, 58, 237, 0.15); /* #7c3aed with alpha */
-  filter: blur(100px);
-  bottom: -100px;
-  left: -100px;
-  pointer-events: none;
-  z-index: 0;
-}
 
 /* Floating Animations for Mockups and Badges */
 @keyframes float {
@@ -220,6 +194,78 @@ body {
 .animate-float-fast {
   animation: float-fast 4s ease-in-out infinite;
 }
+
+/* -------------------------------------------------------------
+   PREMIUM MOTION & DESIGN EXTENSIONS
+   ------------------------------------------------------------- */
+
+/* Tech Grid Overlay Pattern */
+.tech-grid-bg {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.04) 1px, transparent 1px);
+}
+.dark .tech-grid-bg {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(99, 102, 241, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
+}
+
+
+/* Heading Text Shimmer */
+@keyframes textShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.text-gradient-shimmer {
+  background-size: 200% auto;
+  animation: textShimmer 6s linear infinite;
+}
+
+/* Premium Glow Border Cards */
+.premium-glow-card {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-glow-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--primary, #4f46e5) 0%, transparent 40%, transparent 60%, var(--secondary, #10b981) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+}
+
+.premium-glow-card:hover::before {
+  opacity: 0.15;
+}
+
+.dark .premium-glow-card:hover::before {
+  opacity: 0.4;
+}
+
+/* Notification Bell Ring & Wiggle */
+@keyframes bellWiggle {
+  0%, 100% { transform: rotate(0); }
+  15% { transform: rotate(-15deg); }
+  30% { transform: rotate(10deg); }
+  45% { transform: rotate(-10deg); }
+  60% { transform: rotate(5deg); }
+  75% { transform: rotate(-3deg); }
+}
+
+.bell-animate {
+  animation: bellWiggle 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: top center;
+}
+
 
 
 

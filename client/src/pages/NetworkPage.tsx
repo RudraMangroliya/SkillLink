@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { NetworkCardSkeleton } from "../components/Skeletons";
+import BorderGlow from "../components/BorderGlow";
 
 export default function NetworkPage() {
   const [activeTab, setActiveTab] = useState<"connections" | "requests" | "suggestions">("suggestions");
@@ -183,8 +184,8 @@ export default function NetworkPage() {
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Suggested for you</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                       {suggestions.map((profile) => (
-                        <div key={profile._id} className="border border-gray-200 dark:border-slate-700 rounded-xl overflow-hidden hover-lift hover:shadow-lg transition bg-white dark:bg-slate-800 flex flex-col">
-                          <div className={`h-16 relative bg-gradient-to-r ${profile.user?.role === 'recruiter' ? 'from-amber-400 to-orange-500' : profile.user?.role === 'mentor' ? 'from-emerald-400 to-teal-500' : 'from-indigo-500 to-purple-600'}`}>
+                        <BorderGlow key={profile._id} borderRadius={12} className="hover-lift flex flex-col h-full">
+                          <div className={`h-16 relative rounded-t-[inherit] bg-gradient-to-r ${profile.user?.role === 'recruiter' ? 'from-amber-400 to-orange-500' : profile.user?.role === 'mentor' ? 'from-emerald-400 to-teal-500' : 'from-indigo-500 to-purple-600'}`}>
                             {(profile.user?.role === 'recruiter' || profile.user?.role === 'mentor') && (
                               <span className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase tracking-wider">
                                 {profile.user?.role}
@@ -201,7 +202,7 @@ export default function NetworkPage() {
                               </Link>
                             </div>
                           </div>
-                        </div>
+                        </BorderGlow>
                       ))}
                       {suggestions.length === 0 && <p className="text-gray-500 col-span-full">No suggestions available right now.</p>}
                     </div>

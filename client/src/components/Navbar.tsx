@@ -74,6 +74,19 @@ export default function Navbar() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const [isWiggling, setIsWiggling] = useState(false);
+
+  const triggerWiggle = () => {
+    setIsWiggling(true);
+    setTimeout(() => setIsWiggling(false), 650);
+  };
+
+  useEffect(() => {
+    if (unreadCount > 0) {
+      triggerWiggle();
+    }
+  }, [unreadCount]);
+
   const isActive = (path: string) => location.pathname === path;
 
   // Prevent background scrolling when mobile menu is open
@@ -246,9 +259,10 @@ export default function Navbar() {
             {isAuthenticated && (
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
+                onMouseEnter={triggerWiggle}
                 className="relative p-2 text-gray-500 hover:text-indigo-600 rounded-full hover:bg-gray-50 transition cursor-pointer"
               >
-                <Bell size={20} />
+                <Bell size={20} className={isWiggling ? "bell-animate" : ""} />
                 {unreadCount > 0 && (
                   <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center animate-pulse">
                     {unreadCount > 9 ? "9+" : unreadCount}
@@ -312,9 +326,10 @@ export default function Navbar() {
                 <div className="relative">
                   <button 
                     onClick={() => setShowNotifications(!showNotifications)}
+                    onMouseEnter={triggerWiggle}
                     className="relative p-2 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 rounded-full hover:bg-gray-50 dark:hover:bg-gray-800 transition cursor-pointer"
                   >
-                    <Bell size={20} />
+                    <Bell size={20} className={isWiggling ? "bell-animate" : ""} />
                     {unreadCount > 0 && (
                       <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-[10px] font-bold text-white rounded-full flex items-center justify-center animate-pulse">
                         {unreadCount > 9 ? "9+" : unreadCount}

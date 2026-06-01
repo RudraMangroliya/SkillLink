@@ -8,6 +8,7 @@ import EditProfileModal from "../components/EditProfileModal";
 import UserListModal from "../components/UserListModal";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import BorderGlow from "../components/BorderGlow";
 
 export default function ProfilePage() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -604,18 +605,22 @@ export default function ProfilePage() {
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Projects</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {displayData.projects.map((proj: any, index: number) => (
-                    <div key={index} className="border border-gray-200 dark:border-slate-600 rounded-xl p-3 sm:p-4 hover:border-indigo-300 dark:hover:border-indigo-500 transition-colors min-w-0">
-                      <div className="flex items-center mb-2 min-w-0">
-                        <FolderGit2 size={18} className="text-indigo-600 dark:text-indigo-400 mr-2 shrink-0" />
-                        <h3 className="font-bold text-gray-900 dark:text-white break-words min-w-0">{proj.title}</h3>
+                    <BorderGlow key={index} borderRadius={12} className="min-w-0 h-full">
+                      <div className="p-3 sm:p-4 flex flex-col h-full justify-between">
+                        <div>
+                          <div className="flex items-center mb-2 min-w-0">
+                            <FolderGit2 size={18} className="text-indigo-600 dark:text-indigo-400 mr-2 shrink-0" />
+                            <h3 className="font-bold text-gray-900 dark:text-white break-words min-w-0">{proj.title}</h3>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 break-words mb-3">{proj.description}</p>
+                        </div>
+                        {proj.link && (
+                          <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline font-medium flex items-center break-words mt-auto">
+                            View Project <LinkIcon size={14} className="ml-1 shrink-0" />
+                          </a>
+                        )}
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 break-words mb-3">{proj.description}</p>
-                      {proj.link && (
-                        <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-indigo-600 dark:text-indigo-400 hover:underline font-medium flex items-center break-words">
-                          View Project <LinkIcon size={14} className="ml-1 shrink-0" />
-                        </a>
-                      )}
-                    </div>
+                    </BorderGlow>
                   ))}
                 </div>
               </div>

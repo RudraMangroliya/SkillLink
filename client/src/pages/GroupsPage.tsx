@@ -7,6 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import SEO from "../components/SEO";
+import BorderGlow from "../components/BorderGlow";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState<any[]>([]);
@@ -146,7 +147,7 @@ export default function GroupsPage() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {groups.map((group) => (
-                    <div key={group._id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-indigo-100 dark:border-indigo-900/50 overflow-hidden hover:shadow-md transition flex flex-col relative ring-1 ring-indigo-50 dark:ring-0 min-w-0">
+                    <BorderGlow key={group._id} borderRadius={12} className="flex flex-col relative min-w-0 h-full">
                       <div className="absolute top-4 right-4 z-10">
                         <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm ${
                           group.visibility === 'private' 
@@ -156,7 +157,7 @@ export default function GroupsPage() {
                           {group.visibility === 'private' ? 'Private' : 'Public'}
                         </span>
                       </div>
-                      <div className="h-24 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center">
+                      <div className="h-24 bg-gradient-to-r from-indigo-500 to-purple-600 flex items-center justify-center rounded-t-[inherit]">
                         <UsersRound size={40} className="text-white opacity-80" />
                       </div>
                       <div className="p-6 flex flex-col flex-1">
@@ -180,7 +181,7 @@ export default function GroupsPage() {
                           </Link>
                         </div>
                       </div>
-                    </div>
+                    </BorderGlow>
                   ))}
                 </div>
               </div>
@@ -195,7 +196,7 @@ export default function GroupsPage() {
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {exploreGroups.map((group) => (
-                    <div key={group._id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden hover:shadow-md transition flex flex-col relative min-w-0">
+                    <BorderGlow key={group._id} borderRadius={12} className="flex flex-col relative min-w-0 h-full">
                       <div className="absolute top-4 right-4 z-10">
                         <span className={`px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm ${
                           group.visibility === 'private' 
@@ -205,7 +206,7 @@ export default function GroupsPage() {
                           {group.visibility === 'private' ? 'Private' : 'Public'}
                         </span>
                       </div>
-                      <div className="h-24 bg-gray-100 dark:bg-slate-700 flex items-center justify-center">
+                      <div className="h-24 bg-gray-100 dark:bg-slate-700 flex items-center justify-center rounded-t-[inherit]">
                         <UsersRound size={40} className="text-gray-400" />
                       </div>
                       <div className="p-6 flex flex-col flex-1">
@@ -224,7 +225,7 @@ export default function GroupsPage() {
                           </Link>
                         </div>
                       </div>
-                    </div>
+                    </BorderGlow>
                   ))}
                 </div>
               </div>
