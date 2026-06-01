@@ -216,7 +216,7 @@ export default function LandingPage() {
               />
 
               {/* Floating Chat card (absolute positioned relative to the self-sizing container) */}
-              <div className="chat-card absolute top-4 right-[-15px] sm:right-[-30px] lg:right-[-50px] w-[100px] min-[360px]:w-[130px] min-[480px]:w-[170px] sm:w-[210px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl sm:rounded-2xl p-1.5 sm:p-3.5 shadow-2xl animate-float-fast hover:scale-105 transition-transform duration-300 z-20 hidden min-[280px]:block">
+              {/* <div className="chat-card absolute top-4 right-[-15px] sm:right-[-30px] lg:right-[-50px] w-[100px] min-[360px]:w-[130px] min-[480px]:w-[170px] sm:w-[210px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl sm:rounded-2xl p-1.5 sm:p-3.5 shadow-2xl animate-float-fast hover:scale-105 transition-transform duration-300 z-20 hidden min-[280px]:block">
                 <div className="flex items-center justify-between mb-1.5 sm:mb-2.5 border-b border-gray-100 dark:border-slate-700/60 pb-1.5 sm:pb-2">
                   <span className="text-[7px] min-[360px]:text-[10px] sm:text-xs font-black text-gray-900 dark:text-white flex items-center gap-1">
                     Live Chat <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -230,7 +230,7 @@ export default function LandingPage() {
                     alt="Live chat visual" 
                   />
                 </div>
-              </div>
+              </div> */}
 
               {/* Badge A: AI Matching (Top-Left, tracked perfectly) */}
               {/* <div className="absolute top-10 left-[-15px] sm:left-[-30px] lg:left-[-50px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
@@ -312,6 +312,47 @@ export default function LandingPage() {
             </BorderGlow>
 
           </div>
+        </div>
+      </div>
+
+      {/* Product Showcase Section */}
+      <div className="relative py-20 lg:py-32 bg-slate-50/50 dark:bg-slate-900/30 transition-colors border-t border-indigo-50/20 dark:border-slate-800/20 z-10 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
+          
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center">
+            {/* Illustration on Left */}
+            <div className="lg:col-span-6 order-2 lg:order-1 flex justify-center w-full">
+              <BorderGlow borderRadius={24} className="w-full max-w-[480px] bg-white dark:bg-slate-800/80 p-4 sm:p-6 shadow-xl border border-indigo-50/50 dark:border-slate-800/50 transition-colors">
+                <div className="bg-indigo-50/50 dark:bg-slate-900/60 rounded-xl p-4 sm:p-6 border border-gray-100/20 dark:border-slate-800/20 overflow-hidden shadow-inner flex justify-center items-center">
+                  <img 
+                    src={chatCommunicationImg} 
+                    className="w-full max-w-[320px] h-auto object-contain filter drop-shadow-[0_10px_20px_rgba(79,70,229,0.1)] hover:scale-105 transition-transform duration-500"
+                    alt="Smart Chat Communication illustration" 
+                  />
+                </div>
+              </BorderGlow>
+            </div>
+            
+            {/* Text on Right */}
+            <div className="lg:col-span-6 order-1 lg:order-2 text-left flex flex-col justify-center">
+              <span className="text-xs sm:text-sm font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-2">Real-Time Messaging</span>
+              <h2 className="text-2xl min-[360px]:text-3xl sm:text-4xl font-black text-gray-900 dark:text-white leading-tight mb-4 sm:mb-6">
+                Connect and communicate instantly
+              </h2>
+              <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed mb-6 sm:mb-8">
+                Exchange direct messages with recruiters, network contacts, and group members in real time. Coordinate interviews, receive mentorship guidance, and build meaningful professional relationships without leaving the ecosystem.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                <Link
+                  to="/chat"
+                  className="inline-flex items-center justify-center px-6 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 text-xs sm:text-sm text-center w-full sm:w-auto"
+                >
+                  Open Direct Messages
+                </Link>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
