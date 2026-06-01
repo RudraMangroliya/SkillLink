@@ -74,12 +74,12 @@ const Footer = () => {
           glowRadius={130}
           sparkle
           waveAmplitude={0}
-          cursorRadius={100}
+          cursorRadius={400}
           cursorForce={0.1}
           bulgeOnly
-          gradientFrom={isDark ? "#080946" : "#a5b4fc"}
-          gradientTo={isDark ? "#7b79db" : "#e0e7ff"}
-          glowColor={isDark ? "#120F17" : "#e0e7ff"}
+          gradientFrom={isDark ? "#080946" : "#8296fbff"}
+          gradientTo={isDark ? "#7b79db" : "#bac9f8ff"}
+          glowColor={isDark ? "#120F17" : "#fcfcfcff"}
         />
       </div>
 

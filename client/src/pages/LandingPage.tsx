@@ -65,12 +65,12 @@ export default function LandingPage() {
       {/* Premium WebGL Antigravity Particle Background Overlay (100% Click-Through Proof) */}
       <div 
         className={`absolute inset-0 w-full h-[650px] min-[480px]:h-[750px] sm:h-[850px] lg:h-full z-0 pointer-events-none select-none overflow-hidden transition-all duration-1000 ease-in-out ${
-          showCanvas ? (isDarkMode ? "opacity-[0.35]" : "opacity-[0.30]") : "opacity-0"
+          showCanvas ? (isDarkMode ? "opacity-[0.35]" : "opacity-[0.15]") : "opacity-0"
         }`}
       >
         {showCanvas && (
           <Antigravity
-            count={120}
+            count={600}
             magnetRadius={3.5}
             ringRadius={4.0}
             waveSpeed={0.4}
@@ -205,7 +205,7 @@ export default function LandingPage() {
             <div className="relative max-w-[280px] min-[360px]:max-w-[340px] min-[480px]:max-w-[450px] sm:max-w-[550px] lg:max-w-[650px] w-full mx-auto animate-float flex justify-center items-center overflow-visible">
               
               {/* Refined professional high-contrast glow backdrop to ensure connecting lines are perfectly visible in light mode */}
-              <div className="absolute w-[80%] h-[80%] rounded-full bg-gradient-to-tr from-indigo-600/14 via-purple-600/16 to-indigo-950/18 filter blur-2xl z-0 pointer-events-none block dark:hidden"></div>
+              <div className="absolute w-[100%] h-[80%] rounded-full bg-gradient-to-tr from-indigo-600/4 via-purple-600/4 to-indigo-950/4 filter blur-2xl z-0 pointer-events-none block dark:hidden"></div>
               <div className="absolute w-[60%] h-[60%] rounded-full bg-indigo-950/12 filter blur-3xl z-0 pointer-events-none block dark:hidden"></div>
               
               {/* The Main Network Map Image */}
@@ -233,7 +233,7 @@ export default function LandingPage() {
               </div>
 
               {/* Badge A: AI Matching (Top-Left, tracked perfectly) */}
-              <div className="absolute top-10 left-[-15px] sm:left-[-30px] lg:left-[-50px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
+              {/* <div className="absolute top-10 left-[-15px] sm:left-[-30px] lg:left-[-50px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2 sm:p-3 shadow-xl flex items-center gap-2 sm:gap-3 animate-float hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 font-black text-xs sm:text-sm border border-emerald-100 dark:border-emerald-900/50 shadow-inner">
                   95%
                 </div>
@@ -241,7 +241,7 @@ export default function LandingPage() {
                   <span className="block text-[8px] sm:text-[9px] text-gray-400 dark:text-gray-500 uppercase font-black tracking-wider leading-none">AI Matching</span>
                   <span className="text-[10px] sm:text-xs font-black text-gray-900 dark:text-white">Profile Score</span>
                 </div>
-              </div>
+              </div> */}
 
               {/* Badge B: Job Match Alert (Bottom-Left, perfectly aligned & visually balanced) */}
               {/* <div className="absolute bottom-10 left-[-15px] sm:left-[-30px] lg:left-[-50px] bg-white/95 dark:bg-slate-800/95 border border-indigo-100/40 dark:border-slate-700/40 backdrop-blur-md rounded-xl p-2.5 sm:p-3.5 shadow-xl flex items-center gap-2 sm:gap-3.5 animate-float-slow hover:scale-105 transition-transform duration-300 z-20 hidden min-[480px]:flex">
