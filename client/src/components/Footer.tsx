@@ -79,7 +79,7 @@ const Footer = () => {
           bulgeOnly
           gradientFrom={isDark ? "#080946" : "#a5b4fc"}
           gradientTo={isDark ? "#7b79db" : "#e0e7ff"}
-          glowColor={isDark ? "#120F17" : "#f8fafc"}
+          glowColor={isDark ? "#120F17" : "#e0e7ff"}
         />
       </div>
 
