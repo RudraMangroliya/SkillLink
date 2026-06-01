@@ -68,7 +68,7 @@ const Footer = () => {
       {/* DotField Dynamic Background */}
       <div className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none overflow-hidden opacity-60">
         <DotField
-          dotRadius={1}
+          dotRadius={2}
           dotSpacing={19}
           bulgeStrength={67}
           glowRadius={130}

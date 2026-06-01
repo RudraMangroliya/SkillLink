@@ -30,7 +30,7 @@ interface DotFieldProps {
 }
 
 const DotField = memo(({
-  dotRadius = 1.5,
+  dotRadius = 2,
   dotSpacing = 14,
   cursorRadius = 500,
   cursorForce = 0.1,
@@ -114,9 +114,10 @@ const DotField = memo(({
     }
 
     function onMouseMove(e: MouseEvent) {
-      const s = sizeRef.current;
-      mouseRef.current.x = e.pageX - s.offsetX;
-      mouseRef.current.y = e.pageY - s.offsetY;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = e.clientX - rect.left;
+      mouseRef.current.y = e.clientY - rect.top;
     }
 
     function updateMouseSpeed() {
