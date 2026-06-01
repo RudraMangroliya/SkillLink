@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Mail, Zap, ArrowUp } from 'lucide-react';
 import { FaTwitter, FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
+import DotField from './DotField';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [isDark, setIsDark] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -18,6 +20,22 @@ const Footer = () => {
     };
     window.addEventListener('scroll', toggleVisibility);
     return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const checkTheme = () => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    };
+    checkTheme();
+    
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+    
+    return () => observer.disconnect();
   }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
@@ -47,6 +65,24 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-50 dark:bg-slate-950 text-gray-600 dark:text-gray-300 py-16 border-t border-gray-200 dark:border-slate-800 font-sans relative overflow-hidden mt-auto transition-colors duration-300">
+      {/* DotField Dynamic Background */}
+      <div className="absolute inset-0 w-full h-full z-0 pointer-events-none select-none overflow-hidden opacity-60">
+        <DotField
+          dotRadius={1}
+          dotSpacing={19}
+          bulgeStrength={67}
+          glowRadius={130}
+          sparkle
+          waveAmplitude={0}
+          cursorRadius={100}
+          cursorForce={0.1}
+          bulgeOnly
+          gradientFrom={isDark ? "#080946" : "#a5b4fc"}
+          gradientTo={isDark ? "#7b79db" : "#e0e7ff"}
+          glowColor={isDark ? "#120F17" : "#f8fafc"}
+        />
+      </div>
+
       {/* Background glow effects */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-indigo-600/10 dark:bg-indigo-500/20 blur-[120px] rounded-full pointer-events-none"></div>
 
