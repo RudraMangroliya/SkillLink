@@ -50,7 +50,11 @@ export default function GroupsPage() {
       // Initialize Socket connection
       if (user) {
         const newSocket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
-          transports: ["websocket"],
+          transports: ["websocket", "polling"],
+          reconnection: true,
+          reconnectionAttempts: Infinity,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
         });
         newSocket.emit("setup", user);
         
@@ -87,12 +91,28 @@ export default function GroupsPage() {
   };
 
   useEffect(() => {
-    return () => {
-      if (socket) {
+    if (socket && user) {
+      const handleReconnect = () => {
+        if (socket && !socket.connected) {
+          socket.connect();
+          socket.emit("setup", user);
+          // Re-join groups
+          groups.forEach((g: any) => {
+            socket.emit("join group", g._id);
+          });
+        }
+      };
+
+      window.addEventListener("focus", handleReconnect);
+      document.addEventListener("visibilitychange", handleReconnect);
+
+      return () => {
+        window.removeEventListener("focus", handleReconnect);
+        document.removeEventListener("visibilitychange", handleReconnect);
         socket.disconnect();
-      }
-    };
-  }, [socket]);
+      };
+    }
+  }, [socket, user, groups]);
 
   const handleCreateGroup = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -220,20 +220,35 @@ export default function ChatPage() {
 
   useEffect(() => {
     socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: Infinity,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
     });
     if (user) {
       socket.emit("setup", user);
       socket.on("connected", () => setSocketConnected(true));
-      socket.on("typing", (room) => {
-        // We will move the typing check to the selectedChat effect
-      });
-      socket.on("stop typing", (room) => {
-        // We will move the stop typing check to the selectedChat effect
-      });
+      socket.on("disconnect", () => setSocketConnected(false));
       socket.on("online users", (users) => setOnlineUsers(users));
       socket.on("user online", (userId) => setOnlineUsers(prev => [...prev, userId]));
       socket.on("user offline", (userId) => setOnlineUsers(prev => prev.filter(id => id !== userId)));
+
+      const handleReconnect = () => {
+        if (socket && !socket.connected) {
+          socket.connect();
+          socket.emit("setup", user);
+        }
+      };
+
+      window.addEventListener("focus", handleReconnect);
+      document.addEventListener("visibilitychange", handleReconnect);
+
+      return () => {
+        window.removeEventListener("focus", handleReconnect);
+        document.removeEventListener("visibilitychange", handleReconnect);
+        socket.disconnect();
+      };
     }
     return () => {
       socket.disconnect();

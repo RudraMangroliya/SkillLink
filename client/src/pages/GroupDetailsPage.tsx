@@ -158,10 +158,15 @@ export default function GroupDetailsPage() {
   useEffect(() => {
     if (group && isMember) {
       socket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
-        transports: ["websocket"],
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: Infinity,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax: 5000,
       });
       socket.emit("setup", user);
       socket.on("connected", () => setSocketConnected(true));
+      socket.on("disconnect", () => setSocketConnected(false));
       socket.emit("join group", id);
 
       socket.on("group typing", (room) => {
@@ -175,7 +180,20 @@ export default function GroupDetailsPage() {
       socket.on("user online", (userId) => setOnlineUsers(prev => [...prev, userId]));
       socket.on("user offline", (userId) => setOnlineUsers(prev => prev.filter(uid => uid !== userId)));
 
+      const handleReconnect = () => {
+        if (socket && !socket.connected) {
+          socket.connect();
+          socket.emit("setup", user);
+          socket.emit("join group", id);
+        }
+      };
+
+      window.addEventListener("focus", handleReconnect);
+      document.addEventListener("visibilitychange", handleReconnect);
+
       return () => {
+        window.removeEventListener("focus", handleReconnect);
+        document.removeEventListener("visibilitychange", handleReconnect);
         socket.emit("leave group", id);
         socket.disconnect();
       };

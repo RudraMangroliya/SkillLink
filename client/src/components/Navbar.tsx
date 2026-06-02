@@ -109,7 +109,11 @@ export default function Navbar() {
       // Setup individual socket for global notifications
       if (user) {
         const newSocket = io(import.meta.env.VITE_API_URL || "http://localhost:5000", {
-          transports: ["websocket"],
+          transports: ["websocket", "polling"],
+          reconnection: true,
+          reconnectionAttempts: Infinity,
+          reconnectionDelay: 1000,
+          reconnectionDelayMax: 5000,
         });
         newSocket.emit("setup", user);
         
@@ -153,7 +157,19 @@ export default function Navbar() {
 
         setSocket(newSocket);
 
+        const handleReconnect = () => {
+          if (newSocket && !newSocket.connected) {
+            newSocket.connect();
+            newSocket.emit("setup", user);
+          }
+        };
+
+        window.addEventListener("focus", handleReconnect);
+        document.addEventListener("visibilitychange", handleReconnect);
+
         return () => {
+          window.removeEventListener("focus", handleReconnect);
+          document.removeEventListener("visibilitychange", handleReconnect);
           newSocket.disconnect();
         };
       }
