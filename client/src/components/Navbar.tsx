@@ -500,7 +500,7 @@ export default function Navbar() {
                 <img
                   src={user?.profileImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=random&size=150`}
                   alt="Profile"
-                  className="w-5 h-5 rounded-full object-cover mr-3 border border-gray-200 dark:border-slate-700 shadow-sm"
+                  className="w-6 h-6 rounded-full object-cover mr-3 border border-gray-200 dark:border-slate-700 shadow-sm"
                 /> 
                 <span>Profile</span>
               </Link>
