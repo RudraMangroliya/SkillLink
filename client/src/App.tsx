@@ -13,7 +13,7 @@ import PageLoader from "./components/PageLoader";
 const LandingPage = lazy(() => import("./pages/LandingPage"));
 const LoginPage = lazy(() => import("./pages/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/RegisterPage"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+import ProfilePage from "./pages/ProfilePage";
 const JobBoardPage = lazy(() => import("./pages/JobBoardPage"));
 const ExplorePage = lazy(() => import("./pages/ExplorePage"));
 const ChatPage = lazy(() => import("./pages/ChatPage"));
