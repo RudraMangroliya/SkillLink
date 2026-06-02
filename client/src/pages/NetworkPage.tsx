@@ -174,7 +174,7 @@ export default function NetworkPage() {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-3 sm:p-6 transition-colors min-w-0">
+          <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-2 min-[340px]:p-4 sm:p-6 transition-colors min-w-0">
             {loading ? (
               <NetworkCardSkeleton type={activeTab} />
             ) : (
@@ -192,12 +192,12 @@ export default function NetworkPage() {
                               </span>
                             )}
                           </div>
-                          <div className="px-4 pb-4 flex-1 flex flex-col items-center text-center -mt-8 relative z-10">
+                          <div className="px-2 pb-4 min-[340px]:px-4 flex-1 flex flex-col items-center text-center -mt-8 relative z-10">
                             <img src={profile.user?.profileImage || "https://via.placeholder.com/150"} alt="" className="w-16 h-16 rounded-full border-4 border-white dark:border-slate-800 bg-gray-200 dark:bg-slate-700 object-cover" />
                             <h3 className="font-bold text-gray-900 dark:text-white mt-2">{profile.user?.name}</h3>
                             <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">{profile.headline || profile.user?.role}</p>
                             <div className="mt-auto pt-4 w-full">
-                              <Link to={`/profile/${profile.user?._id}`} className="block w-full py-1.5 text-indigo-600 dark:text-indigo-400 font-medium border border-indigo-600 dark:border-indigo-500 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition text-sm">
+                              <Link to={`/profile/${profile.user?._id}`} className="block w-full py-1.5 text-indigo-600 dark:text-indigo-400 font-medium border border-indigo-600 dark:border-indigo-500 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition text-xs min-[340px]:text-sm">
                                 View Profile
                               </Link>
                             </div>

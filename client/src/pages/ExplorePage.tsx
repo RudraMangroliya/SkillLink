@@ -131,13 +131,13 @@ export default function ExplorePage() {
         title="Explore Professionals & Mentors" 
         description="Search and connect with industry leading tech experts, recruiters, and professional mentors in the SkillLink community."
       />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-2 min-[340px]:px-4 sm:px-6 lg:px-8">
 
         <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white transition-colors">Explore Professionals</h1>
           <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1 mb-6 transition-colors">Connect with industry experts and grow your network.</p>
 
-          <form onSubmit={handleSearch} className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 transition-colors">
+          <form onSubmit={handleSearch} className="bg-white dark:bg-slate-800 p-3 min-[340px]:p-4 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 transition-colors">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 flex items-center border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 bg-gray-50 dark:bg-slate-900 focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent transition-colors">
                 <Search size={20} className="text-gray-400 mr-2 flex-shrink-0" />
@@ -152,13 +152,13 @@ export default function ExplorePage() {
                 <button
                   type="button"
                   onClick={() => setShowFilters(!showFilters)}
-                  className="flex-1 flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition min-w-0"
+                  className="flex-1 flex items-center justify-center px-2 py-2 min-[340px]:px-4 border border-gray-300 dark:border-slate-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700 transition min-w-0 text-xs min-[340px]:text-sm"
                 >
-                  <Filter size={18} className="mr-2 flex-shrink-0" /> Filters
+                  <Filter size={16} className="mr-1.5 flex-shrink-0" /> Filters
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition min-w-0"
+                  className="flex-1 px-4 py-2 min-[340px]:px-6 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition min-w-0 text-xs min-[340px]:text-sm"
                 >
                   Search
                 </button>
@@ -207,7 +207,7 @@ export default function ExplorePage() {
                     </span>
                   )}
                 </div>
-                <div className="px-5 pb-6 flex-1 flex flex-col relative">
+                <div className="px-3 pb-4 min-[340px]:px-5 min-[340px]:pb-6 flex-1 flex flex-col relative">
 
                   {/* Avatar layout */}
                   <div className="flex justify-start -mt-10 mb-3 relative z-10">
@@ -248,7 +248,7 @@ export default function ExplorePage() {
                   </div>
 
                   <div className="mt-5 flex flex-col min-[350px]:flex-row gap-2 w-full">
-                    <a href={`/profile/${person.user?._id}`} className="flex-1 bg-white dark:bg-transparent border border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 px-3 py-2 rounded-lg font-semibold hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors flex items-center justify-center text-sm text-center min-w-0">
+                    <a href={`/profile/${person.user?._id}`} className="flex-1 bg-white dark:bg-transparent border border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 px-2 py-2 min-[340px]:px-3 rounded-lg font-semibold hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition-colors flex items-center justify-center text-xs min-[340px]:text-sm text-center min-w-0">
                       View Profile
                     </a>
                     {user?.role !== "admin" && (
@@ -256,7 +256,7 @@ export default function ExplorePage() {
                         <button 
                           onClick={() => handleDisconnect(person.user?._id)}
                           disabled={disconnectingIds.has(person.user?._id)}
-                          className="flex-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 px-3 py-2 rounded-lg font-semibold hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 transition-colors flex items-center justify-center text-sm disabled:opacity-50 min-w-0"
+                          className="flex-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 px-2 py-2 min-[340px]:px-3 rounded-lg font-semibold hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 transition-colors flex items-center justify-center text-xs min-[340px]:text-sm disabled:opacity-50 min-w-0"
                         >
                           {disconnectingIds.has(person.user?._id) ? <Loader2 className="animate-spin h-4 w-4" /> : "Disconnect"}
                         </button>
@@ -264,7 +264,7 @@ export default function ExplorePage() {
                         <button 
                           onClick={() => handleConnect(person.user?._id)}
                           disabled={connectionStatuses[person.user?._id] === "Pending" || connectingIds.has(person.user?._id)}
-                          className="flex-1 bg-indigo-600 text-white px-3 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center text-sm disabled:opacity-50 min-w-0"
+                          className="flex-1 bg-indigo-600 text-white px-2 py-2 min-[340px]:px-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors flex items-center justify-center text-xs min-[340px]:text-sm disabled:opacity-50 min-w-0"
                         >
                           {connectingIds.has(person.user?._id) || connectionStatuses[person.user?._id] === "Pending" ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <UserPlus size={16} className="mr-1 flex-shrink-0" />}
                           {connectionStatuses[person.user?._id] === "Pending" ? "Pending" : connectingIds.has(person.user?._id) ? "Connecting..." : <span className="truncate">Connect</span>}

@@ -335,11 +335,11 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-8 pb-12 transition-colors duration-300">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-5xl mx-auto px-2 min-[340px]:px-4 sm:px-6 lg:px-8">
 
         {/* Profile Completion Card (if not 100%) */}
         {isOwnProfile && displayData.profileCompletionScore < 100 && (
-          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-indigo-100 dark:border-slate-700 p-5 sm:p-6 mb-6 transition-all duration-300 hover:shadow-md animate-fade-in-slide">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-indigo-100 dark:border-slate-700 p-3 min-[340px]:p-5 sm:p-6 mb-6 transition-all duration-300 hover:shadow-md animate-fade-in-slide">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
               <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-lg font-bold text-gray-900 dark:text-white flex flex-wrap items-center justify-center sm:justify-start gap-2">
@@ -407,7 +407,7 @@ export default function ProfilePage() {
             )}
           </div>
 
-          <div className="px-4 sm:px-8 pb-8 relative">
+          <div className="px-3 min-[340px]:px-4 sm:px-8 pb-8 relative">
             <div className="relative -mt-20 mb-4 inline-block">
               <img
                 src={displayUser?.profileImage || `https://ui-avatars.com/api/?name=${displayUser?.name}&background=random&size=150`}
@@ -466,7 +466,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex flex-wrap gap-3 w-full md:w-auto mt-4 md:mt-0">
                 {isOwnProfile ? (
-                  <button onClick={() => setIsEditModalOpen(true)} className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow text-sm sm:text-base">
+                  <button onClick={() => setIsEditModalOpen(true)} className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-3 py-2 min-[340px]:px-4 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow text-xs min-[340px]:text-sm sm:text-base">
                     Edit Profile
                   </button>
                 ) : (
@@ -474,7 +474,7 @@ export default function ProfilePage() {
                     <button 
                       onClick={handleFollow}
                       disabled={isFollowLoading}
-                      className={`flex-1 md:flex-none px-6 py-2 rounded-lg font-medium transition shadow-sm hover:shadow text-sm sm:text-base border flex items-center justify-center disabled:opacity-50 ${
+                      className={`flex-1 md:flex-none px-3 py-2 min-[340px]:px-6 rounded-lg font-medium transition shadow-sm hover:shadow text-xs min-[340px]:text-sm sm:text-base border flex items-center justify-center disabled:opacity-50 ${
                         isFollowing 
                           ? "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700" 
                           : "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700"
@@ -486,14 +486,14 @@ export default function ProfilePage() {
                       <>
                         <button 
                           onClick={handleStartChat}
-                          className="flex-1 md:flex-none bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center"
+                          className="flex-1 md:flex-none bg-indigo-600 text-white px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center"
                         >
                           Message
                         </button>
                         <button 
                           onClick={handleDisconnect}
                           disabled={isDisconnectingLoading}
-                          className="flex-1 md:flex-none bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                          className="flex-1 md:flex-none bg-red-50 text-red-600 border border-red-200 px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                         >
                           {isDisconnectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Disconnect"}
                         </button>
@@ -503,14 +503,14 @@ export default function ProfilePage() {
                         <button 
                           onClick={handleAcceptConnection}
                           disabled={isAcceptingLoading}
-                          className="flex-1 bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                          className="flex-1 bg-indigo-600 text-white px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                         >
                           {isAcceptingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Accept"}
                         </button>
                         <button 
                           onClick={handleRejectConnection}
                           disabled={isRejectingLoading}
-                          className="flex-1 bg-red-50 text-red-600 border border-red-200 px-6 py-2 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                          className="flex-1 bg-red-50 text-red-600 border border-red-200 px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                         >
                           {isRejectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Reject"}
                         </button>
@@ -519,9 +519,9 @@ export default function ProfilePage() {
                       <button 
                         onClick={handleConnect}
                         disabled={connectionStatus === "Pending" || isConnectingLoading}
-                        className="flex-1 md:flex-none bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                        className="flex-1 md:flex-none bg-indigo-600 text-white px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
                       >
-                        {isConnectingLoading || connectionStatus === "Pending" ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <UserPlus size={18} className="mr-2" />}
+                        {isConnectingLoading || connectionStatus === "Pending" ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <UserPlus size={16} className="mr-1 sm:mr-2" />}
                         {connectionStatus === "Pending" ? "Pending..." : isConnectingLoading ? "Connecting..." : "Connect"}
                       </button>
                     )}
@@ -532,7 +532,7 @@ export default function ProfilePage() {
                     navigator.clipboard.writeText(window.location.href);
                     alert("Profile link copied to clipboard!");
                   }} 
-                  className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow text-sm sm:text-base flex justify-center items-center"
+                  className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-3 py-2 min-[340px]:px-4 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow text-xs min-[340px]:text-sm sm:text-base flex justify-center items-center"
                 >
                   Share
                 </button>
