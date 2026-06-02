@@ -762,12 +762,12 @@ export default function ProfilePage() {
               <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Links & Resume</h2>
               <div className="space-y-4">
                 {displayData.githubLink && (
-                  <a href={displayData.githubLink} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate break-all">
+                  <a href={displayData.githubLink} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate break-all min-w-0">
                     <LinkIcon size={20} className="mr-3 flex-shrink-0" /> <span className="truncate">{displayData.githubLink}</span>
                   </a>
                 )}
                 {displayData.portfolioLink && (
-                  <a href={displayData.portfolioLink} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate break-all">
+                  <a href={displayData.portfolioLink} target="_blank" rel="noopener noreferrer" className="flex items-center text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate break-all min-w-0">
                     <LinkIcon size={20} className="mr-3 flex-shrink-0" /> <span className="truncate">{displayData.portfolioLink}</span>
                   </a>
                 )}

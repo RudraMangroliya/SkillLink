@@ -246,7 +246,7 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 sticky top-0 z-50 shadow-sm transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 xl:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link to="/" className="text-xl sm:text-2xl font-extrabold text-indigo-600 dark:text-indigo-400 tracking-tight">
@@ -255,7 +255,7 @@ export default function Navbar() {
           </div>
           
           {/* Mobile menu buttons */}
-          <div className="flex items-center space-x-1 lg:hidden">
+          <div className="flex items-center space-x-1 xl:hidden">
             {isAuthenticated && (
               <button 
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -279,7 +279,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden lg:flex lg:items-center lg:space-x-4 xl:space-x-6">
+          <div className="hidden xl:flex xl:items-center xl:space-x-4">
             {isAuthenticated ? (
               <>
                 <Link to="/explore" className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition ${isActive("/explore") ? "text-indigo-600 bg-indigo-50 dark:bg-indigo-900/30 dark:text-indigo-400" : "text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-50 dark:hover:bg-gray-800"}`}>
@@ -313,12 +313,12 @@ export default function Navbar() {
                 </Link>
                 
                 {user?.role === "admin" && (
-                  <Link to="/admin" className="text-red-500 hover:text-red-600 flex items-center transition font-medium text-sm lg:text-base">
+                  <Link to="/admin" className="text-red-500 hover:text-red-600 flex items-center transition font-medium text-sm xl:text-base">
                     <ShieldAlert size={18} className="mr-1.5" /> Admin
                   </Link>
                 )}
 
-                <div className="border-l border-gray-200 dark:border-gray-700 h-6 mx-1 lg:mx-2"></div>
+                <div className="border-l border-gray-200 dark:border-gray-700 h-6 mx-1 xl:mx-2"></div>
                 
                 <ThemeToggle />
                 
@@ -338,18 +338,18 @@ export default function Navbar() {
                   </button>
                 </div>
 
-                <div className="border-l border-gray-200 dark:border-gray-700 h-6 mx-1 lg:mx-2"></div>
+                <div className="border-l border-gray-200 dark:border-gray-700 h-6 mx-1 xl:mx-2"></div>
                 
-                <button onClick={handleLogout} className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 flex items-center transition text-sm lg:text-base cursor-pointer">
+                <button onClick={handleLogout} className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 flex items-center transition text-sm xl:text-base cursor-pointer">
                   <LogOut size={18} className="mr-1.5" /> Logout
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="text-gray-600 font-medium hover:text-indigo-600 transition text-sm lg:text-base">
+                <Link to="/login" className="text-gray-600 font-medium hover:text-indigo-600 transition text-sm xl:text-base">
                   Log in
                 </Link>
-                <Link to="/register" className="bg-indigo-600 text-white px-4 lg:px-5 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm lg:text-base">
+                <Link to="/register" className="bg-indigo-600 text-white px-4 xl:px-5 py-2 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-sm xl:text-base">
                   Sign up
                 </Link>
               </>
@@ -421,14 +421,14 @@ export default function Navbar() {
       {/* Backdrop Overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/40 z-[60] lg:hidden transition-opacity duration-300"
+          className="fixed inset-0 bg-black/40 z-[60] xl:hidden transition-opacity duration-300"
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
 
       {/* Left Sidebar Drawer */}
       <div 
-        className={`fixed inset-y-0 left-0 w-[260px] max-w-[80vw] bg-white dark:bg-gray-900 shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out lg:hidden flex flex-col ${
+        className={`fixed inset-y-0 left-0 w-[260px] max-w-[80vw] bg-white dark:bg-gray-900 shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out xl:hidden flex flex-col ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >

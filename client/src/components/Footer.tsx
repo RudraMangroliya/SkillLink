@@ -191,7 +191,7 @@ const Footer = () => {
             <div className="text-center xs:text-left">
               <h3 className="text-gray-900 dark:text-white font-semibold mb-6 transition-colors text-center xs:text-left">Contact</h3>
               <div className="space-y-4 flex flex-col items-center xs:items-start">
-                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-[10px] min-[320px]:text-xs min-[380px]:text-sm md:text-xs lg:text-xs xl:text-sm font-medium whitespace-nowrap justify-center xs:justify-start w-full">
+                <a href="mailto:support@skilllink.com" className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-white transition-colors text-[10px] min-[320px]:text-xs min-[380px]:text-sm md:text-xs lg:text-xs xl:text-sm font-medium break-all justify-center xs:justify-start w-full">
                   <Mail size={16} className="shrink-0" /> support@skilllink.com
                 </a>
                 <p className="text-gray-600 dark:text-gray-400 text-xs min-[380px]:text-sm font-medium">Ahmedabad, India</p>
