@@ -104,3 +104,104 @@ export function NetworkCardSkeleton({ type }: NetworkCardSkeletonProps) {
     </div>
   );
 }
+
+// Profile Page Skeleton (mimics ProfilePage.tsx)
+export function ProfileSkeleton() {
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-8 pb-12 transition-colors duration-300 w-full animate-fade-in-slide">
+      <div className="max-w-5xl mx-auto px-2 min-[340px]:px-4 sm:px-6 lg:px-8">
+        
+        {/* Profile Strength Card Shimmer */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700/80 p-5 mb-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex-1 space-y-3 w-full">
+            <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-1/3 animate-shimmer" />
+            <div className="h-4 bg-gray-100 dark:bg-slate-700/50 rounded w-3/4 animate-shimmer" />
+          </div>
+          <div className="w-24 h-24 rounded-full bg-gray-100 dark:bg-slate-700/80 animate-shimmer shrink-0" />
+        </div>
+
+        {/* Header Card Shimmer */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700/80 overflow-hidden mb-6">
+          <div className="h-48 bg-gray-100 dark:bg-slate-700/60 animate-shimmer" />
+          <div className="px-4 sm:px-8 pb-8 relative">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white dark:border-slate-800 bg-gray-200 dark:bg-slate-700/80 animate-shimmer -mt-20 mb-4" />
+            
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 w-full">
+              <div className="space-y-3 flex-1 w-full">
+                <div className="h-8 bg-gray-200 dark:bg-slate-700 rounded w-1/3 animate-shimmer" />
+                <div className="h-5 bg-gray-100 dark:bg-slate-700/50 rounded w-1/2 animate-shimmer" />
+                <div className="flex gap-4">
+                  <div className="h-4 bg-gray-100 dark:bg-slate-700/40 rounded w-20 animate-shimmer" />
+                  <div className="h-4 bg-gray-100 dark:bg-slate-700/40 rounded w-20 animate-shimmer" />
+                </div>
+                <div className="flex flex-wrap gap-4 pt-2">
+                  <div className="h-4 bg-gray-100 dark:bg-slate-700/30 rounded w-24 animate-shimmer" />
+                  <div className="h-4 bg-gray-100 dark:bg-slate-700/30 rounded w-28 animate-shimmer" />
+                </div>
+              </div>
+              <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0">
+                <div className="h-10 bg-gray-100 dark:bg-slate-700/60 rounded-lg w-28 animate-shimmer" />
+                <div className="h-10 bg-gray-100 dark:bg-slate-700/60 rounded-lg w-24 animate-shimmer" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content & Sidebar Grid Shimmer */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Main content columns */}
+          <div className="md:col-span-2 space-y-6">
+            {/* About Card */}
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700/80 p-6 space-y-4">
+              <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-20 animate-shimmer" />
+              <div className="space-y-2">
+                <div className="h-4 bg-gray-100 dark:bg-slate-700/50 rounded w-full animate-shimmer" />
+                <div className="h-4 bg-gray-100 dark:bg-slate-700/50 rounded w-11/12 animate-shimmer" />
+                <div className="h-4 bg-gray-100 dark:bg-slate-700/50 rounded w-5/6 animate-shimmer" />
+              </div>
+            </div>
+
+            {/* Experience Card */}
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700/80 p-6 space-y-6">
+              <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-28 animate-shimmer" />
+              {Array.from({ length: 2 }).map((_, i) => (
+                <div key={i} className="flex gap-4">
+                  <div className="w-12 h-12 rounded-lg bg-gray-100 dark:bg-slate-700/60 animate-shimmer shrink-0" />
+                  <div className="space-y-2 flex-1">
+                    <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-1/3 animate-shimmer" />
+                    <div className="h-3 bg-gray-100 dark:bg-slate-700/50 rounded w-1/4 animate-shimmer" />
+                    <div className="h-3 bg-gray-100 dark:bg-slate-700/40 rounded w-1/5 animate-shimmer" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar Column */}
+          <div className="space-y-6">
+            {/* Skills Card */}
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700/80 p-6 space-y-4">
+              <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-24 animate-shimmer" />
+              <div className="flex flex-wrap gap-2">
+                <div className="h-8 bg-gray-100 dark:bg-slate-700/50 rounded-full w-16 animate-shimmer" />
+                <div className="h-8 bg-gray-100 dark:bg-slate-700/50 rounded-full w-20 animate-shimmer" />
+                <div className="h-8 bg-gray-100 dark:bg-slate-700/50 rounded-full w-14 animate-shimmer" />
+                <div className="h-8 bg-gray-100 dark:bg-slate-700/50 rounded-full w-24 animate-shimmer" />
+              </div>
+            </div>
+
+            {/* Links Card */}
+            <div className="bg-white dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700/80 p-6 space-y-4">
+              <div className="h-5 bg-gray-200 dark:bg-slate-700 rounded w-24 animate-shimmer" />
+              <div className="space-y-3">
+                <div className="h-5 bg-gray-100 dark:bg-slate-700/50 rounded w-3/4 animate-shimmer" />
+                <div className="h-5 bg-gray-100 dark:bg-slate-700/50 rounded w-2/3 animate-shimmer" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+}

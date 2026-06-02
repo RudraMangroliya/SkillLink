@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import { MapPin, Briefcase, GraduationCap, Edit2, Camera, UserPlus, CheckCircle2, XCircle, Share2, FileText, ChevronRight, MessageSquare, Loader2, Link as LinkIcon, Plus, UserCheck, X, Award, FolderGit2 } from "lucide-react";
 import PageLoader from "../components/PageLoader";
+import { ProfileSkeleton } from "../components/Skeletons";
 import axiosInstance from "../utils/axios";
 import EditProfileModal from "../components/EditProfileModal";
 import UserListModal from "../components/UserListModal";
@@ -282,11 +283,7 @@ export default function ProfilePage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex justify-center pt-32">
-        <PageLoader fullPage={true} label="Loading profile..." />
-      </div>
-    );
+    return <ProfileSkeleton />;
   }
 
   if (error) {
