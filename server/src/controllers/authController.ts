@@ -10,6 +10,7 @@ import { OAuth2Client } from "google-auth-library";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
 import { deleteUserCompletely } from "../utils/deleteUserHelper";
+import axios from "axios";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -123,14 +124,28 @@ export const login = async (req: Request, res: Response) => {
 
 export const googleLogin = async (req: Request, res: Response) => {
   try {
-    const { idToken, role } = req.body;
+    const { idToken, accessToken: googleAccessToken, role } = req.body;
     
-    const ticket = await client.verifyIdToken({
-      idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
-    });
+    let payload;
 
-    const payload = ticket.getPayload();
+    if (idToken) {
+      const ticket = await client.verifyIdToken({
+        idToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      payload = ticket.getPayload();
+    } else if (googleAccessToken) {
+      const response = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+        headers: { Authorization: `Bearer ${googleAccessToken}` },
+      });
+      const data = response.data;
+      payload = {
+        email: data.email,
+        name: data.name,
+        picture: data.picture,
+        sub: data.sub,
+      };
+    }
     
     if (!payload) {
       return res.status(400).json({ message: "Invalid Google Token" });
