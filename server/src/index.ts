@@ -35,20 +35,24 @@ const allowedOrigins = process.env.CLIENT_URL
   ? process.env.CLIENT_URL.split(',') 
   : ["http://localhost:5173", "http://localhost:5174"];
 
+const corsOptions = {
+  origin: function (origin: any, callback: any) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+
 export const app = express();
 const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
-    origin: function (origin: any, callback: any) {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1 || origin.endsWith('.vercel.app')) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    ...corsOptions,
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
   },
   transports: ["websocket", "polling"],
 });
@@ -76,10 +80,7 @@ const authLimiter = rateLimit({
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(cors(corsOptions));
 app.use(helmet({
   contentSecurityPolicy: false,
   crossOriginResourcePolicy: { policy: "cross-origin" },
