@@ -33,7 +33,7 @@ We recommend deploying the Node.js backend to [Render](https://render.com/).
 ## Deploying the AI Recommendation Service (Render)
 1. In Render, create another **Web Service** connected to your repository.
 2. Set the **Root Directory** to `recommendation-service`.
-3. Set the **Build Command** to `pip install -r requirements.txt`.
+3. Set the **Build Command** to `pip install -r requirements.txt && python -m spacy download en_core_web_sm`.
 4. Set the **Start Command** to `uvicorn main:app --host 0.0.0.0 --port $PORT`.
 
 ## Deploying the Frontend (Vercel)

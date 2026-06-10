@@ -7,14 +7,20 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 
-# Load spaCy NLP model
-try:
-    nlp = spacy.load("en_core_web_sm")
-except OSError:
-    print("Downloading spaCy model...")
-    from spacy.cli import download
-    download("en_core_web_sm")
-    nlp = spacy.load("en_core_web_sm")
+# Lazy-load spaCy NLP model to ensure fast startup and avoid cold start timeouts on Render
+nlp = None
+
+def get_nlp():
+    global nlp
+    if nlp is None:
+        try:
+            nlp = spacy.load("en_core_web_sm")
+        except OSError:
+            print("Downloading spaCy model...")
+            from spacy.cli import download
+            download("en_core_web_sm")
+            nlp = spacy.load("en_core_web_sm")
+    return nlp
 
 app = FastAPI(title="SkillLink AI Recommendation Service", version="1.0.0")
 
@@ -53,7 +59,7 @@ def generate_text_representation(profile: ProfileRequest) -> str:
     # Combine relevant fields into a single text document for vectorization
     text = f"{profile.headline} {profile.bio} {weighted_skills} {' '.join(profile.interests)}"
     # Basic cleaning using spaCy
-    doc = nlp(text.lower())
+    doc = get_nlp()(text.lower())
     tokens = [token.lemma_ for token in doc if not token.is_stop and not token.is_punct]
     return " ".join(tokens)
 
@@ -97,7 +103,7 @@ def generate_smart_reply(req: ChatMessage):
     latest_lower = latest_message.lower()
     
     # Process only the latest message for NLP rules to avoid reacting to old context
-    doc = nlp(latest_message)
+    doc = get_nlp()(latest_message)
     
     # 1. Identify questions in the LATEST message
     is_question = latest_message.endswith("?") or any(w.tag_ in ["WP", "WRB"] for w in doc)
