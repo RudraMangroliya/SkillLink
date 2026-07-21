@@ -31,8 +31,8 @@ if (process.env.NODE_ENV !== "test") {
   connectDB();
 }
 
-const allowedOrigins = process.env.CLIENT_URL 
-  ? process.env.CLIENT_URL.split(',') 
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',')
   : ["http://localhost:5173", "http://localhost:5174"];
 
 const corsOptions = {
@@ -65,7 +65,7 @@ const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 500, // Limit each IP to 500 requests per `window`
   message: { message: "Too many requests from this IP, please try again after 15 minutes" },
-  standardHeaders: true, 
+  standardHeaders: true,
   legacyHeaders: false,
 });
 
@@ -73,7 +73,7 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 200, // Limit each IP to 200 requests per window for auth routes to prevent brute force
   message: { message: "Too many login/register attempts from this IP, please try again after 15 minutes" },
-  standardHeaders: true, 
+  standardHeaders: true,
   legacyHeaders: false,
 });
 
@@ -132,9 +132,9 @@ io.on("connection", (socket) => {
 
   socket.on("setup", (userData) => {
     if (!userData?._id) return;
-    
+
     socket.join(userData._id);
-    
+
     // Add to online users
     if (!userSockets.has(userData._id)) {
       userSockets.set(userData._id, new Set());
@@ -142,10 +142,10 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("user online", userData._id);
     }
     userSockets.get(userData._id)?.add(socket.id);
-    
+
     // Send current online users to this user
     socket.emit("online users", Array.from(userSockets.keys()));
-    
+
     socket.emit("connected");
   });
 

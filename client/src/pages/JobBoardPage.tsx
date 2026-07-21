@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, MapPin, Building, DollarSign, Clock, BookmarkPlus, Loader2, CheckCircle2, X } from "lucide-react";
+import { Search, MapPin, Building, DollarSign, Clock, BookmarkPlus, Loader2, CheckCircle2, X, Briefcase, Bookmark, LayoutDashboard } from "lucide-react";
 import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
@@ -140,22 +140,22 @@ export default function JobBoardPage() {
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
         
         {/* Header & Search */}
-        <div className="bg-indigo-600 rounded-2xl sm:rounded-3xl p-6 sm:p-10 text-white shadow-xl mb-8 sm:mb-10 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-white opacity-5 rounded-full blur-2xl sm:blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+        <div className="bg-slate-100 dark:bg-slate-800/90 border border-slate-200/80 dark:border-slate-700/80 rounded-2xl sm:rounded-3xl p-4 min-[400px]:p-6 sm:p-10 shadow-md mb-6 sm:mb-10 relative overflow-hidden transition-colors">
+          <div className="absolute top-0 right-0 w-32 sm:w-64 h-32 sm:h-64 bg-indigo-500/10 dark:bg-indigo-500/5 rounded-full blur-2xl sm:blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
           
           <div className="flex justify-between items-start mb-2 sm:mb-4 relative z-10">
-            <h1 className="text-2xl sm:text-4xl font-extrabold break-words">Find your dream job</h1>
+            <h1 className="text-xl min-[360px]:text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white break-words">Find your dream job</h1>
           </div>
-          <p className="text-indigo-100 text-sm sm:text-lg mb-6 sm:mb-8 relative z-10 max-w-2xl">
+          <p className="text-slate-600 dark:text-slate-300 text-xs min-[360px]:text-sm sm:text-lg mb-4 sm:mb-8 relative z-10 max-w-2xl">
             Explore opportunities matching your skills and experience.
           </p>
           
-          <div className="bg-white dark:bg-gray-800 p-2 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center shadow-lg max-w-4xl relative z-10 gap-2 sm:gap-0 transition-colors">
-            <div className="flex-1 flex items-center px-2 sm:px-4 border-b sm:border-b-0 sm:border-r border-gray-200">
-              <Search size={20} className="text-gray-400 mr-2 sm:mr-3 flex-shrink-0" />
+          <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-700 p-1.5 sm:p-2 rounded-xl sm:rounded-2xl flex flex-col sm:flex-row items-stretch sm:items-center shadow-sm max-w-4xl relative z-10 gap-1.5 sm:gap-0 transition-colors">
+            <div className="flex-1 flex items-center px-2 sm:px-4 border-b sm:border-b-0 sm:border-r border-gray-200 dark:border-gray-700">
+              <Search size={18} className="text-gray-400 mr-2 sm:mr-3 flex-shrink-0" />
               <input type="text" 
                 placeholder="Job title or company" 
-                className="w-full py-2 sm:py-3 bg-transparent text-gray-900 dark:text-white outline-none text-sm sm:text-base min-w-0 dark:placeholder-gray-400"
+                className="w-full py-2 sm:py-3 bg-transparent text-gray-900 dark:text-white outline-none text-xs sm:text-base min-w-0 dark:placeholder-gray-400"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -169,33 +169,48 @@ export default function JobBoardPage() {
                 onChange={(e) => setSearchLocation(e.target.value)}
               />
             </div>
-            <button className="bg-indigo-600 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-indigo-700 transition w-full sm:w-auto text-sm sm:text-base whitespace-nowrap">
+            <button className="bg-indigo-600 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl font-semibold hover:bg-indigo-700 transition w-full sm:w-auto text-xs sm:text-base whitespace-nowrap">
               Search
             </button>
           </div>
         </div>
 
-        {/* Tabs */}
-        <div className="flex space-x-4 mb-8 border-b border-gray-200 dark:border-gray-700">
+        {/* Tabs with Rich Visual Depth (Stacked rows on screens < 350px) */}
+        <div className="bg-slate-200/60 dark:bg-slate-900/90 p-1.5 rounded-xl sm:rounded-2xl border border-slate-300/60 dark:border-slate-800 shadow-[inset_0_2px_4px_rgba(0,0,0,0.08)] dark:shadow-[inset_0_2px_6px_rgba(0,0,0,0.6)] backdrop-blur-md flex flex-col min-[350px]:flex-row w-full gap-1.5 sm:gap-2 mb-6 sm:mb-8 min-w-0 max-w-full">
           <button 
-            className={`pb-3 font-semibold transition ${activeTab === 'board' && !showSavedOnly ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-3 sm:px-5 py-2.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 w-full min-[350px]:w-auto min-[350px]:flex-1 text-center ${
+              activeTab === 'board' && !showSavedOnly 
+                ? 'bg-gradient-to-b from-indigo-500 to-indigo-600 text-white shadow-[0_4px_14px_rgba(79,70,229,0.4),0_1px_2px_rgba(0,0,0,0.1)] border-t border-indigo-400/40 translate-y-[-1px]' 
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-md hover:-translate-y-0.5 border border-transparent'
+            }`}
             onClick={() => {setActiveTab('board'); setShowSavedOnly(false);}}
           >
-            Job Board
+            <Briefcase size={16} className={`shrink-0 ${activeTab === 'board' && !showSavedOnly ? "drop-shadow" : ""}`} />
+            <span>Job Board</span>
           </button>
           {user?.role !== "recruiter" && user?.role !== "admin" && (
             <button 
-              className={`pb-3 font-semibold transition ${activeTab === 'board' && showSavedOnly ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`px-3 sm:px-5 py-2.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 w-full min-[350px]:w-auto min-[350px]:flex-1 text-center ${
+                activeTab === 'board' && showSavedOnly 
+                  ? 'bg-gradient-to-b from-indigo-500 to-indigo-600 text-white shadow-[0_4px_14px_rgba(79,70,229,0.4),0_1px_2px_rgba(0,0,0,0.1)] border-t border-indigo-400/40 translate-y-[-1px]' 
+                  : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-md hover:-translate-y-0.5 border border-transparent'
+              }`}
               onClick={() => {setActiveTab('board'); setShowSavedOnly(true);}}
             >
-              Saved Jobs
+              <Bookmark size={16} className={`shrink-0 ${activeTab === 'board' && showSavedOnly ? "drop-shadow" : ""}`} />
+              <span>Saved Jobs</span>
             </button>
           )}
           <button 
-            className={`pb-3 font-semibold transition ${activeTab === 'dashboard' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-gray-500 hover:text-gray-700'}`}
+            className={`px-3 sm:px-5 py-2.5 sm:py-2.5 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold flex items-center justify-center gap-2 transition-all duration-200 active:scale-95 w-full min-[350px]:w-auto min-[350px]:flex-1 text-center ${
+              activeTab === 'dashboard' 
+                ? 'bg-gradient-to-b from-indigo-500 to-indigo-600 text-white shadow-[0_4px_14px_rgba(79,70,229,0.4),0_1px_2px_rgba(0,0,0,0.1)] border-t border-indigo-400/40 translate-y-[-1px]' 
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-slate-800/80 hover:shadow-md hover:-translate-y-0.5 border border-transparent'
+            }`}
             onClick={() => setActiveTab('dashboard')}
           >
-            Dashboard
+            <LayoutDashboard size={16} className={`shrink-0 ${activeTab === 'dashboard' ? "drop-shadow" : ""}`} />
+            <span>Dashboard</span>
           </button>
         </div>
 
@@ -227,26 +242,26 @@ export default function JobBoardPage() {
 
           {/* Job List */}
           <div className="lg:col-span-3 space-y-6">
-            <div className="flex flex-col min-[450px]:flex-row min-[450px]:justify-between items-start min-[450px]:items-center bg-white dark:bg-slate-800 p-4 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm transition-colors gap-4">
-              <span className="text-gray-600 dark:text-gray-400 font-medium whitespace-nowrap">Showing <span className="text-gray-900 dark:text-white font-bold">{jobsToDisplay.length}</span> jobs</span>
+            <div className="flex flex-col min-[450px]:flex-row min-[450px]:justify-between items-start min-[450px]:items-center bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-xl border border-gray-100 dark:border-slate-700 shadow-sm transition-colors gap-3 sm:gap-4">
+              <span className="text-gray-600 dark:text-gray-400 font-medium text-xs sm:text-sm whitespace-nowrap">Showing <span className="text-gray-900 dark:text-white font-bold">{jobsToDisplay.length}</span> jobs</span>
               
-              <div className="flex flex-wrap items-center gap-3 w-full min-[450px]:w-auto">
-                <label className="flex items-center cursor-pointer">
+              <div className="flex items-center justify-between min-[450px]:justify-end gap-2 sm:gap-3 w-full min-[450px]:w-auto">
+                <label className="flex items-center cursor-pointer select-none">
                   <div className="relative flex-shrink-0">
                     <input type="checkbox" className="sr-only" checked={showRecommended} onChange={() => setShowRecommended(!showRecommended)} />
-                    <div className={`block w-10 h-6 rounded-full transition ${showRecommended ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-slate-600'}`}></div>
-                    <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform ${showRecommended ? 'translate-x-4' : ''}`}></div>
+                    <div className={`block w-9 sm:w-10 h-5 sm:h-6 rounded-full transition ${showRecommended ? 'bg-indigo-600' : 'bg-gray-200 dark:bg-slate-600'}`}></div>
+                    <div className={`dot absolute left-0.5 sm:left-1 top-0.5 sm:top-1 bg-white w-3.5 sm:w-4 h-3.5 sm:h-4 rounded-full transition transform ${showRecommended ? 'translate-x-4' : ''}`}></div>
                   </div>
-                  <span className="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">For You</span>
+                  <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">For You</span>
                 </label>
 
-                <div className="relative w-full min-[300px]:w-auto flex-1 min-[300px]:flex-none">
-                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full appearance-none bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-200 font-medium py-2 pl-3 pr-8 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm cursor-pointer transition-colors shadow-sm">
+                <div className="relative flex-1 min-[450px]:flex-none min-w-[120px]">
+                  <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full appearance-none bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-200 font-medium py-1.5 sm:py-2 pl-2.5 sm:pl-3 pr-7 sm:pr-8 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm cursor-pointer transition-colors shadow-sm">
                     <option value="relevant">Most relevant</option>
                     <option value="recent">Most recent</option>
                   </select>
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
-                    <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                    <svg className="fill-current h-3.5 w-3.5 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                   </div>
                 </div>
               </div>

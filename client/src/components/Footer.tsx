@@ -217,9 +217,9 @@ const Footer = () => {
         <button
           onClick={scrollToTop}
           aria-label="Scroll to top"
-          className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white/90 dark:bg-slate-900/90 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-800 shadow-lg hover:shadow-indigo-500/20 hover:text-indigo-600 dark:hover:text-indigo-400 hover:-translate-y-1 active:scale-95 transition-all duration-300 backdrop-blur-sm group focus:outline-none"
+          className="fixed bottom-6 right-6 z-50 p-3 rounded-xl bg-white/90 dark:bg-slate-900/90 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-slate-800 shadow-md hover:shadow-lg hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-indigo-600 dark:hover:text-indigo-400 hover:-translate-y-1 active:scale-95 transition-all duration-200 backdrop-blur-sm group focus:outline-none"
         >
-          <ArrowUp size={20} className="group-hover:animate-bounce shrink-0" />
+          <ArrowUp size={20} className="transition-transform duration-200 group-hover:-translate-y-0.5 shrink-0" />
         </button>
       )}
     </footer>
