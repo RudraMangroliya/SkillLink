@@ -34,6 +34,7 @@ export default function ProfilePage() {
   const [isFollowLoading, setIsFollowLoading] = useState(false);
   const [isConnectingLoading, setIsConnectingLoading] = useState(false);
   const [isDisconnectingLoading, setIsDisconnectingLoading] = useState(false);
+  const [showDisconnectConfirm, setShowDisconnectConfirm] = useState(false);
   const [isAcceptingLoading, setIsAcceptingLoading] = useState(false);
   const [isRejectingLoading, setIsRejectingLoading] = useState(false);
   const navigate = useNavigate();
@@ -208,6 +209,18 @@ export default function ProfilePage() {
       console.error("Disconnect error:", err);
     } finally {
       setIsDisconnectingLoading(false);
+    }
+  };
+
+  const handleDisconnectClick = () => {
+    if (showDisconnectConfirm) {
+      setShowDisconnectConfirm(false);
+      handleDisconnect();
+    } else {
+      setShowDisconnectConfirm(true);
+      setTimeout(() => {
+        setShowDisconnectConfirm(false);
+      }, 4000);
     }
   };
 
@@ -488,11 +501,21 @@ export default function ProfilePage() {
                           Message
                         </button>
                         <button 
-                          onClick={handleDisconnect}
+                          onClick={handleDisconnectClick}
                           disabled={isDisconnectingLoading}
-                          className="flex-1 md:flex-none bg-red-50 text-red-600 border border-red-200 px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                          className={`flex-1 md:flex-none px-3 py-2 min-[340px]:px-6 rounded-lg font-medium transition-all duration-200 shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50 ${
+                            showDisconnectConfirm
+                              ? "bg-red-600 text-white font-bold animate-pulse border border-red-600 shadow-md shadow-red-500/20"
+                              : "bg-red-50 text-red-600 dark:text-red-400 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700"
+                          }`}
                         >
-                          {isDisconnectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Disconnect"}
+                          {isDisconnectingLoading ? (
+                            <Loader2 className="animate-spin h-4 w-4" />
+                          ) : showDisconnectConfirm ? (
+                            "Confirm Disconnect?"
+                          ) : (
+                            "Disconnect"
+                          )}
                         </button>
                       </>
                     ) : connectionStatus === "Pending" && String(connectionRequester) !== String(user?._id) ? (

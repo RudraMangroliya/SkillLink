@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Search, UserPlus, CheckCircle2, XCircle, Users, ExternalLink, Briefcase, GraduationCap, X, MessageSquare, Check } from "lucide-react";
+import { Search, UserPlus, CheckCircle2, XCircle, Users, ExternalLink, Briefcase, GraduationCap, X, MessageSquare, Check, UserCheck, Clock } from "lucide-react";
 import PageLoader from "../components/PageLoader";
 import axiosInstance from "../utils/axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -15,6 +15,8 @@ export default function NetworkPage() {
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [processingIds, setProcessingIds] = useState<Set<string>>(new Set());
+  const [disconnectingIds, setDisconnectingIds] = useState<Set<string>>(new Set());
+  const [confirmDisconnectId, setConfirmDisconnectId] = useState<string | null>(null);
   const [startingChatIds, setStartingChatIds] = useState<Set<string>>(new Set());
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
@@ -135,38 +137,85 @@ export default function NetworkPage() {
     }
   };
 
+  const handleDisconnect = async (targetUserId: string) => {
+    setDisconnectingIds(prev => new Set(prev).add(targetUserId));
+    try {
+      await axiosInstance.delete(`/api/connections/remove/${targetUserId}`);
+      setConnections(prev => prev.filter(c => (c.requester._id !== targetUserId && c.recipient._id !== targetUserId)));
+    } catch (err) {
+      console.error("Disconnect error:", err);
+    } finally {
+      setDisconnectingIds(prev => {
+        const next = new Set(prev);
+        next.delete(targetUserId);
+        return next;
+      });
+    }
+  };
+
+  const handleDisconnectClick = (targetUserId: string) => {
+    if (confirmDisconnectId === targetUserId) {
+      setConfirmDisconnectId(null);
+      handleDisconnect(targetUserId);
+    } else {
+      setConfirmDisconnectId(targetUserId);
+      setTimeout(() => {
+        setConfirmDisconnectId(prev => (prev === targetUserId ? null : prev));
+      }, 4000);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-4 sm:pt-8 pb-12 transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar Tabs */}
-          <div className="w-full md:w-64 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden shrink-0 h-max transition-colors">
-            <div className="p-4 border-b border-gray-200 dark:border-slate-700 font-semibold text-gray-800 dark:text-white transition-colors">
+          <div className="w-full md:w-64 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-gray-100 dark:border-slate-700/80 p-2 sm:p-3 shrink-0 h-max transition-colors">
+            <div className="px-3 py-2 text-xs font-bold tracking-wider text-gray-400 dark:text-slate-400 uppercase">
               Manage My Network
             </div>
-            <div className="flex flex-col py-2">
+            <div className="flex flex-col gap-1 mt-1">
               <button 
                 onClick={() => setActiveTab("suggestions")}
-                className={`text-left px-4 py-3 text-sm font-medium transition ${activeTab === "suggestions" ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-l-4 border-indigo-600 dark:border-indigo-500" : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white border-l-4 border-transparent"}`}
+                className={`flex items-center gap-3 w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  activeTab === "suggestions" 
+                    ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-semibold shadow-xs" 
+                    : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 hover:text-gray-900 dark:hover:text-white"
+                }`}
               >
-                Suggested People
+                <UserPlus size={18} className="shrink-0" />
+                <span>Suggested People</span>
               </button>
               {user?.role !== "admin" && (
                 <>
                   <button 
                     onClick={() => setActiveTab("requests")}
-                    className={`flex flex-wrap gap-2 justify-between items-center text-left px-4 py-3 text-sm font-medium transition ${activeTab === "requests" ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-l-4 border-indigo-600 dark:border-indigo-500" : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white border-l-4 border-transparent"}`}
+                    className={`flex items-center justify-between w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                      activeTab === "requests" 
+                        ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-semibold shadow-xs" 
+                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 hover:text-gray-900 dark:hover:text-white"
+                    }`}
                   >
-                    <span>Pending Requests</span>
-                    {requests.length > 0 && activeTab !== "requests" && (
-                      <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">{requests.length}</span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Clock size={18} className="shrink-0" />
+                      <span className="truncate">Pending Requests</span>
+                    </div>
+                    {requests.length > 0 && (
+                      <span className="bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full shadow-xs shrink-0">
+                        {requests.length}
+                      </span>
                     )}
                   </button>
                   <button 
                     onClick={() => setActiveTab("connections")}
-                    className={`text-left px-4 py-3 text-sm font-medium transition ${activeTab === "connections" ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 border-l-4 border-indigo-600 dark:border-indigo-500" : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white border-l-4 border-transparent"}`}
+                    className={`flex items-center gap-3 w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                      activeTab === "connections" 
+                        ? "bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 font-semibold shadow-xs" 
+                        : "text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-slate-700/50 hover:text-gray-900 dark:hover:text-white"
+                    }`}
                   >
-                    My Connections
+                    <UserCheck size={18} className="shrink-0" />
+                    <span>My Connections</span>
                   </button>
                 </>
               )}
@@ -255,9 +304,29 @@ export default function NetworkPage() {
                               </Link>
                               <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{otherUser.headline}</p>
                             </div>
-                            <button onClick={() => handleStartChat(otherUser._id)} disabled={startingChatIds.has(otherUser._id)} className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-2 rounded-full transition disabled:opacity-50">
-                              {startingChatIds.has(otherUser._id) ? <div className="animate-spin h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full" /> : <MessageSquare size={18} />}
-                            </button>
+                            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                              <button onClick={() => handleStartChat(otherUser._id)} disabled={startingChatIds.has(otherUser._id)} className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-2 rounded-full transition disabled:opacity-50" title="Message">
+                                {startingChatIds.has(otherUser._id) ? <div className="animate-spin h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full" /> : <MessageSquare size={18} />}
+                              </button>
+                              <button 
+                                onClick={() => handleDisconnectClick(otherUser._id)} 
+                                disabled={disconnectingIds.has(otherUser._id)} 
+                                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center justify-center disabled:opacity-50 ${
+                                  confirmDisconnectId === otherUser._id 
+                                    ? "bg-red-600 text-white font-bold animate-pulse shadow-sm shadow-red-500/20" 
+                                    : "text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                                }`}
+                                title="Disconnect"
+                              >
+                                {disconnectingIds.has(otherUser._id) ? (
+                                  <div className="animate-spin h-3.5 w-3.5 border-2 border-red-600 border-t-transparent rounded-full" />
+                                ) : confirmDisconnectId === otherUser._id ? (
+                                  "Confirm?"
+                                ) : (
+                                  "Disconnect"
+                                )}
+                              </button>
+                            </div>
                           </div>
                         );
                       })}

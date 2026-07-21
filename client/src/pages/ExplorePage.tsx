@@ -20,6 +20,7 @@ export default function ExplorePage() {
   const [connectionStatuses, setConnectionStatuses] = useState<Record<string, string>>({});
   const [connectingIds, setConnectingIds] = useState<Set<string>>(new Set());
   const [disconnectingIds, setDisconnectingIds] = useState<Set<string>>(new Set());
+  const [confirmDisconnectId, setConfirmDisconnectId] = useState<string | null>(null);
   const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   const fetchProfiles = async () => {
@@ -122,6 +123,18 @@ export default function ExplorePage() {
         next.delete(recipientId);
         return next;
       });
+    }
+  };
+
+  const handleDisconnectClick = (recipientId: string) => {
+    if (confirmDisconnectId === recipientId) {
+      setConfirmDisconnectId(null);
+      handleDisconnect(recipientId);
+    } else {
+      setConfirmDisconnectId(recipientId);
+      setTimeout(() => {
+        setConfirmDisconnectId(prev => (prev === recipientId ? null : prev));
+      }, 4000);
     }
   };
 
@@ -254,11 +267,21 @@ export default function ExplorePage() {
                     {user?.role !== "admin" && (
                       connectionStatuses[person.user?._id] === "Accepted" ? (
                         <button 
-                          onClick={() => handleDisconnect(person.user?._id)}
+                          onClick={() => handleDisconnectClick(person.user?._id)}
                           disabled={disconnectingIds.has(person.user?._id)}
-                          className="flex-1 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 px-2 py-2 min-[340px]:px-3 rounded-lg font-semibold hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300 transition-colors flex items-center justify-center text-xs min-[340px]:text-sm disabled:opacity-50 min-w-0"
+                          className={`flex-1 px-2 py-2 min-[340px]:px-3 rounded-lg font-semibold transition-all duration-200 flex items-center justify-center text-xs min-[340px]:text-sm disabled:opacity-50 min-w-0 ${
+                            confirmDisconnectId === person.user?._id 
+                              ? "bg-red-600 text-white shadow-md shadow-red-500/20 font-bold border border-red-600 animate-pulse" 
+                              : "bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 dark:hover:text-red-300"
+                          }`}
                         >
-                          {disconnectingIds.has(person.user?._id) ? <Loader2 className="animate-spin h-4 w-4" /> : "Disconnect"}
+                          {disconnectingIds.has(person.user?._id) ? (
+                            <Loader2 className="animate-spin h-4 w-4" />
+                          ) : confirmDisconnectId === person.user?._id ? (
+                            "Confirm Disconnect?"
+                          ) : (
+                            "Disconnect"
+                          )}
                         </button>
                       ) : (
                         <button 
