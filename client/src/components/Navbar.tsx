@@ -72,6 +72,7 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [isWiggling, setIsWiggling] = useState(false);
@@ -356,7 +357,7 @@ export default function Navbar() {
 
                 <div className="border-l border-gray-200 dark:border-gray-700 h-6 mx-1 xl:mx-2"></div>
                 
-                <button onClick={handleLogout} className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 flex items-center transition text-sm xl:text-base cursor-pointer">
+                <button onClick={() => setShowLogoutConfirm(true)} className="text-gray-500 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 flex items-center transition text-sm xl:text-base cursor-pointer">
                   <LogOut size={18} className="mr-1.5" /> Logout
                 </button>
               </>
@@ -531,7 +532,7 @@ export default function Navbar() {
             <button 
               onClick={() => {
                 setIsMobileMenuOpen(false);
-                handleLogout();
+                setShowLogoutConfirm(true);
               }} 
               className="w-full text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 dark:hover:text-red-400 flex items-center justify-center px-3 py-2.5 rounded-xl transition font-semibold cursor-pointer border border-transparent hover:border-red-100 dark:hover:border-red-900/30"
             >
@@ -540,6 +541,44 @@ export default function Navbar() {
           </div>
         )}
       </div>
+
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity" onClick={() => setShowLogoutConfirm(false)} />
+          
+          <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-md overflow-hidden relative p-6 border border-gray-100 dark:border-slate-800 transition-colors animate-fade-in-slide z-10">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="p-3 bg-red-50 dark:bg-red-950/40 text-red-500 rounded-2xl">
+                <LogOut size={24} />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white">Confirm Logout</h3>
+                <p className="text-sm text-gray-500 dark:text-slate-400">Are you sure you want to log out of your account?</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={() => setShowLogoutConfirm(false)}
+                className="px-4 py-2 rounded-xl text-sm font-semibold text-gray-700 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  handleLogout();
+                }}
+                className="px-5 py-2 rounded-xl text-sm font-semibold text-white bg-red-600 hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-700 shadow-sm shadow-red-600/25 transition cursor-pointer"
+              >
+                Log Out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

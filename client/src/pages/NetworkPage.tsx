@@ -165,6 +165,19 @@ export default function NetworkPage() {
     }
   };
 
+  const getTabTitle = () => {
+    switch (activeTab) {
+      case "suggestions":
+        return "Suggested for you";
+      case "requests":
+        return "Pending Requests";
+      case "connections":
+        return "My Connections";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 pt-4 sm:pt-8 pb-12 transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -224,114 +237,106 @@ export default function NetworkPage() {
 
           {/* Main Content */}
           <div className="flex-1 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-2 min-[340px]:p-4 sm:p-6 transition-colors min-w-0">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">{getTabTitle()}</h2>
+            
             {loading ? (
               <NetworkCardSkeleton type={activeTab} />
             ) : (
               <>
                 {activeTab === "suggestions" && (
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Suggested for you</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {suggestions.map((profile) => (
-                        <BorderGlow key={profile._id} borderRadius={12} className="hover-lift flex flex-col h-full">
-                          <div className={`h-16 relative rounded-t-[inherit] bg-gradient-to-r ${profile.user?.role === 'recruiter' ? 'from-amber-400 to-orange-500' : profile.user?.role === 'mentor' ? 'from-emerald-400 to-teal-500' : 'from-indigo-500 to-purple-600'}`}>
-                            {(profile.user?.role === 'recruiter' || profile.user?.role === 'mentor') && (
-                              <span className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase tracking-wider">
-                                {profile.user?.role}
-                              </span>
-                            )}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {suggestions.map((profile) => (
+                      <BorderGlow key={profile._id} borderRadius={12} className="hover-lift flex flex-col h-full">
+                        <div className={`h-16 relative rounded-t-[inherit] bg-gradient-to-r ${profile.user?.role === 'recruiter' ? 'from-amber-400 to-orange-500' : profile.user?.role === 'mentor' ? 'from-emerald-400 to-teal-500' : 'from-indigo-500 to-purple-600'}`}>
+                          {(profile.user?.role === 'recruiter' || profile.user?.role === 'mentor') && (
+                            <span className="absolute top-2 right-2 bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm uppercase tracking-wider">
+                              {profile.user?.role}
+                            </span>
+                          )}
+                        </div>
+                        <div className="px-2 pb-4 min-[340px]:px-4 flex-1 flex flex-col items-center text-center -mt-8 relative z-10">
+                          <img src={profile.user?.profileImage || "https://via.placeholder.com/150"} alt="" className="w-16 h-16 rounded-full border-4 border-white dark:border-slate-800 bg-gray-200 dark:bg-slate-700 object-cover" />
+                          <h3 className="font-bold text-gray-900 dark:text-white mt-2">{profile.user?.name}</h3>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">{profile.headline || profile.user?.role}</p>
+                          <div className="mt-auto pt-4 w-full">
+                            <Link to={`/profile/${profile.user?._id}`} className="block w-full py-1.5 text-indigo-600 dark:text-indigo-400 font-medium border border-indigo-600 dark:border-indigo-500 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition text-xs min-[340px]:text-sm">
+                              View Profile
+                            </Link>
                           </div>
-                          <div className="px-2 pb-4 min-[340px]:px-4 flex-1 flex flex-col items-center text-center -mt-8 relative z-10">
-                            <img src={profile.user?.profileImage || "https://via.placeholder.com/150"} alt="" className="w-16 h-16 rounded-full border-4 border-white dark:border-slate-800 bg-gray-200 dark:bg-slate-700 object-cover" />
-                            <h3 className="font-bold text-gray-900 dark:text-white mt-2">{profile.user?.name}</h3>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">{profile.headline || profile.user?.role}</p>
-                            <div className="mt-auto pt-4 w-full">
-                              <Link to={`/profile/${profile.user?._id}`} className="block w-full py-1.5 text-indigo-600 dark:text-indigo-400 font-medium border border-indigo-600 dark:border-indigo-500 rounded-full hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition text-xs min-[340px]:text-sm">
-                                View Profile
-                              </Link>
-                            </div>
-                          </div>
-                        </BorderGlow>
-                      ))}
-                      {suggestions.length === 0 && <p className="text-gray-500 col-span-full">No suggestions available right now.</p>}
-                    </div>
+                        </div>
+                      </BorderGlow>
+                    ))}
+                    {suggestions.length === 0 && <p className="text-gray-500 col-span-full">No suggestions available right now.</p>}
                   </div>
                 )}
 
                 {activeTab === "requests" && (
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Pending Requests</h2>
-                    <div className="space-y-4">
-                      {requests.map((req) => (
-                        <div key={req._id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl hover-scale-sm bg-white dark:bg-slate-800/40 hover:bg-gray-50/80 dark:hover:bg-slate-800/85 transition-all duration-300">
-                          <div className="flex items-center space-x-4 min-w-0">
-                            <img src={req.requester?.profileImage || "https://via.placeholder.com/150"} alt="" className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
-                            <div className="min-w-0">
-                              <Link to={`/profile/${req.requester?._id}`} className="font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate block">
-                                {req.requester?.name}
-                              </Link>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{req.requester?.headline}</p>
-                            </div>
-                          </div>
-                          <div className="flex space-x-2 self-end sm:self-auto shrink-0">
-                            <button onClick={() => handleAccept(req._id)} disabled={processingIds.has(req._id)} className="p-2 text-green-600 hover:bg-green-50 rounded-full transition border border-green-200 disabled:opacity-50" title="Accept">
-                              {processingIds.has(req._id) ? <div className="animate-spin h-5 w-5 border-2 border-green-600 border-t-transparent rounded-full" /> : <Check size={20} />}
-                            </button>
-                            <button onClick={() => handleReject(req._id)} disabled={processingIds.has(req._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-full transition border border-red-200 disabled:opacity-50" title="Reject">
-                              {processingIds.has(req._id) ? <div className="animate-spin h-5 w-5 border-2 border-red-600 border-t-transparent rounded-full" /> : <X size={20} />}
-                            </button>
+                  <div className="space-y-4">
+                    {requests.map((req) => (
+                      <div key={req._id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl hover-scale-sm bg-white dark:bg-slate-800/40 hover:bg-gray-50/80 dark:hover:bg-slate-800/85 transition-all duration-300">
+                        <div className="flex items-center space-x-4 min-w-0">
+                          <img src={req.requester?.profileImage || "https://via.placeholder.com/150"} alt="" className="w-12 h-12 rounded-full object-cover flex-shrink-0" />
+                          <div className="min-w-0">
+                            <Link to={`/profile/${req.requester?._id}`} className="font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate block">
+                              {req.requester?.name}
+                            </Link>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{req.requester?.headline}</p>
                           </div>
                         </div>
-                      ))}
-                      {requests.length === 0 && <p className="text-gray-500">You have no pending requests.</p>}
-                    </div>
+                        <div className="flex space-x-2 self-end sm:self-auto shrink-0">
+                          <button onClick={() => handleAccept(req._id)} disabled={processingIds.has(req._id)} className="p-2 text-green-600 hover:bg-green-50 rounded-full transition border border-green-200 disabled:opacity-50" title="Accept">
+                            {processingIds.has(req._id) ? <div className="animate-spin h-5 w-5 border-2 border-green-600 border-t-transparent rounded-full" /> : <Check size={20} />}
+                          </button>
+                          <button onClick={() => handleReject(req._id)} disabled={processingIds.has(req._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-full transition border border-red-200 disabled:opacity-50" title="Reject">
+                            {processingIds.has(req._id) ? <div className="animate-spin h-5 w-5 border-2 border-red-600 border-t-transparent rounded-full" /> : <X size={20} />}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    {requests.length === 0 && <p className="text-gray-500">You have no pending requests.</p>}
                   </div>
                 )}
 
                 {activeTab === "connections" && (
-                  <div>
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">My Connections</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {connections.map((conn) => {
-                        // determine if the current user is requester or recipient
-                        const otherUser = conn.requester._id === user?._id ? conn.recipient : conn.requester;
-                        return (
-                          <div key={conn._id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl min-w-0 hover-scale-sm bg-white dark:bg-slate-800/40 hover:bg-gray-50/80 dark:hover:bg-slate-800/85 transition-all duration-300">
-                            <img src={otherUser.profileImage || "https://via.placeholder.com/150"} alt="" className="w-12 h-12 rounded-full object-cover" />
-                            <div className="flex-1 min-w-0">
-                              <Link to={`/profile/${otherUser._id}`} className="font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate block">
-                                {otherUser.name}
-                              </Link>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{otherUser.headline}</p>
-                            </div>
-                            <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-                              <button onClick={() => handleStartChat(otherUser._id)} disabled={startingChatIds.has(otherUser._id)} className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-2 rounded-full transition disabled:opacity-50" title="Message">
-                                {startingChatIds.has(otherUser._id) ? <div className="animate-spin h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full" /> : <MessageSquare size={18} />}
-                              </button>
-                              <button 
-                                onClick={() => handleDisconnectClick(otherUser._id)} 
-                                disabled={disconnectingIds.has(otherUser._id)} 
-                                className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center justify-center disabled:opacity-50 ${
-                                  confirmDisconnectId === otherUser._id 
-                                    ? "bg-red-600 text-white font-bold animate-pulse shadow-sm shadow-red-500/20" 
-                                    : "text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
-                                }`}
-                                title="Disconnect"
-                              >
-                                {disconnectingIds.has(otherUser._id) ? (
-                                  <div className="animate-spin h-3.5 w-3.5 border-2 border-red-600 border-t-transparent rounded-full" />
-                                ) : confirmDisconnectId === otherUser._id ? (
-                                  "Confirm?"
-                                ) : (
-                                  "Disconnect"
-                                )}
-                              </button>
-                            </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {connections.map((conn) => {
+                      const otherUser = conn.requester._id === user?._id ? conn.recipient : conn.requester;
+                      return (
+                        <div key={conn._id} className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 border border-gray-200 dark:border-slate-700 rounded-xl min-w-0 hover-scale-sm bg-white dark:bg-slate-800/40 hover:bg-gray-50/80 dark:hover:bg-slate-800/85 transition-all duration-300">
+                          <img src={otherUser.profileImage || "https://via.placeholder.com/150"} alt="" className="w-12 h-12 rounded-full object-cover" />
+                          <div className="flex-1 min-w-0">
+                            <Link to={`/profile/${otherUser._id}`} className="font-bold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition truncate block">
+                              {otherUser.name}
+                            </Link>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{otherUser.headline}</p>
                           </div>
-                        );
-                      })}
-                      {connections.length === 0 && <p className="text-gray-500 col-span-full">You don't have any connections yet.</p>}
-                    </div>
+                          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+                            <button onClick={() => handleStartChat(otherUser._id)} disabled={startingChatIds.has(otherUser._id)} className="text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 p-2 rounded-full transition disabled:opacity-50" title="Message">
+                              {startingChatIds.has(otherUser._id) ? <div className="animate-spin h-4 w-4 border-2 border-indigo-600 border-t-transparent rounded-full" /> : <MessageSquare size={18} />}
+                            </button>
+                            <button 
+                              onClick={() => handleDisconnectClick(otherUser._id)} 
+                              disabled={disconnectingIds.has(otherUser._id)} 
+                              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all duration-200 flex items-center justify-center disabled:opacity-50 ${
+                                confirmDisconnectId === otherUser._id 
+                                  ? "bg-red-600 text-white font-bold animate-pulse shadow-sm shadow-red-500/20" 
+                                  : "text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30"
+                              }`}
+                              title="Disconnect"
+                            >
+                              {disconnectingIds.has(otherUser._id) ? (
+                                <div className="animate-spin h-3.5 w-3.5 border-2 border-red-600 border-t-transparent rounded-full" />
+                              ) : confirmDisconnectId === otherUser._id ? (
+                                "Confirm?"
+                              ) : (
+                                "Disconnect"
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {connections.length === 0 && <p className="text-gray-500 col-span-full">You don't have any connections yet.</p>}
                   </div>
                 )}
               </>

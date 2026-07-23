@@ -14,10 +14,10 @@ import axios from "axios";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-// Access Token: Short lived (2 days as requested)
+// Access Token: 7 days
 const generateAccessToken = (id: string) => {
   return jwt.sign({ id }, process.env.JWT_SECRET as string, {
-    expiresIn: "2d",
+    expiresIn: "7d",
   });
 };
 
@@ -34,7 +34,7 @@ const setCookies = (res: Response, accessToken: string, refreshToken: string) =>
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? "none" : "lax",
-    maxAge: 2 * 24 * 60 * 60 * 1000 // 2 days
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
   
   res.cookie("refreshToken", refreshToken, {
@@ -218,7 +218,7 @@ export const refreshToken = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
-      maxAge: 2 * 24 * 60 * 60 * 1000 // 2 days
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
 
     res.json({ token: newAccessToken });
