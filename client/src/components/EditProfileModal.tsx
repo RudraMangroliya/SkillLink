@@ -42,6 +42,7 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [backgroundImageFile, setBackgroundImageFile] = useState<File | null>(null);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [deletingResume, setDeletingResume] = useState(false);
 
   const profileInputRef = useRef<HTMLInputElement>(null);
   const backgroundInputRef = useRef<HTMLInputElement>(null);
@@ -173,6 +174,34 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
     }
   };
 
+  const handleDeleteResume = async () => {
+    if (!window.confirm("Are you sure you want to delete your resume? This action cannot be undone.")) {
+      return;
+    }
+    setDeletingResume(true);
+    setError("");
+    try {
+      await axiosInstance.delete("/api/profile/delete-resume");
+      setResumeFile(null);
+      if (resumeInputRef.current) {
+        resumeInputRef.current.value = "";
+      }
+      onSuccess();
+    } catch (err: any) {
+      console.error("Delete resume error:", err);
+      setError(err.response?.data?.message || "Failed to delete resume");
+    } finally {
+      setDeletingResume(false);
+    }
+  };
+
+  const handleClearResumeSelection = () => {
+    setResumeFile(null);
+    if (resumeInputRef.current) {
+      resumeInputRef.current.value = "";
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={onClose} />
@@ -227,9 +256,29 @@ export default function EditProfileModal({ isOpen, onClose, profileData, onSucce
               <div className="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 dark:border-slate-700 rounded-xl bg-white dark:bg-slate-900/40 hover:bg-gray-50 dark:hover:bg-slate-800/60 transition">
                 <input type="file" ref={resumeInputRef} className="hidden" accept="application/pdf" onChange={(e) => setResumeFile(e.target.files?.[0] || null)} />
                 <FileText size={24} className="text-gray-400 dark:text-slate-500 mb-2" />
-                <button type="button" onClick={() => resumeInputRef.current?.click()} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
-                  {resumeFile ? resumeFile.name : profileData?.resumeUrl ? "Update PDF Resume" : "Upload PDF Resume"}
-                </button>
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <button type="button" onClick={() => resumeInputRef.current?.click()} className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition">
+                    {resumeFile ? resumeFile.name : profileData?.resumeUrl ? "Update PDF Resume" : "Upload PDF Resume"}
+                  </button>
+                  
+                  {resumeFile && (
+                    <button type="button" onClick={handleClearResumeSelection} className="text-xs font-semibold text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition px-2 py-1 bg-gray-100 dark:bg-slate-800 rounded">
+                      Clear Selection
+                    </button>
+                  )}
+
+                  {!resumeFile && profileData?.resumeUrl && (
+                    <button type="button" onClick={handleDeleteResume} disabled={deletingResume} className="text-xs font-semibold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition px-2 py-1 bg-red-50 dark:bg-red-950/30 rounded flex items-center gap-1">
+                      {deletingResume ? (
+                        <>
+                          <Loader2 size={12} className="animate-spin" /> Deleting...
+                        </>
+                      ) : (
+                        "Delete Resume"
+                      )}
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 

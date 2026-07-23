@@ -146,6 +146,45 @@ export const uploadResume = async (req: any, res: Response) => {
   }
 };
 
+export const deleteResume = async (req: any, res: Response) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user._id });
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    if (profile.resumeUrl) {
+      const url = profile.resumeUrl;
+      const parts = url.split("/");
+      const uploadIndex = parts.indexOf("upload");
+      if (uploadIndex !== -1) {
+        let startIndex = uploadIndex + 1;
+        if (parts[startIndex].startsWith('v') && !isNaN(parseInt(parts[startIndex].substring(1)))) {
+          startIndex++;
+        }
+        const fullPath = decodeURIComponent(parts.slice(startIndex).join("/"));
+        const lastDotIndex = fullPath.lastIndexOf(".");
+        const publicIdWithoutExt = lastDotIndex !== -1 ? fullPath.substring(0, lastDotIndex) : fullPath;
+        
+        // Try destroying both with and without extension, as raw and image
+        await cloudinary.uploader.destroy(publicIdWithoutExt, { resource_type: "image" }).catch(() => {});
+        await cloudinary.uploader.destroy(publicIdWithoutExt, { resource_type: "raw" }).catch(() => {});
+        await cloudinary.uploader.destroy(fullPath, { resource_type: "raw" }).catch(() => {});
+        await cloudinary.uploader.destroy(fullPath, { resource_type: "image" }).catch(() => {});
+      }
+    }
+
+    profile.resumeUrl = "";
+    await profile.save();
+
+    res.json({ message: "Resume deleted successfully", resumeUrl: "" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 export const uploadProfileImage = async (req: any, res: Response) => {
   try {
     if (!req.file) {
