@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import axiosInstance from "../utils/axios";
-import { Briefcase, Users, XCircle, CheckCircle, Calendar, Plus, Trash2, Edit, Loader2 } from "lucide-react";
+import { Briefcase, Users, XCircle, CheckCircle, Calendar, Plus, Trash2, Edit, Loader2, ArrowUpRight } from "lucide-react";
 import PageLoader from "../components/PageLoader";
 import { Link, useNavigate } from "react-router-dom";
+import { CustomSelect } from "../components/CustomSelect";
 
 export default function JobsDashboardPage() {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -327,28 +328,48 @@ export default function JobsDashboardPage() {
                     const myApp = job.applications.find((app: any) => String(app.applicant) === String(user?._id) || String(app.applicant?._id) === String(user?._id));
                     if (!myApp) return null;
                     return (
-                      <div key={job._id} className="border border-gray-100 dark:border-slate-700 rounded-xl p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:border-indigo-100 dark:hover:border-indigo-500/50 transition bg-white dark:bg-slate-800/50 min-w-0">
-                        <div className="min-w-0">
-                          <h3 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg break-words">{job.title}</h3>
-                          <p className="text-gray-600 dark:text-gray-400 text-sm break-words">{job.company} &bull; {job.location}</p>
-                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">Applied on {new Date(myApp.appliedAt).toLocaleDateString()}</p>
+                      <div key={job._id} className="border border-gray-100 dark:border-slate-700/60 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-5 hover:border-indigo-500/20 dark:hover:border-indigo-500/30 transition-all duration-300 bg-white dark:bg-slate-800/40 shadow-sm hover:shadow-md min-w-0">
+                        <div className="flex gap-4 items-start min-w-0">
+                          <div className="flex-shrink-0 w-11 h-11 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 rounded-xl flex items-center justify-center border border-indigo-100/50 dark:border-indigo-900/30 shadow-sm">
+                            <Briefcase size={20} />
+                          </div>
+                          <div className="min-w-0">
+                            <h3 className="font-bold text-gray-900 dark:text-white text-base sm:text-lg break-words leading-tight">{job.title}</h3>
+                            <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mt-0.5 break-words">{job.company} &bull; {job.location}</p>
+                            <p className="text-xs text-gray-400 dark:text-gray-500 mt-2.5 flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-slate-600"></span>
+                              Applied on {new Date(myApp.appliedAt).toLocaleDateString()}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:space-x-4 sm:gap-0 shrink-0 self-start sm:self-auto w-full sm:w-auto">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 shrink-0 self-start md:self-auto w-full md:w-auto">
                           {myApp.interviewDate && (
-                            <div className="text-left sm:text-right">
-                              <p className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold mb-1 flex items-center justify-start sm:justify-end"><Calendar size={12} className="mr-1 shrink-0" /> Interview Scheduled</p>
-                              <p className="text-sm font-medium text-gray-900 dark:text-white">{new Date(myApp.interviewDate).toLocaleString()}</p>
+                            <div className="flex flex-col items-start sm:items-end bg-indigo-50/40 dark:bg-indigo-950/20 border border-indigo-100/50 dark:border-indigo-900/20 rounded-xl p-3.5 text-left sm:text-right w-full sm:w-auto">
+                              <p className="text-sm text-indigo-600 dark:text-indigo-400 font-bold mb-1 flex items-center gap-1.5 justify-start sm:justify-end">
+                                <Calendar size={14} className="shrink-0" />
+                                <span>Interview Scheduled</span>
+                              </p>
+                              <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-white mt-0.5">
+                                {new Date(myApp.interviewDate).toLocaleString()}
+                              </p>
                               {myApp.interviewLink && (
-                                <a href={myApp.interviewLink.startsWith('http') ? myApp.interviewLink : `https://${myApp.interviewLink}`} target="_blank" rel="noopener noreferrer" className="text-xs text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 hover:underline mt-1 block break-all">
+                                <a 
+                                  href={myApp.interviewLink.startsWith('http') ? myApp.interviewLink : `https://${myApp.interviewLink}`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer" 
+                                  className="inline-flex items-center gap-1.5 text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 font-bold hover:underline mt-2.5 transition-colors group"
+                                >
                                   Join Meeting
+                                  <ArrowUpRight size={15} className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                                 </a>
                               )}
                             </div>
                           )}
-                          <span className={`px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap self-start sm:self-auto text-center ${
-                            myApp.status === 'Pending' ? 'bg-yellow-100 text-yellow-700' :
-                            myApp.status === 'Shortlisted' ? 'bg-green-100 text-green-700' :
-                            myApp.status === 'Rejected' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                          <span className={`px-3 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase border whitespace-nowrap self-start sm:self-center text-center ${
+                            myApp.status === 'Pending' ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400 border-amber-200/50 dark:border-amber-900/30' :
+                            myApp.status === 'Shortlisted' ? 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-200/50 dark:border-emerald-900/30' :
+                            myApp.status === 'Rejected' ? 'bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 border-rose-200/50 dark:border-rose-900/30' : 
+                            'bg-sky-50 dark:bg-sky-950/30 text-sky-600 dark:text-sky-400 border-sky-200/50 dark:border-sky-900/30'
                           }`}>
                             {myApp.status}
                           </span>
@@ -386,13 +407,12 @@ export default function JobsDashboardPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Job Type</label>
-                  <select id="jobType" name="jobType" value={newJob.type} onChange={e => setNewJob({...newJob, type: e.target.value})} className="w-full px-4 py-2 border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-900 dark:text-white rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Contract">Contract</option>
-                    <option value="Internship">Internship</option>
-                    <option value="Remote">Remote</option>
-                  </select>
+                  <CustomSelect
+                    value={newJob.type}
+                    onChange={val => setNewJob({...newJob, type: val})}
+                    options={["Full-time", "Part-time", "Contract", "Internship", "Remote"]}
+                    triggerClassName="bg-white dark:bg-slate-700 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 focus:ring-indigo-500 focus:border-indigo-500"
+                  />
                 </div>
               </div>
               

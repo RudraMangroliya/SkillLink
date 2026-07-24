@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import SEO from "../components/SEO";
 import BorderGlow from "../components/BorderGlow";
+import { CustomSelect } from "../components/CustomSelect";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState<any[]>([]);
@@ -295,13 +296,15 @@ export default function GroupsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Visibility</label>
-                  <select value={visibility}
-                    onChange={(e) => setVisibility(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-900 dark:text-white rounded-lg focus:bg-white dark:focus:bg-slate-800 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all outline-none"
-                  >
-                    <option value="public">Public (Anyone can join)</option>
-                    <option value="private">Private (Invite only)</option>
-                  </select>
+                  <CustomSelect
+                    value={visibility}
+                    onChange={setVisibility}
+                    options={[
+                      { value: "public", label: "Public (Anyone can join)" },
+                      { value: "private", label: "Private (Invite only)" }
+                    ]}
+                    triggerClassName="bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 text-gray-900 dark:text-white"
+                  />
                 </div>
               </div>
               <div className="mt-8 flex justify-end space-x-3">

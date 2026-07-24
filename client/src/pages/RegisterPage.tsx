@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import type { RootState } from "../store/store";
 
 import { Eye, EyeOff } from "lucide-react";
+import { CustomSelect } from "../components/CustomSelect";
 
 export default function RegisterPage() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -125,15 +126,17 @@ export default function RegisterPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">I am a...</label>
-            <select className="w-full px-4 py-2 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none transition-all [&>option]:text-gray-900"
+            <CustomSelect
               value={role}
-              onChange={(e) => setRole(e.target.value)}
-            >
-              <option value="student">Student</option>
-              <option value="professional">Professional</option>
-              <option value="mentor">Mentor</option>
-              <option value="recruiter">Recruiter</option>
-            </select>
+              onChange={setRole}
+              options={[
+                { value: "student", label: "Student" },
+                { value: "professional", label: "Professional" },
+                { value: "mentor", label: "Mentor" },
+                { value: "recruiter", label: "Recruiter" },
+              ]}
+              triggerClassName="bg-white dark:bg-slate-700/50"
+            />
           </div>
           <button type="submit" disabled={isLoading} className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg hover:bg-indigo-700 transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center">
             {isLoading ? (

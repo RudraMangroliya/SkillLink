@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import JobsDashboardPage from "./JobsDashboardPage";
 import SEO from "../components/SEO";
+import { CustomSelect } from "../components/CustomSelect";
 
 export default function JobBoardPage() {
   const [activeTab, setActiveTab] = useState<"board" | "dashboard">("board");
@@ -252,14 +253,16 @@ export default function JobBoardPage() {
                     <span className="ml-2 sm:ml-3 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">For You</span>
                   </label>
 
-                  <div className="relative flex-1 min-[450px]:flex-none min-w-[120px]">
-                    <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="w-full appearance-none bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-200 font-medium py-1.5 sm:py-2 pl-2.5 sm:pl-3 pr-7 sm:pr-8 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none text-xs sm:text-sm cursor-pointer transition-colors shadow-sm">
-                      <option value="relevant">Most relevant</option>
-                      <option value="recent">Most recent</option>
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500 dark:text-gray-400">
-                      <svg className="fill-current h-3.5 w-3.5 sm:h-4 sm:w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
-                    </div>
+                  <div className="flex-1 min-[450px]:flex-none min-w-[140px]">
+                    <CustomSelect
+                      value={sortBy}
+                      onChange={setSortBy}
+                      options={[
+                        { value: "relevant", label: "Most relevant" },
+                        { value: "recent", label: "Most recent" }
+                      ]}
+                      triggerClassName="bg-gray-50 dark:bg-slate-700/50 border border-gray-200 dark:border-slate-600 text-gray-700 dark:text-gray-200 py-1.5 sm:py-2 text-xs sm:text-sm shadow-sm"
+                    />
                   </div>
                 </div>
               </div>

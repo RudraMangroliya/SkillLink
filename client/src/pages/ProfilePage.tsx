@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
-import { MapPin, Briefcase, GraduationCap, Edit2, Camera, UserPlus, CheckCircle2, XCircle, Share2, FileText, ChevronRight, MessageSquare, Loader2, Link as LinkIcon, Plus, UserCheck, X, Award, FolderGit2 } from "lucide-react";
+import { MapPin, Briefcase, GraduationCap, Edit2, Camera, UserPlus, CheckCircle2, XCircle, Share2, FileText, ChevronRight, MessageSquare, Loader2, Link as LinkIcon, Plus, UserCheck, X, Award, FolderGit2, Users } from "lucide-react";
 import PageLoader from "../components/PageLoader";
 import { ProfileSkeleton } from "../components/Skeletons";
 import axiosInstance from "../utils/axios";
@@ -474,47 +474,58 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
-              <div className="flex flex-wrap gap-3 w-full md:w-auto mt-4 md:mt-0">
+              <div className="flex flex-wrap gap-3.5 w-full md:w-auto mt-4 md:mt-0">
                 {isOwnProfile ? (
-                  <button onClick={() => setIsEditModalOpen(true)} className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-3 py-2 min-[340px]:px-4 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow text-xs min-[340px]:text-sm sm:text-base">
-                    Edit Profile
+                  <button 
+                    onClick={() => setIsEditModalOpen(true)} 
+                    className="flex-1 md:flex-none bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/10 active:scale-98 transition-all duration-150 flex items-center justify-center gap-2 text-xs min-[340px]:text-sm cursor-pointer border border-transparent shadow-sm"
+                  >
+                    <Edit2 size={15} className="shrink-0" />
+                    <span>Edit Profile</span>
                   </button>
                 ) : (
                   <>
                     <button 
                       onClick={handleFollow}
                       disabled={isFollowLoading}
-                      className={`flex-1 md:flex-none px-3 py-2 min-[340px]:px-6 rounded-lg font-medium transition shadow-sm hover:shadow text-xs min-[340px]:text-sm sm:text-base border flex items-center justify-center disabled:opacity-50 ${
-                        isFollowing 
-                          ? "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700" 
-                          : "bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700"
-                      }`}
+                      className="flex-1 md:flex-none px-5 py-2.5 rounded-xl font-bold transition-all duration-150 active:scale-98 text-xs min-[340px]:text-sm cursor-pointer border flex items-center justify-center gap-2 bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-100 dark:hover:border-indigo-900/50 hover:shadow-md hover:shadow-indigo-500/5 disabled:opacity-50"
                     >
-                      {isFollowLoading ? <Loader2 className="animate-spin h-4 w-4" /> : isFollowing ? "Unfollow" : "Follow"}
+                      {isFollowLoading ? (
+                        <Loader2 className="animate-spin h-4 w-4" />
+                      ) : (
+                        <>
+                          <Users size={15} className="shrink-0" />
+                          <span>{isFollowing ? "Unfollow" : "Follow"}</span>
+                        </>
+                      )}
                     </button>
                     {connectionStatus === "Accepted" ? (
                       <>
                         <button 
                           onClick={handleStartChat}
-                          className="flex-1 md:flex-none bg-indigo-600 text-white px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center"
+                          className="flex-1 md:flex-none bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/10 active:scale-98 transition-all duration-150 flex items-center justify-center gap-2 text-xs min-[340px]:text-sm cursor-pointer border border-transparent shadow-sm"
                         >
-                          Message
+                          <MessageSquare size={15} className="shrink-0" />
+                          <span>Message</span>
                         </button>
                         <button 
                           onClick={handleDisconnectClick}
                           disabled={isDisconnectingLoading}
-                          className={`flex-1 md:flex-none px-3 py-2 min-[340px]:px-6 rounded-lg font-medium transition-all duration-200 shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50 ${
+                          className={`flex-1 md:flex-none px-5 py-2.5 rounded-xl font-bold transition-all duration-150 active:scale-98 text-xs min-[340px]:text-sm cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 ${
                             showDisconnectConfirm
-                              ? "bg-red-600 text-white font-bold animate-pulse border border-red-600 shadow-md shadow-red-500/20"
-                              : "bg-red-50 text-red-600 dark:text-red-400 dark:bg-red-900/20 border border-red-200 dark:border-red-800/50 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700"
+                              ? "bg-red-600 text-white border border-red-600 hover:bg-red-700 shadow-md shadow-red-500/20"
+                              : "bg-red-50 text-red-600 dark:text-red-400 dark:bg-red-900/20 border border-red-200 dark:border-red-800/40 hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 shadow-sm"
                           }`}
                         >
                           {isDisconnectingLoading ? (
                             <Loader2 className="animate-spin h-4 w-4" />
                           ) : showDisconnectConfirm ? (
-                            "Confirm Disconnect?"
+                            <span>Confirm Disconnect?</span>
                           ) : (
-                            "Disconnect"
+                            <>
+                              <X size={15} className="shrink-0" />
+                              <span>Disconnect</span>
+                            </>
                           )}
                         </button>
                       </>
@@ -523,26 +534,30 @@ export default function ProfilePage() {
                         <button 
                           onClick={handleAcceptConnection}
                           disabled={isAcceptingLoading}
-                          className="flex-1 bg-indigo-600 text-white px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                          className="flex-1 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/10 active:scale-98 transition-all duration-150 flex items-center justify-center gap-2 text-xs min-[340px]:text-sm cursor-pointer border border-transparent shadow-sm disabled:opacity-50"
                         >
-                          {isAcceptingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Accept"}
+                          {isAcceptingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : <span>Accept</span>}
                         </button>
                         <button 
                           onClick={handleRejectConnection}
                           disabled={isRejectingLoading}
-                          className="flex-1 bg-red-50 text-red-600 border border-red-200 px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-red-100 hover:text-red-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                          className="flex-1 bg-red-50 text-red-600 dark:bg-red-950/20 dark:text-red-400 border border-red-200 dark:border-red-800/40 px-5 py-2.5 rounded-xl font-bold hover:bg-red-100 dark:hover:bg-red-900/40 hover:text-red-700 transition active:scale-98 text-xs min-[340px]:text-sm cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
                         >
-                          {isRejectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : "Reject"}
+                          {isRejectingLoading ? <Loader2 className="animate-spin h-4 w-4" /> : <span>Reject</span>}
                         </button>
                       </div>
                     ) : (
                       <button 
                         onClick={handleConnect}
                         disabled={connectionStatus === "Pending" || isConnectingLoading}
-                        className="flex-1 md:flex-none bg-indigo-600 text-white px-3 py-2 min-[340px]:px-6 rounded-lg font-medium hover:bg-indigo-700 transition shadow-sm text-xs min-[340px]:text-sm sm:text-base flex items-center justify-center disabled:opacity-50"
+                        className="flex-1 md:flex-none bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-500/10 active:scale-98 transition-all duration-150 flex items-center justify-center gap-2 text-xs min-[340px]:text-sm cursor-pointer border border-transparent disabled:opacity-50 shadow-sm"
                       >
-                        {isConnectingLoading || connectionStatus === "Pending" ? <Loader2 className="animate-spin h-4 w-4 mr-2" /> : <UserPlus size={16} className="mr-1 sm:mr-2" />}
-                        {connectionStatus === "Pending" ? "Pending..." : isConnectingLoading ? "Connecting..." : "Connect"}
+                        {isConnectingLoading || connectionStatus === "Pending" ? (
+                          <Loader2 className="animate-spin h-4 w-4 mr-1" />
+                        ) : (
+                          <UserPlus size={15} className="shrink-0" />
+                        )}
+                        <span>{connectionStatus === "Pending" ? "Pending..." : isConnectingLoading ? "Connecting..." : "Connect"}</span>
                       </button>
                     )}
                   </>
@@ -552,9 +567,10 @@ export default function ProfilePage() {
                     navigator.clipboard.writeText(window.location.href);
                     alert("Profile link copied to clipboard!");
                   }} 
-                  className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-700 text-gray-700 dark:text-gray-300 px-3 py-2 min-[340px]:px-4 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-slate-700 transition shadow-sm hover:shadow text-xs min-[340px]:text-sm sm:text-base flex justify-center items-center"
+                  className="flex-1 md:flex-none bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-indigo-600 dark:hover:text-indigo-400 hover:border-indigo-100 dark:hover:border-indigo-900/50 hover:shadow-md hover:shadow-indigo-500/5 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2 text-xs min-[340px]:text-sm cursor-pointer shadow-sm"
                 >
-                  Share
+                  <Share2 size={15} className="shrink-0" />
+                  <span>Share</span>
                 </button>
               </div>
             </div>

@@ -6,6 +6,7 @@ import axiosInstance from "../utils/axios";
 import { useSelector } from "react-redux";
 import type { RootState } from "../store/store";
 import io, { Socket } from "socket.io-client";
+import { CustomSelect } from "../components/CustomSelect";
 
 let socket: Socket;
 
@@ -989,10 +990,15 @@ export default function GroupDetailsPage() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Visibility</label>
-                  <select value={editVisibility} onChange={(e) => setEditVisibility(e.target.value)} className="w-full px-4 py-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-white border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
-                    <option value="public">Public (Anyone can join)</option>
-                    <option value="private">Private (Invite only)</option>
-                  </select>
+                  <CustomSelect
+                    value={editVisibility}
+                    onChange={setEditVisibility}
+                    options={[
+                      { value: "public", label: "Public (Anyone can join)" },
+                      { value: "private", label: "Private (Invite only)" }
+                    ]}
+                    triggerClassName="bg-white dark:bg-slate-800 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-white"
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
